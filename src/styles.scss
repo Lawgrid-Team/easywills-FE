@@ -1,1 +1,45 @@
-/* You can add global styles to this file, and also import other style files */
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+
+@use "@angular/material" as mat;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import "./app/themes/material-theme.css";
+
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: Poppins, "Helvetica Neue", sans-serif;
+}
+
+:root {
+    @include mat.button-overrides(
+        (
+            filled-container-shape: 0.3125rem,
+            outlined-container-shape: 0.3125rem,
+        )
+    );
+    @include mat.form-field-overrides(
+        (
+            outlined-container-shape: 0.75rem,
+            outlined-outline-color: #dedede,
+            container-height: 1rem,
+            container-vertical-padding: 0.8rem,
+            outlined-input-text-placeholder-color: var(--Placeholder-text, #8a8989)
+        )
+    );
+
+    .field mat-form-field {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    .field label {
+        display: block;
+        margin-bottom: 0.4rem;
+        color: #655d5d;
+        font-family: Poppins;
+        font-size: 0.9rem;
+    }
+}

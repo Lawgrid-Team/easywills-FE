@@ -1,0 +1,167 @@
+<div class="min-h-screen p-8 w-full gap-24 sm:gap-y-0 grid grid-cols-1 lg:grid-cols-2 items-center justify-center">
+
+    <div class="bg-gray-100 rounded-lg w-full min-h-full p-10">
+        <div class="flex justify-items-start">
+            <img src="images/easywill_logo.png" alt="EasyWill Logo" class="w-24">
+        </div>
+
+        <div class="flex flex-col px-14 py-28 gap-9 min-h-full items-center justify-center">
+
+            <img src="svg/login_avatar.svg" alt="EasyWill Logo">
+            <!-- <p class="text-center text-gray-600">
+                200,000+ Nigerian families have trusted easyWill to ensure that their legacy is secure after they pass
+                on.
+            </p>
+
+            <div class="flex p-10 flex-col justify-center bg-easywills-black rounded-2xl">
+                <div class="text-yellow-400 mb-6">
+                    ★ ★ ★ ★ ★
+                </div>
+                <blockquote class="flex flex-col gap-4 justify-between text-easywills-white">
+                    <div>
+                        <p>
+                            “7 loved how straightforward the steps were. The guidance provided at each stage was incredibly
+                            helpful!”
+                        </p>
+                    </div>
+
+                    <footer class="mt-2 flex gap-x-4 text-easywills-white">
+                        <div>
+                            <img src="svg/avatar.svg" alt="EasyWills Logo" class="w-10">
+                        </div>
+                        <div class="flex flex-col justify-center text-xs">
+                            <span class="text-easywills-white">Michael R.</span>
+                            <span class="text-easywills-white">From Calgary</span>
+                        </div>
+                    </footer>
+                </blockquote>
+            </div> -->
+        </div>
+
+    </div>
+
+    <div class="w-full mx-auto py-20 px-16">
+        <p class="text-center mb-12 text-3xl normal text-easywills-black"><b>Let’s get started!</b></p>
+        <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="field">
+                <label for="name">Full name</label>
+                <mat-form-field >
+                    <!-- <mat-label>Full name</mat-label> -->
+                    <input formControlName="name" matInput placeholder="Enter first and last name">
+                    @if (form.get('name')?.hasError('required')) {
+                    <mat-error>Fullname is required</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+            <div class="field">
+                <label for="email">Email</label>
+                <mat-form-field>
+                    <input formControlName="email" matInput placeholder="e.g janedoe@gmail.com">
+                    @if (form.get('email')?.hasError('required')) {
+                    <mat-error>Email is required</mat-error>
+                    }
+                    @else if (form.get('email')?.hasError('email')) {
+                    <mat-error>Please enter a valid email</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <mat-form-field>
+                    <input formControlName="password" type="password" matInput placeholder="Enter Password"
+                        [type]="hide() ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide()">
+                        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    @if (form.get('password')?.hasError('required')) {
+                    <mat-error>Password is required</mat-error>
+                    }
+                    @else if (form.get('password')?.hasError('minlength')) {
+                    <mat-error>Password must be at least 8 characters</mat-error>
+                    }
+                    @else if (form.get('password')?.hasError('pattern')) {
+                    <mat-error>Password must contain at least one uppercase letter, one lowercase letter, one number and
+                        one special character</mat-error>
+                    }
+                    <!-- <mat-hint style="font-size: x-small;">Must be a minimum of 8 combined characters, number & symbol</mat-hint> -->
+                </mat-form-field>
+            </div>
+
+            <div class="field">
+                <label for="confirmPassword">Confirm password</label>
+                <mat-form-field>
+                    <input formControlName="confirmPassword" type="password" matInput placeholder="Confirm Password" [type]="hide2() ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix (click)="clickEvent2($event)" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide2()">
+                        <mat-icon>{{hide2() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-checkbox formControlName="terms">I agree to the Terms and Conditions</mat-checkbox>
+            </div>
+            <br>
+            <div>
+                <button style="width: 100%;" mat-flat-button type="submit">Create an account</button>
+            </div>
+        </form>
+
+        <!-- <form>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="fullName">
+                    Full name
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="fullName" type="text" placeholder="Enter first and last name">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                    Email
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="email" type="email" placeholder="e.g. janedoe@gmail.com">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                    Password
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="password" type="password" placeholder="Create password">
+                <p class="text-gray-600 text-xs mt-1">Must be a minimum of 8 combined characters, number & symbol</p>
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="confirmPassword">
+                    Confirm password
+                </label>
+                <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="confirmPassword" type="password" placeholder="Confirm password">
+            </div>
+            <div class="mb-6">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox">
+                    <span class="ml-2 text-gray-700">I agree to the Terms and Conditions</span>
+                </label>
+            </div>
+            <div class="flex items-center justify-between">
+                <button
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="button">
+                    Create an account
+                </button>
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
+                    Sign Up with Google
+                </a>
+            </div>
+            <p class="text-center text-gray-600 mt-8">
+                Already have an account? <a class="text-blue-500 hover:text-blue-800" href="#">Log In</a>
+            </p>
+        </form> -->
+    </div>
+
+    <!-- </div> -->
+</div>

@@ -1,0 +1,54 @@
+
+<!-- <div class="container mx-auto px-4 py-2 sm:px-6 lg:px-8"> -->
+<header class="w-full">
+    <div class="">
+        <div class="flex justify-between items-center pt-4 pb-4 border-b border-b-gray-300">
+            <div class="container flex justify-between items-center mx-auto">
+                <div class="flex items-center">
+                    <img src="images/easywill_logo.png" alt="EasyWill Logo" class="">
+                </div>
+
+                <div class="flex items-center justify-center gap-x-4">
+                    <button mat-stroked-button [routerLink]="['/login']">Login</button>
+                    <button mat-flat-button [routerLink]="['/signup']">Write your will</button>
+
+                    <!-- <button [routerLink]="['/login']" class="bg-white hover:bg-white-200 ring-1 ring-gray-300 text-black font-bold py-2 px-4 rounded">
+                        Login
+                    </button>
+                    <button [routerLink]="['/signup']" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                        Write your will
+                    </button> -->
+                </div>
+            </div>
+        </div>
+        <div class="pt-4 pb-4 border-y-gray-300 border-b border-b-gray-300">
+            <nav class="flex justify-between items-center container mx-auto">
+                <ul class="flex items-center justify-center gap-x-8 text-base/7 text-gray-400">
+                    <li class="hover:text-gray-500">
+                        <a routerLink='/login' routerLinkActive="router-link-active" class="hover:text-gray-500">About</a>
+                    </li>
+                    <li class="hover:text-gray-500">
+                        <a [routerLink]="['/home']" routerLinkActive="router-link-active"  class="hover:text-gray-500">How it Works</a>
+                    </li>
+                    <li class="hover:text-gray-500">
+                        <a [routerLink]="['/pricing']" routerLinkActive="router-link-active" class="hover:text-gray-500">Pricing</a>
+                    </li>
+                    <li class="hover:text-gray-500">
+                        <a [routerLink]="['/help']" routerLinkActive="router-link-active" class="hover:text-gray-500">Help Centre</a>
+                    </li>
+                    <!-- <li class="hover:text-gray-500">
+                        <a href="#" class="hover:text-gray-500">Contact</a>
+                    </li> -->
+                </ul>
+
+                <ul class="flex items-center justify-center gap-x-4 text-base/7 text-gray-400">
+                    <li class="hover:text-gray-500">
+                        <a href="#" class="hover:text-gray-500">Digital Vault</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>
+
+
