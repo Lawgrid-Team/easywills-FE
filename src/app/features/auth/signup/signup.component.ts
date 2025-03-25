@@ -1,6 +1,7 @@
 import {
     ChangeDetectionStrategy,
     Component,
+    inject,
     OnInit,
     signal,
 } from '@angular/core';
@@ -16,6 +17,9 @@ import {
     Validators,
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { AuthService } from '../../../core/services/auth.service';
+import { of } from 'rxjs';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-signup',
@@ -27,6 +31,7 @@ import { MatInputModule } from '@angular/material/input';
         MatIconModule,
         FormsModule,
         ReactiveFormsModule,
+        RouterModule
     ],
     templateUrl: './signup.component.html',
     styleUrl: './signup.component.scss',
@@ -37,7 +42,8 @@ export class SignupComponent implements OnInit {
     hide = signal(true);
     hide2 = signal(true);
 
-    constructor(private fb: FormBuilder) {}
+    public aService = inject(AuthService);
+    constructor(private fb: FormBuilder, private authService: AuthService,  private router: Router) {}
 
     clickEvent(event: MouseEvent) {
         this.hide.set(!this.hide());
@@ -63,6 +69,7 @@ export class SignupComponent implements OnInit {
                     ),
                 ],
             ],
+            passwordValid: [true],
             confirmPassword: ['', Validators.required],
             terms: [false, Validators.requiredTrue],
         });
@@ -70,5 +77,19 @@ export class SignupComponent implements OnInit {
 
     onSubmit() {
         console.log(this.form.value, 'form value');
+        this.authService.register(this.form.value).subscribe({
+            next: (res) => {
+                if (res.status === 200) {
+                    this.router.navigate(['/login']);
+                }
+                //console.log(res);
+            },
+            error: (err) => {
+                console.log(err);
+            },
+            complete: () => {
+                console.log('complete');
+            },
+        });
     }
 }

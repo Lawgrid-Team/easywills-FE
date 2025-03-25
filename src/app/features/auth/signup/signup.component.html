@@ -7,8 +7,8 @@
 
         <div class="flex flex-col px-14 py-28 gap-9 min-h-full items-center justify-center">
 
-            <img src="svg/login_avatar.svg" alt="EasyWill Logo">
-            <!-- <p class="text-center text-gray-600">
+            <!-- <img src="svg/login_avatar.svg" alt="EasyWill Logo"> -->
+            <p class="text-center text-gray-600">
                 200,000+ Nigerian families have trusted easyWill to ensure that their legacy is secure after they pass
                 on.
             </p>
@@ -35,7 +35,7 @@
                         </div>
                     </footer>
                 </blockquote>
-            </div> -->
+            </div>
         </div>
 
     </div>
@@ -103,9 +103,17 @@
             </div>
             <br>
             <div>
-                <button style="width: 100%;" mat-flat-button type="submit">Create an account</button>
+                <button [disabled]="form.invalid" style="width: 100%;" mat-flat-button type="submit">Create an account</button>
             </div>
         </form>
+
+        <div>
+            <p class="text-center text-easywills-dark-grey mt-5">
+                Already have an account? <a class="text-easywills-blue hover:text-easywills-colour-1" [routerLink]="['/login']" >Log In</a>
+            </p>
+        </div>
+
+
 
         <!-- <form>
             <div class="mb-4">
