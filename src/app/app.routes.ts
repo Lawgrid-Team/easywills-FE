@@ -7,7 +7,7 @@ export const routes: Routes = [
             import('./features/auth/auth.routes').then((m) => m.routes),
     },
     {
-        path: 'wizard',
+        path: 'wiz',
         loadChildren: () =>
             import('./features/wizard/wizard.routes').then((m) => m.routes),
     },
