@@ -1,0 +1,152 @@
+.pricing-container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.pricing-section {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+
+.pricing-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #505050;
+  margin-bottom: 0.5rem;
+
+  .highlight {
+    color: #6982b5;
+  }
+}
+
+.pricing-subtitle {
+  color: #737373;
+}
+
+.pricing-tiers {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pricing-tier {
+  border-radius: 0.5rem;
+  border: 1px solid #737373;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+
+  &.expanded {
+    background-color: #efefef;
+  }
+}
+
+.tier-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.tier-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #505050;
+}
+
+.tier-price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #505050;
+}
+
+.tier-divider {
+  margin-top: 1.5rem;
+  margin-bottom: 2.25rem;
+  border-bottom: 1px solid #737373;
+}
+
+.tier-bottom-divider {
+  margin-top: 1.5rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid #737373;
+}
+
+.tier-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.tier-description {
+  flex: 1;
+  padding-right: 1.5rem;
+
+  p {
+    font-size: 0.875rem;
+    color: #737373;
+  }
+}
+
+.tier-action {
+  flex-shrink: 0;
+  width: 9rem;
+}
+
+.action-button {
+  width: 100%;
+  padding: 0.5rem 0;
+  border-radius: 0.25rem;
+  background-color: #505050;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: #444444;
+  }
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+
+  .check-icon {
+    font-size: 1rem;
+    height: 1rem;
+    width: 1rem;
+    margin-top: 0.125rem;
+    color: #505050;
+  }
+
+  span {
+    font-size: 0.875rem;
+    color: #737373;
+  }
+}
+
