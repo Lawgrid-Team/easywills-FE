@@ -1,1 +1,324 @@
-<p>pricing works!</p>
+<div class="pricing-container">
+  <section class="pricing-section">
+    <div class="pricing-header">
+      <h1 class="pricing-title">
+        Upgrade your Free <span class="highlight">Plan</span>
+      </h1>
+      <p class="pricing-subtitle">Affordable, transparent, and designed to meet your needs</p>
+    </div>
+
+        <div class="pricing-tiers">
+      <!-- Free Plan -->
+      <div class="pricing-tier" [ngClass]="{'expanded': expandedTier === 'free'}">
+        <div class="tier-header" (click)="toggleTier('free')">
+          <h2 class="tier-title">Free</h2>
+        </div>
+        <div class="tier-divider"></div>
+
+        <ng-container *ngIf="expandedTier === 'free'; else freeCollapsed">
+          <div class="tier-content">
+            <div class="tier-description">
+              <p>
+                Get started with our platform at no cost. Perfect for those who want to explore the process and
+                create a basic will with ease.
+              </p>
+            </div>
+            <div class="tier-action">
+              <button class="action-button">Start free trial</button>
+            </div>
+          </div>
+          <div class="feature-list">
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Create custom will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Include detailed signing instructions</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Express your final wish for Funeral, Burial or Cremation</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Name your own executors</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Download your custom will</span>
+            </div>
+          </div>
+          <div class="tier-bottom-divider"></div>
+        </ng-container>
+
+        <ng-template #freeCollapsed>
+          <div class="tier-content">
+            <div class="tier-description">
+              <p>
+                Get started with our platform at no cost. Perfect for those who want to explore the process and
+                create a basic will with ease.
+              </p>
+            </div>
+            <div class="tier-action">
+              <button class="action-button">Start free trial</button>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Legacy Plan -->
+      <div class="pricing-tier" [ngClass]="{'expanded': expandedTier === 'legacy'}">
+        <div class="tier-header" (click)="toggleTier('legacy')">
+          <h2 class="tier-title">Legacy</h2>
+          <div class="tier-price">₦ 100,000</div>
+        </div>
+        <div class="tier-divider"></div>
+
+        <ng-container *ngIf="expandedTier === 'legacy'; else legacyCollapsed">
+          <div class="tier-content">
+            <div class="tier-description">
+              <p>
+                Perfect for individuals with straightforward estate planning needs. Create a legally binding
+                will with confidence and ease.
+              </p>
+            </div>
+            <div class="tier-action">
+              <button class="action-button">Select Package</button>
+            </div>
+          </div>
+          <div class="feature-list">
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Create custom will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Include detailed signing instructions</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Express your final wish for Funeral, Burial or Cremation</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Name your own executors</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Download your custom will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Unlimited number of assets</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Virtual execution of your custom will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Send notifications to executors and guardians named in your will</span>
+            </div>
+          </div>
+          <div class="tier-bottom-divider"></div>
+        </ng-container>
+
+        <ng-template #legacyCollapsed>
+          <div class="tier-content">
+            <div class="tier-description">
+              <p>
+                Perfect for individuals with straightforward estate planning needs. Create a legally binding will
+                with confidence and ease.
+              </p>
+            </div>
+            <div class="tier-action">
+              <button class="action-button">Select Package</button>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Legacy Plus Plan -->
+      <div class="pricing-tier" [ngClass]="{'expanded': expandedTier === 'legacyPlus'}">
+        <div class="tier-header" (click)="toggleTier('legacyPlus')">
+          <h2 class="tier-title">Legacy Plus</h2>
+          <div class="tier-price">₦ 250,000</div>
+        </div>
+        <div class="tier-divider"></div>
+
+        <ng-container *ngIf="expandedTier === 'legacyPlus'; else legacyPlusCollapsed">
+          <div class="tier-content">
+            <div class="tier-description">
+              <p>
+                Designed for those with more detailed estate planning needs, the Premium Plan offers additional
+                flexibility and support to ensure your will is comprehensive and up-to-date.
+              </p>
+            </div>
+            <div class="tier-action">
+              <button class="action-button">Select Package</button>
+            </div>
+          </div>
+          <div class="feature-list">
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Create custom will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Include detailed signing instructions</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Express your final wish for Funeral, Burial or Cremation</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Name your own executors</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Download your custom will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Unlimited number of assets</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Virtual execution of your custom will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Send notifications to executors and guardians named in your will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Unlimited number of updates (Codicils)</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Register your will at probate</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Proof of life notifications</span>
+            </div>
+          </div>
+          <div class="tier-bottom-divider"></div>
+        </ng-container>
+
+        <ng-template #legacyPlusCollapsed>
+          <div class="tier-content">
+            <div class="tier-description">
+              <p>
+                Designed for those with more detailed estate planning needs, the Premium Plan offers additional
+                flexibility and support to ensure your will is comprehensive and up-to-date.
+              </p>
+            </div>
+            <div class="tier-action">
+              <button class="action-button">Select Package</button>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Custom Plan -->
+      <div class="pricing-tier" [ngClass]="{'expanded': expandedTier === 'custom'}">
+        <div class="tier-header" (click)="toggleTier('custom')">
+          <h2 class="tier-title">Custom plan</h2>
+          <div class="tier-price">Custom</div>
+        </div>
+        <div class="tier-divider"></div>
+
+        <ng-container *ngIf="expandedTier === 'custom'; else customCollapsed">
+          <div class="tier-content">
+            <div class="tier-description">
+              <p>
+                Tailored for individuals with unique estate planning needs, the Custom Plan gives you complete
+                flexibility to create a will that fits your specific circumstances.
+              </p>
+            </div>
+            <div class="tier-action">
+              <button class="action-button">Contact Us</button>
+            </div>
+          </div>
+          <div class="feature-list">
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Free 30 minute legal consultation</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Include detailed signing instructions</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Express your final wish for Funeral, Burial or Cremation</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Name your own executors</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Download your custom will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Unlimited number of assets</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Virtual execution of your custom will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Send notifications to executors and guardians named in your will</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Unlimited number of updates (Codicils)</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Register your will at probate</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Proof of life notifications</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Appoint power of attorney for finances and property</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Appoint power of attorney for health</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon class="check-icon">check</mat-icon>
+              <span>Create legal trust</span>
+            </div>
+          </div>
+          <div class="tier-bottom-divider"></div>
+        </ng-container>
+
+        <ng-template #customCollapsed>
+          <div class="tier-content">
+            <div class="tier-description">
+              <p>
+                Tailored for individuals with unique estate planning needs, the Custom Plan gives you complete
+                flexibility to create a will that fits your specific circumstances.
+              </p>
+            </div>
+            <div class="tier-action">
+              <button class="action-button">Contact Us</button>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+</div>
+
