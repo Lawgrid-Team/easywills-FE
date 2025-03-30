@@ -1,0 +1,69 @@
+// Import DM Serif Display font
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+
+// Custom class for DM Serif Display font
+.dm-serif {
+  font-family: 'DM Serif Display', serif;
+}
+
+// Additional styles if needed
+:host {
+  display: block;
+  width: 100%;
+}
+
+// For the aspect ratio container
+.aspect-\[2\/1\] {
+  position: relative;
+  padding-bottom: 50%; // 2:1 aspect ratio
+}
+
+.aspect-\[2\/1\] img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+// Logo carousel styles
+.logo-carousel-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.logo-carousel {
+  display: flex;
+  animation: scroll 30s linear infinite;
+  width: fit-content;
+}
+
+.logo-slide {
+  display: flex;
+  gap: 4rem;
+  padding: 0 2rem;
+}
+
+.logo-item {
+  flex: 0 0 auto;
+  height: 72px;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause animation on hover */
+.logo-carousel:hover {
+  animation-play-state: paused;
+}
