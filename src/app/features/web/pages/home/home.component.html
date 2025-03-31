@@ -219,3 +219,49 @@
     </div>
   </div>
 </section>
+
+<!-- Testimonial Carousel Section -->
+<section class="testimonial-carousel-section">
+  <div class="container">
+    <div class="testimonial-cards">
+      <div *ngFor="let testimonial of visibleTestimonials" class="testimonial-card">
+        <div class="star-rating">
+          <span *ngFor="let star of createRange(5)" class="star-icon">★</span>
+        </div>
+        <div class="testimonial-quote">
+          <p>"{{testimonial.quote}}"</p>
+        </div>
+        <div class="testimonial-author">
+          <div class="author-avatar">
+            <img [src]="testimonial.avatar" [alt]="testimonial.name">
+          </div>
+          <div class="author-info">
+            <p class="author-name">{{testimonial.name}}</p>
+            <p class="author-location">{{testimonial.location}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="carousel-navigation">
+      <div class="carousel-indicators">
+        <button 
+          *ngFor="let testimonial of testimonials; let i = index" 
+          (click)="goToTestimonial(i)" 
+          [class.active]="activeTestimonial === i"
+          class="indicator-dot"
+          [attr.aria-label]="'Go to testimonial ' + (i + 1)">
+        </button>
+      </div>
+      <div class="carousel-controls">
+        <button (click)="prevTestimonial()" class="control-button prev" aria-label="Previous testimonial">
+          <span class="control-icon">❮</span>
+        </button>
+        <button (click)="nextTestimonial()" class="control-button next" aria-label="Next testimonial">
+          <span class="control-icon">❯</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
