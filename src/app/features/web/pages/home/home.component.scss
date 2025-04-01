@@ -553,7 +553,7 @@
   grid-template-columns: 1fr;
   gap: 3rem;
   align-items: center;
-  margin-bottom: 4rem;
+  margin-bottom: 1rem;
   
   @media (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
@@ -569,7 +569,7 @@
 .how-it-works-title {
   font-size: 3rem;
   color: #444444;
-  margin-bottom: 1.5rem;
+  margin-bottom: 4rem;
   
   @media (min-width: 768px) {
     font-size: 3.5rem;
@@ -579,7 +579,7 @@
 .how-it-works-description {
   font-size: 1.25rem;
   color: #444444;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
   line-height: 1.6;
 }
 
@@ -608,7 +608,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 2rem;
-  margin-top: 3rem;
+  margin-top: 1rem;
   
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
