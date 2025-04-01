@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/easywills-fe",
+    "public": "dist/easywills-fe/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
