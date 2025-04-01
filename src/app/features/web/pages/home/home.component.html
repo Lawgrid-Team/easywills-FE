@@ -460,3 +460,56 @@
     </div>
   </div>
 </section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+  <div class="container">
+    <div class="faq-header">
+      <h2 class="faq-title dm-serif">FAQs</h2>
+      <p class="faq-subtitle">Got Questions? We've Got Answers</p>
+    </div>
+
+    <div class="faq-divider"></div>
+
+    <!-- FAQ Accordion -->
+    <div class="faq-accordion">
+      <div *ngFor="let faq of faqs; let i = index" class="faq-item">
+        <button
+          class="faq-question"
+          [class.active]="activeFaq === i"
+          (click)="toggleFaq(i)"
+          [attr.aria-expanded]="activeFaq === i"
+        >
+          <h3 class="question-text">{{faq.question}}</h3>
+          <svg 
+            class="chevron-icon" 
+            [class.rotate]="activeFaq === i"
+            xmlns="http://www.w3.org/2000/svg" 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            stroke-linejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <div class="faq-answer" *ngIf="activeFaq === i">
+          <p>{{faq.answer}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Still have a question -->
+    <div class="contact-section">
+      <h3 class="contact-title">Still have a question?</h3>
+      <p class="contact-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <a routerLink="/" class="contact-button">
+        Contact
+      </a>
+    </div>
+  </div>
+</section>

@@ -10,6 +10,11 @@ interface Testimonial {
     avatar: string;
 }
 
+interface Faq {
+    question: string;
+    answer: string;
+}
+
 @Component({
     selector: 'app-home',
     imports: [CommonModule, RouterModule],
@@ -18,6 +23,7 @@ interface Testimonial {
 })
 export class HomeComponent implements OnInit {
     activeTestimonial = 0;
+    activeFaq: number | null = null;
 
     testimonials: Testimonial[] = [
         {
@@ -57,6 +63,29 @@ export class HomeComponent implements OnInit {
         },
     ];
 
+    faqs: Faq[] = [
+        {
+            question: 'What is a Will?',
+            answer: 'A Will is a legal document that outlines your wishes regarding the distribution of your assets and the care of any minor children after your death. It allows you to specify who will receive your property, who will be the guardian of your children, and who will manage your estate and carry out your wishes after your death.',
+        },
+        {
+            question: 'Do I need a Lawyer to create a Will?',
+            answer: "No, you don't necessarily need a lawyer to create a valid Will. Our platform provides a legally-binding document that meets all requirements in your jurisdiction. However, for complex estates or specific legal concerns, consulting with a lawyer may be beneficial.",
+        },
+        {
+            question: 'Is this service suitable for all legal situations?',
+            answer: 'Our service is designed to meet the needs of most individuals with straightforward estate planning needs. However, if you have a complex estate, significant assets, international property, or specific legal concerns, we recommend consulting with a legal professional for personalized advice.',
+        },
+        {
+            question: 'Is my will legally binding?',
+            answer: 'Yes, Wills created through our platform are legally binding as long as they are properly executed according to the laws in your jurisdiction. This typically involves signing the document in the presence of witnesses who also sign the Will. We provide clear instructions on how to properly execute your Will to ensure its validity.',
+        },
+        {
+            question: 'How long does it take to create a will?',
+            answer: 'Most users complete their Will in 20-30 minutes. Our step-by-step process guides you through all necessary decisions, making it quick and straightforward. You can also save your progress and return later if needed.',
+        },
+    ];
+
     get visibleTestimonials(): Testimonial[] {
         return [
             this.testimonials[this.activeTestimonial],
@@ -91,6 +120,10 @@ export class HomeComponent implements OnInit {
 
     goToTestimonial(index: number): void {
         this.activeTestimonial = index;
+    }
+
+    toggleFaq(index: number): void {
+        this.activeFaq = this.activeFaq === index ? null : index;
     }
 
     // Helper method to create an array for stars
