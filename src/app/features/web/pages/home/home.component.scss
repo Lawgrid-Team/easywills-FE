@@ -1029,3 +1029,67 @@
     background-color: #f9f9f9;
   }
 }
+
+// CTA Banner Section
+.cta-banner-section {
+  width: 100%;
+  padding: 6rem 1rem;
+  background-color: #000000;
+  background-image: url('/svg/cta-background.svg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  
+  .container {
+    max-width: 1200px; // Equivalent to max-w-6xl
+    position: relative;
+    z-index: 10;
+  }
+}
+
+.cta-content {
+  text-align: center;
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  max-width: 896px; // Equivalent to max-w-4xl
+  margin-left: auto;
+  margin-right: auto;
+  
+  @media (min-width: 768px) {
+    font-size: 3.75rem;
+  }
+}
+
+.cta-description {
+  font-size: 1.125rem;
+  margin-bottom: 3rem;
+  max-width: 1024px; // Equivalent to max-w-5xl
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+  
+  @media (min-width: 768px) {
+    font-size: 1.25rem;
+  }
+}
+
+.cta-button {
+  display: inline-block;
+  background-color: white;
+  color: black;
+  padding: 1rem 2rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  font-size: 1.125rem;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  
+  &:hover {
+    background-color: #e5e5e5;
+  }
+}
