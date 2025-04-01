@@ -803,3 +803,101 @@
   opacity: 0.7;
   display: block;
 }
+
+// Benefits Section
+.benefits-section {
+  width: 100%;
+  padding: 5rem 1rem;
+  background-color: white;
+}
+
+.benefits-header {
+  margin-bottom: 4rem;
+}
+
+.benefits-title {
+  font-size: 3rem;
+  color: #444444;
+  margin-bottom: 1.5rem;
+  width: 60%; // This controls the width of the heading
+  
+  @media (min-width: 768px) {
+    font-size: 3.75rem;
+  }
+}
+
+.benefits-divider {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto 0;
+  border-top: 1px solid #676767; // This is the color you requested
+}
+
+.benefit-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 6rem;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+  
+  &.reversed {
+    @media (min-width: 768px) {
+      .benefit-content {
+        order: 2;
+      }
+      
+      .benefit-image {
+        order: 1;
+      }
+    }
+  }
+}
+
+.benefit-label {
+  color: #6982b5;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.benefit-heading {
+  font-size: 2.25rem;
+  color: #444444;
+  margin-bottom: 1.5rem;
+}
+
+.benefit-description {
+  font-size: 1.125rem;
+  color: #444444;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.btn-get-started {
+  display: inline-block;
+  border: 1px solid #444444;
+  color: #444444;
+  padding: 0.75rem 2rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  
+  &:hover {
+    background-color: #f9f9f9;
+  }
+}
+
+.benefit-image {
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    margin: 0 auto;
+    display: block;
+  }
+}
