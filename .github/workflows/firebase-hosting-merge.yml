@@ -60,7 +60,7 @@ jobs:
                   # Save service account JSON file to a temporary location
                   echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_EASY_WIL }}" > "$HOME/service-account.json"
 
-                  # Set the GOOGLE_APPLICATION_CREDENTIALS environment variable for authentication
+                  # Set the GOOGLE_APPLICATION_CREDENTIALS environment variable to the file path
                   export GOOGLE_APPLICATION_CREDENTIALS="$HOME/service-account.json"
 
                   # Run the Firebase Functions deployment
