@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.app.json",
+    "compilerOptions": {
+      "outDir": "dist/server",
+      "types": ["node"]
+    },
+    "files": ["server.ts"],
+    "angularCompilerOptions": {
+      "enableIvy": false
+    }
+  }
