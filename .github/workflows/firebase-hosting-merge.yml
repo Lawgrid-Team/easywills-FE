@@ -55,8 +55,15 @@ jobs:
 
             - name: Deploy Firebase Functions (SSR)
               env:
-                  FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EASY_WIL }}
-              run: firebase deploy --only functions --project easy-wil
+                  FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EASY_WIL }}
+              run: |
+                  echo "$FIREBASE_SERVICE_ACCOUNT_JSON" > "$HOME/service-account.json"
+                  firebase deploy --only functions --project easy-wil --token "$(firebase auth:print-access-token --account "$HOME/service-account.json")"
+
+            # - name: Deploy Firebase Functions (SSR)
+            #   env:
+            #       FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EASY_WIL }}
+            #   run: firebase deploy --only functions --project easy-wil
 
             - name: Deploy to Firebase Hosting
               uses: FirebaseExtended/action-hosting-deploy@v0
