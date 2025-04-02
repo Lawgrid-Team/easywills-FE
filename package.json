@@ -5,12 +5,10 @@
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
+        "build:ssr": "ng build --configuration=production && ng run easywills-FE:server",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "build:ssr": "ng build --configuration production && ng run easywills-fe:server:production",
-        "serve:ssr": "node dist/easywills-fe/server/main.mjs",
-        "deploy:ssr": "firebase deploy --only functions,hosting",
-        "clean": "rimraf dist/ node_modules/ && npm install"
+        "serve:ssr": "node dist/easywills-fe/server/main.js"
     },
     "private": true,
     "dependencies": {

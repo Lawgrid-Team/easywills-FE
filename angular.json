@@ -87,16 +87,16 @@
                     "builder": "@angular-devkit/build-angular:ssr-dev-server",
                     "configurations": {
                         "production": {
-                            "browserTarget": "easywills-fe:build:production",
-                            "serverTarget": "easywills-fe:server:production"
+                            "browserTarget": "easywills-FE:build:production",
+                            "serverTarget": "easywills-FE:server:production"
                         }
                     }
                 },
                 "prerender": {
                     "builder": "@angular-devkit/build-angular:prerender",
                     "options": {
-                        "browserTarget": "easywills-fe:build:production",
-                        "serverTarget": "easywills-fe:server:production",
+                        "browserTarget": "easywills-FE:build:production",
+                        "serverTarget": "easywills-FE:server:production",
                         "routes": ["/"]
                     }
                 },
@@ -104,10 +104,10 @@
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "configurations": {
                         "production": {
-                            "buildTarget": "easywills-fe:build:production"
+                            "buildTarget": "easywills-FE:build:production"
                         },
                         "development": {
-                            "buildTarget": "easywills-fe:build:development"
+                            "buildTarget": "easywills-FE:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
