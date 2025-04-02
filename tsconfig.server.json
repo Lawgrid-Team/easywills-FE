@@ -4,7 +4,7 @@
       "outDir": "dist/server",
       "types": ["node"]
     },
-    "files": ["server.ts"],
+    "files": ["src/server.ts"],
     "angularCompilerOptions": {
       "enableIvy": false
     }
