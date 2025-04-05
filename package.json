@@ -5,10 +5,9 @@
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
-        "build:ssr": "ng build --configuration=production && ng run easywills-FE:server",
-        "serve:ssr": "node dist/easywills-fe/server/main.js",
         "watch": "ng build --watch --configuration development",
-        "test": "ng test"
+        "test": "ng test",
+        "serve:ssr:easywills-FE": "node dist/easywills-fe/server/server.mjs"
     },
     "private": true,
     "dependencies": {

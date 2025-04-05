@@ -31,7 +31,12 @@
                             }
                         ],
                         "styles": ["src/tailwind.css", "src/styles.scss"],
-                        "scripts": []
+                        "scripts": [],
+                        "server": "src/main.server.ts",
+                        "outputMode": "server",
+                        "ssr": {
+                            "entry": "src/server.ts"
+                        }
                     },
                     "configurations": {
                         "production": {
@@ -54,49 +59,14 @@
                             "extractLicenses": false,
                             "sourceMap": true,
                             "fileReplacements": [
-                                {
-                                    "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.development.ts"
-                                }
+                              {
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.development.ts"
+                              }
                             ]
                         }
                     },
                     "defaultConfiguration": "production"
-                },
-                "server": {
-                    "builder": "@angular-devkit/build-angular:server",
-                    "options": {
-                        "outputPath": "dist/easywills-fe/server",
-                        "main": "src/server.ts",
-                        "tsConfig": "tsconfig.server.json"
-                    },
-                    "configurations": {
-                        "production": {
-                            "fileReplacements": [
-                                {
-                                    "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.prod.ts"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "serve-ssr": {
-                    "builder": "@angular-devkit/build-angular:ssr-dev-server",
-                    "configurations": {
-                        "production": {
-                            "browserTarget": "easywills-FE:build:production",
-                            "serverTarget": "easywills-FE:server:production"
-                        }
-                    }
-                },
-                "prerender": {
-                    "builder": "@angular-devkit/build-angular:prerender",
-                    "options": {
-                        "browserTarget": "easywills-FE:build:production",
-                        "serverTarget": "easywills-FE:server:production",
-                        "routes": ["/"]
-                    }
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
