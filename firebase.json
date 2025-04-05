@@ -1,16 +1,16 @@
 {
-    "hosting": {
-        "public": "dist/dist/easywills-fe/browser",
-        "ignore": ["firebase.json", "**/node_modules/**"],
-        "rewrites": [
-            {
-                "source": "**",
-                "function": "ssrFunction"
-            }
-        ]
-    },
-    "functions": {
-        "source": ".",
-        "runtime": "nodejs20"
-    }
+  "hosting": {
+    "public": "dist/easywills-fe/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
 }
