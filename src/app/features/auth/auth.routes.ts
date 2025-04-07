@@ -3,11 +3,11 @@ import { AuthComponent } from './auth.component';
 
 export const routes: Routes = [
     {
-        path:'',
+        path: '',
         component: AuthComponent,
         children: [
             {
-                path:'',
+                path: '',
                 redirectTo: 'login',
                 pathMatch: 'full',
             },
@@ -37,6 +37,13 @@ export const routes: Routes = [
                 loadComponent: () =>
                     import('./reset-password/reset-password.component').then(
                         (m) => m.ResetPasswordComponent
+                    ),
+            },
+            {
+                path: 'verify-email',
+                loadComponent: () =>
+                    import('./verify-email/verify-email.component').then(
+                        (m) => m.VerifyEmailComponent
                     ),
             },
             {
