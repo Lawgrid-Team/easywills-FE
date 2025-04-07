@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../../core/services/auth.service';
 import { of } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
+import { NotificationService } from '../../../core/utils/notification.service';
 
 @Component({
     selector: 'app-signup',
@@ -31,7 +32,7 @@ import { Router, RouterModule } from '@angular/router';
         MatIconModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule
+        RouterModule,
     ],
     templateUrl: './signup.component.html',
     styleUrl: './signup.component.scss',
@@ -43,7 +44,12 @@ export class SignupComponent implements OnInit {
     hide2 = signal(true);
 
     public aService = inject(AuthService);
-    constructor(private fb: FormBuilder, private authService: AuthService,  private router: Router) {}
+    constructor(
+        private fb: FormBuilder,
+        private authService: AuthService,
+        private router: Router,
+        private notification: NotificationService
+    ) {}
 
     clickEvent(event: MouseEvent) {
         this.hide.set(!this.hide());
@@ -56,23 +62,49 @@ export class SignupComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.form = this.fb.group({
-            name: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
-            password: [
-                '',
-                [
-                    Validators.required,
-                    Validators.minLength(8),
-                    Validators.pattern(
-                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-                    ),
+        this.form = this.fb.group(
+            {
+                name: ['', Validators.required],
+                email: ['', [Validators.required, Validators.email]],
+                password: [
+                    '',
+                    [
+                        Validators.required,
+                        Validators.minLength(8),
+                        Validators.pattern(
+                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+                        ),
+                    ],
                 ],
-            ],
-            passwordValid: [true],
-            confirmPassword: ['', Validators.required],
-            terms: [false, Validators.requiredTrue],
+                passwordValid: [false],
+                confirmPassword: ['', Validators.required],
+                terms: [false, Validators.requiredTrue],
+            },
+            { validator: this.checkPasswords.bind(this) }
+        );
+
+        // set passwordValid to true if password and confirmPassword are valid
+        this.form.valueChanges.subscribe((val) => {
+            const password = this.form.get('password');
+            const confirmPassword = this.form.get('confirmPassword');
+            const passwordValid = this.form.get('passwordValid');
+
+            const isValid = password?.valid && confirmPassword?.valid;
+
+            if (passwordValid?.value !== isValid) {
+                passwordValid?.setValue(isValid, { emitEvent: false }); //prevent loop
+            }
         });
+    }
+
+    checkPasswords(form: FormGroup) {
+        const { confirmPassword, password } = form.controls;
+        if (confirmPassword.value && confirmPassword.value != password.value) {
+            confirmPassword.setErrors({ notSame: true });
+            return { notSame: true };
+        } else {
+            return null;
+        }
     }
 
     onSubmit() {
@@ -80,11 +112,15 @@ export class SignupComponent implements OnInit {
         this.authService.register(this.form.value).subscribe({
             next: (res) => {
                 if (res.status === 200) {
-                    this.router.navigate(['/login']);
+                    this.notification.showSuccess(
+                        'Account Created Successfully'
+                    );
+                    this.router.navigate(['/auth/login']);
                 }
                 //console.log(res);
             },
             error: (err) => {
+                this.notification.showError(err.error.message);
                 console.log(err);
             },
             complete: () => {

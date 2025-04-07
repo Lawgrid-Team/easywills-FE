@@ -20,7 +20,8 @@
                 <blockquote class="flex flex-col gap-4 justify-between text-easywills-white">
                     <div>
                         <p>
-                            “7 loved how straightforward the steps were. The guidance provided at each stage was incredibly
+                            “7 loved how straightforward the steps were. The guidance provided at each stage was
+                            incredibly
                             helpful!”
                         </p>
                     </div>
@@ -45,9 +46,10 @@
         <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
             <div class="field">
                 <label for="name">Full name</label>
-                <mat-form-field >
+                <mat-form-field>
                     <!-- <mat-label>Full name</mat-label> -->
-                    <input formControlName="name" matInput placeholder="Enter first and last name">
+                    <input formControlName="name" name="name" id="name" matInput
+                        placeholder="Enter first and last name">
                     @if (form.get('name')?.hasError('required')) {
                     <mat-error>Fullname is required</mat-error>
                     }
@@ -56,7 +58,7 @@
             <div class="field">
                 <label for="email">Email</label>
                 <mat-form-field>
-                    <input formControlName="email" matInput placeholder="e.g janedoe@gmail.com">
+                    <input formControlName="email" name="email" id="email" matInput placeholder="e.g janedoe@gmail.com">
                     @if (form.get('email')?.hasError('required')) {
                     <mat-error>Email is required</mat-error>
                     }
@@ -68,10 +70,10 @@
             <div class="field">
                 <label for="password">Password</label>
                 <mat-form-field>
-                    <input formControlName="password" type="password" matInput placeholder="Enter Password"
-                        [type]="hide() ? 'password' : 'text'">
-                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
-                        [attr.aria-pressed]="hide()">
+                    <input formControlName="password" name="password" id="password" type="password" matInput
+                        placeholder="Enter Password" [type]="hide() ? 'password' : 'text'">
+                    <button type="button" mat-icon-button matSuffix (click)="clickEvent($event)"
+                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()">
                         <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
                     @if (form.get('password')?.hasError('required')) {
@@ -91,11 +93,18 @@
             <div class="field">
                 <label for="confirmPassword">Confirm password</label>
                 <mat-form-field>
-                    <input formControlName="confirmPassword" type="password" matInput placeholder="Confirm Password" [type]="hide2() ? 'password' : 'text'">
-                    <button mat-icon-button matSuffix (click)="clickEvent2($event)" [attr.aria-label]="'Hide password'"
-                        [attr.aria-pressed]="hide2()">
+                    <input formControlName="confirmPassword" id="confirmPassword" name="confirmPassword" type="password"
+                        matInput placeholder="Confirm Password" [type]="hide2() ? 'password' : 'text'">
+                    <button type="button" mat-icon-button matSuffix (click)="clickEvent2($event)"
+                        [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2()">
                         <mat-icon>{{hide2() ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
+                    @if (form.get('confirmPassword')?.hasError('required')) {
+                    <mat-error> Confirm Password is required </mat-error>
+                    }
+                    @else if (form.get('confirmPassword')?.hasError('notSame')) {
+                    <mat-error> Passwords do not match! </mat-error>
+                    }
                 </mat-form-field>
             </div>
             <div>
@@ -103,13 +112,15 @@
             </div>
             <br>
             <div>
-                <button [disabled]="form.invalid" style="width: 100%;" mat-flat-button type="submit">Create an account</button>
+                <button [disabled]="form.invalid" style="width: 100%;" mat-flat-button type="submit">Create an
+                    account</button>
             </div>
         </form>
 
         <div>
             <p class="text-center text-easywills-dark-grey mt-5">
-                Already have an account? <a class="text-easywills-blue hover:text-easywills-colour-1" [routerLink]="['/auth/login']" >Log In</a>
+                Already have an account? <a class="text-easywills-blue hover:text-easywills-colour-1"
+                    [routerLink]="['/auth/login']">Log In</a>
             </p>
         </div>
 

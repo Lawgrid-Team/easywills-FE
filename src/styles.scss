@@ -43,3 +43,29 @@ body {
         font-size: 0.9rem;
     }
 }
+
+// Toast Notification
+.notification-error {
+    background: #bc0000 !important;
+    color: #dcdcdc !important;
+    button {
+      background-color: rgba(255, 255, 255, 0.3) !important;
+      color: #dcdcdc !important;
+    }
+  }
+  .notification-warning {
+    background: #eebe00 !important;
+    color: #dcdcdc !important;
+    button {
+      background-color: rgba(255, 255, 255, 0.3) !important;
+      color: dimgray !important;
+    }
+  }
+  .notification-success {
+    background: #14780d !important;
+    color: #dcdcdc !important;
+    button {
+      background-color: rgba(255, 255, 255, 0.3) !important;
+      color: #dcdcdc !important;
+    }
+  }

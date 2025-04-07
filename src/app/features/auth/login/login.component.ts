@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
@@ -12,6 +12,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import { NotificationService } from '../../../core/utils/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-login',
@@ -38,6 +41,10 @@ export class LoginComponent implements OnInit {
         event.stopPropagation();
     }
 
+     public authService = inject(AuthService);
+     public notification = inject(NotificationService);
+     public router = inject(Router);
+
     constructor(private fb: FormBuilder) {}
 
     ngOnInit(): void {
@@ -48,6 +55,30 @@ export class LoginComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.form.value, 'form value');
+
+        if (this.form.valid) {
+            this.authService.login(this.form.value).subscribe({
+                next: (res: any) => {
+
+                this.router.navigate(['/wiz'], { replaceUrl: true });
+                    // if (res.status === 200) {
+                    //     this.notification.showSuccess(
+                    //         res.message
+                    //     );
+                    //     this.router.navigate(['/wiz'], { replaceUrl: true });
+                    // } else {
+                    //     this.notification.showError(res.message);
+                    //     this.notification.showError(res.msg);
+                    // }
+
+                },
+                error: (err: any) => {
+                    this.notification.showError(err.error.message);
+                },
+                // complete: () => {
+                //     console.log('complete');
+                // },
+            });
+        }
     }
 }
