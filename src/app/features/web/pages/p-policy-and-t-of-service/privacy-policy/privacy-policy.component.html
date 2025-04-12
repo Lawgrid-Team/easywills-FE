@@ -1,294 +1,120 @@
-<div class="flex min-h-screen flex-col">
-  <header class="border-b border-gray-200">
-    <div class="container mx-auto flex items-center justify-between px-4 py-4">
-      <a routerLink="/" class="text-xl font-bold">
-        easyWill
-      </a>
-      <nav class="hidden md:flex items-center space-x-8">
-        <a routerLink="/how-it-works" class="text-sm text-[#505050] hover:text-black">
-          How it works
-        </a>
-        <a routerLink="/pricing" class="text-sm text-[#505050] hover:text-black">
-          Pricing
-        </a>
-        <a routerLink="/help-centre" class="text-sm text-[#505050] hover:text-black">
-          Help centre
-        </a>
-      </nav>
-      <div class="flex items-center space-x-4">
-        <a routerLink="/digital-vault" class="hidden md:block text-sm text-[#505050] hover:text-black">
-          Digital Vault
-        </a>
-        <a
-          routerLink="/login"
-          class="rounded-md border border-gray-300 px-4 py-2 text-sm text-[#505050] hover:bg-gray-50"
-        >
-          Login
-        </a>
-        <a
-          routerLink="/write-your-will"
-          class="rounded-md bg-[#32302f] px-4 py-2 text-sm text-white hover:bg-opacity-90"
-        >
-          Write your will
-        </a>
-      </div>
-    </div>
-  </header>
+<div class="container mx-auto px-4 py-12">
+  <h1 class="text-4xl font-bold text-[#32302f] mb-2">Privacy Policy</h1>
+  <p class="text-[#505050] mb-16">Effective date: October 3, 2023</p>
 
-  <main class="flex-1">
-    <div class="container mx-auto px-4 py-12">
-      <h1 class="text-4xl font-bold text-[#32302f] mb-2">Privacy Policy</h1>
-      <p class="text-[#505050] mb-16">Effective date: October 3, 2023</p>
-
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <aside class="md:col-span-1">
-          <div class="sticky top-8">
-            <h2 class="text-lg font-medium mb-4">Table of contents</h2>
-            <nav class="flex flex-col space-y-2">
-              <button
-                (click)="scrollToSection('introduction')"
-                [ngClass]="{
-                  'text-left py-2 px-4 rounded-md font-medium': true,
-                  'bg-[#efefef] text-[#505050]': activeSection === 'introduction',
-                  'text-[#505050] hover:bg-gray-100': activeSection !== 'introduction'
-                }"
-              >
-                Introduction
-              </button>
-              <button
-                (click)="scrollToSection('information-collection')"
-                [ngClass]="{
-                  'text-left py-2 px-4 rounded-md pl-8': true,
-                  'bg-[#efefef] text-[#505050]': activeSection === 'information-collection',
-                  'text-[#505050] hover:bg-gray-100': activeSection !== 'information-collection'
-                }"
-              >
-                Information collection
-              </button>
-              <button
-                (click)="scrollToSection('data-storage')"
-                [ngClass]="{
-                  'text-left py-2 px-4 rounded-md pl-8': true,
-                  'bg-[#efefef] text-[#505050]': activeSection === 'data-storage',
-                  'text-[#505050] hover:bg-gray-100': activeSection !== 'data-storage'
-                }"
-              >
-                Data storage and security
-              </button>
-              <button
-                (click)="scrollToSection('access-control')"
-                [ngClass]="{
-                  'text-left py-2 px-4 rounded-md pl-8': true,
-                  'bg-[#efefef] text-[#505050]': activeSection === 'access-control',
-                  'text-[#505050] hover:bg-gray-100': activeSection !== 'access-control'
-                }"
-              >
-                Access and control of your information
-              </button>
-              <button
-                (click)="scrollToSection('contact-us')"
-                [ngClass]="{
-                  'text-left py-2 px-4 rounded-md pl-8': true,
-                  'bg-[#efefef] text-[#505050]': activeSection === 'contact-us',
-                  'text-[#505050] hover:bg-gray-100': activeSection !== 'contact-us'
-                }"
-              >
-                Contact us
-              </button>
-            </nav>
-          </div>
-        </aside>
-
-        <div class="md:col-span-3 space-y-12">
-          <section id="introduction">
-            <h2 class="text-3xl font-bold text-[#32302f] mb-6">Introduction</h2>
-            <p class="text-[#505050] mb-4">
-              Lorem ipsum dolor sit amet consectetur. Laoreet eget facilisi quis nunc facilisis. Faucibus egestas
-              velit urna proin aenean. Dictum tellus urna mi eget. Ultrices ut et ultricies auctor cras malesuada.
-              In ut est lorem scelerisque sit.
-            </p>
-          </section>
-
-          <section id="information-collection">
-            <h2 class="text-3xl font-bold text-[#32302f] mb-6">Information collection</h2>
-            <p class="text-[#505050] mb-4">
-              Lorem ipsum dolor sit amet consectetur. Gravida at urna malesuada tempor velit sem cursus sit.
-              Faucibus dolor nisi amet commodo id sit aliquam. Id viverra sit pharetra nullam proin ipsum sed lacus.
-              Ut porttitor imperdiet sagittis malesuada. Ultrices at nullam porta tortor sit.
-            </p>
-            <p class="text-[#505050] mb-4">
-              Lorem ipsum dolor sit amet consectetur. Nibh eu vel sapien sollicitudin amet. Commodo neque vestibulum
-              ac nisl sapien. Et malesuada ac mollis ipsum venenatis leo nunc. Sed lacus lacus pulvinar risus
-              vestibulum aliquet. Elit metus cursus condimentum tempor. Id arci lacus cursus id.
-            </p>
-          </section>
-
-          <section id="data-storage">
-            <h2 class="text-3xl font-bold text-[#32302f] mb-6">Data storage and security</h2>
-            <p class="text-[#505050] mb-4">
-              Lorem ipsum dolor sit amet consectetur. Amet tincidunt cras nunc ac a. Varius ultrices elementum vel
-              in a ut tempus eleifend libero. Augue montes egestas sem mi dolor egestas adipiscing vel vivamus.
-              Mattis sed leo tincidunt volutpat in euismod. Mollis in amet neque in felis id. Ullamcorper velit
-              metus convallis pulvinar id. Ultrices luctus senectus at aliquet in consectetur.
-            </p>
-          </section>
-
-          <section id="access-control">
-            <h2 class="text-3xl font-bold text-[#32302f] mb-6">Access and control of your information</h2>
-            <p class="text-[#505050] mb-4">
-              Lorem ipsum dolor sit amet consectetur. Et duis aliquam ac eget dignissim elit tellus lorem etiam.
-              Semper volutpat lacus et sodales integer habitasse quisque vestibulum. Dictum elit egestas libero
-              volutpat lacus risus urna ornare velit. Pulvinar orci sit gravida viverra fermentum ut at tempus diam.
-            </p>
-            <p class="text-[#505050] mb-4">
-              Urna mattis purus tempor placerat risus mauris non sed. Est in eget sodales vitae in maecenas aliquet
-              eleifend. Quis at nec semper nunc arci facilisis maecenas ut. Eu urna morbi faucibus.
-            </p>
-          </section>
-
-          <section id="contact-us">
-            <h2 class="text-3xl font-bold text-[#32302f] mb-6">Contact us:</h2>
-            <p class="text-[#505050] mb-4">
-              If you have any questions or concerns about this privacy policy, please contact us at 13 rd Floor, 18
-              Uptown Road, Canada A2 5AA
-            </p>
-          </section>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <footer class="bg-[#fdfdfd] border-t border-gray-200 mt-16">
-    <div class="container mx-auto px-4 py-12">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <div>
-          <h3 class="text-lg font-bold mb-4">Join our newsletter</h3>
-          <p class="text-[#505050] mb-4">
-            Sign up for our weekly non-boring newsletter about money, markets, and more.
-          </p>
-        </div>
-        <div class="flex flex-col md:flex-row gap-2">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            class="flex-1 rounded-md border border-gray-300 px-4 py-2 text-sm"
-          />
-          <button class="rounded-md bg-[#32302f] px-4 py-2 text-sm text-white hover:bg-opacity-90">
-            Subscribe
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-16">
+    <aside class="md:col-span-6 lg:col-span-5 pr-4">
+      <div class="sticky top-8 w-full">
+        <h2 class="text-lg font-medium mb-4">Table of contents</h2>
+        <nav class="flex flex-col space-y-2">
+          <button
+            (click)="scrollToSection('introduction')"
+            [ngClass]="{
+              'text-left py-2 px-4 rounded-md font-medium w-full': true,
+              'bg-[#efefef] text-[#505050]': activeSection === 'introduction',
+              'text-[#505050] hover:bg-gray-100': activeSection !== 'introduction'
+            }"
+          >
+            Introduction
           </button>
-        </div>
+          <button
+            (click)="scrollToSection('information-collection')"
+            [ngClass]="{
+              'text-left py-2 px-4 rounded-md pl-10 w-full': true,
+              'bg-[#efefef] text-[#505050]': activeSection === 'information-collection',
+              'text-[#505050] hover:bg-gray-100': activeSection !== 'information-collection'
+            }"
+          >
+            Information collection
+          </button>
+          <button
+            (click)="scrollToSection('data-storage')"
+            [ngClass]="{
+              'text-left py-2 px-4 rounded-md pl-14 w-full': true,
+              'bg-[#efefef] text-[#505050]': activeSection === 'data-storage',
+              'text-[#505050] hover:bg-gray-100': activeSection !== 'data-storage'
+            }"
+          >
+            Data storage and security
+          </button>
+          <button
+            (click)="scrollToSection('access-control')"
+            [ngClass]="{
+              'text-left py-2 px-4 rounded-md pl-18 w-full break-words': true,
+              'bg-[#efefef] text-[#505050]': activeSection === 'access-control',
+              'text-[#505050] hover:bg-gray-100': activeSection !== 'access-control'
+            }"
+          >
+            Access and control of your information
+          </button>
+          <button
+            (click)="scrollToSection('contact-us')"
+            [ngClass]="{
+              'text-left py-2 px-4 rounded-md pl-22 w-full': true,
+              'bg-[#efefef] text-[#505050]': activeSection === 'contact-us',
+              'text-[#505050] hover:bg-gray-100': activeSection !== 'contact-us'
+            }"
+          >
+            Contact us
+          </button>
+        </nav>
       </div>
-      <p class="text-xs text-[#a6a6a6] mb-12">By subscribing you agree to with our Privacy Policy</p>
+    </aside>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-        <div>
-          <a routerLink="/" class="text-xl font-bold">
-            easyWill
-          </a>
-        </div>
-        <div>
-          <h3 class="text-sm font-bold mb-4">About us</h3>
-          <nav class="flex flex-col space-y-2">
-            <a routerLink="/our-story" class="text-sm text-[#505050] hover:text-black">
-              Our story
-            </a>
-            <a routerLink="/how-it-works" class="text-sm text-[#505050] hover:text-black">
-              How it works
-            </a>
-            <a routerLink="/testimonies" class="text-sm text-[#505050] hover:text-black">
-              Testimonies
-            </a>
-            <a routerLink="/online-wills-pricing" class="text-sm text-[#505050] hover:text-black">
-              Online wills Pricing
-            </a>
-            <a routerLink="/faqs" class="text-sm text-[#505050] hover:text-black">
-              FAQs
-            </a>
-          </nav>
-        </div>
-        <div>
-          <h3 class="text-sm font-bold mb-4">Legal</h3>
-          <nav class="flex flex-col space-y-2">
-            <a routerLink="/accessibility" class="text-sm text-[#505050] hover:text-black">
-              Accessibility
-            </a>
-            <a routerLink="/privacy-policy" class="text-sm text-[#505050] hover:text-black">
-              Privacy and policy
-            </a>
-            <a routerLink="/terms-of-use" class="text-sm text-[#505050] hover:text-black">
-              Terms of use
-            </a>
-          </nav>
-        </div>
-        <div>
-          <h3 class="text-sm font-bold mb-4">Socials</h3>
-          <nav class="flex flex-col space-y-2">
-            <a routerLink="/instagram" class="flex items-center text-sm text-[#505050] hover:text-black">
-              <span class="icon-instagram mr-2"></span>
-              Instagram
-            </a>
-            <a routerLink="/twitter" class="flex items-center text-sm text-[#505050] hover:text-black">
-              <span class="icon-twitter mr-2"></span>
-              Twitter
-            </a>
-            <a routerLink="/youtube" class="flex items-center text-sm text-[#505050] hover:text-black">
-              <span class="icon-youtube mr-2"></span>
-              YouTube
-            </a>
-            <a routerLink="/linkedin" class="flex items-center text-sm text-[#505050] hover:text-black">
-              <span class="icon-linkedin mr-2"></span>
-              LinkedIn
-            </a>
-          </nav>
-        </div>
-        <div>
-          <h3 class="text-sm font-bold mb-4">Contact us</h3>
-          <p class="text-sm text-[#505050] mb-2">+1 (415) 555-1234</p>
-          <p class="text-sm text-[#505050]">
-            3 rd Floor, 18 Uptown Road,
-            <br />
-            Canada A2 5AA
-          </p>
-        </div>
-      </div>
+    <div class="md:col-span-6 lg:col-span-7 space-y-12">
+      <section id="introduction">
+        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Introduction</h2>
+        <p class="text-[#505050] mb-4">
+          Lorem ipsum dolor sit amet consectetur. Laoreet eget facilisi quis nunc facilisis. Faucibus egestas
+          velit urna proin aenean. Dictum tellus urna mi eget. Ultrices ut et ultricies auctor cras malesuada.
+          In ut est lorem scelerisque sit.
+        </p>
+      </section>
 
-      <hr class="border-gray-200 mb-8" />
+      <section id="information-collection">
+        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Information collection</h2>
+        <p class="text-[#505050] mb-4">
+          Lorem ipsum dolor sit amet consectetur. Gravida at urna malesuada tempor velit sem cursus sit.
+          Faucibus dolor nisi amet commodo id sit aliquam. Id viverra sit pharetra nullam proin ipsum sed lacus.
+          Ut porttitor imperdiet sagittis malesuada. Ultrices at nullam porta tortor sit.
+        </p>
+        <p class="text-[#505050] mb-4">
+          Lorem ipsum dolor sit amet consectetur. Nibh eu vel sapien sollicitudin amet. Commodo neque vestibulum
+          ac nisl sapien. Et malesuada ac mollis ipsum venenatis leo nunc. Sed lacus lacus pulvinar risus
+          vestibulum aliquet. Elit metus cursus condimentum tempor. Id arci lacus cursus id.
+        </p>
+      </section>
 
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="flex flex-col md:flex-row items-center gap-4 text-sm text-[#505050]">
-          <p>© 2025 easyWills. All rights reserved.</p>
-          <div class="flex gap-4">
-            <a routerLink="/privacy-policy" class="hover:text-black">
-              Privacy Policy
-            </a>
-            <a routerLink="/terms-of-service" class="hover:text-black">
-              Terms of Service
-            </a>
-            <a routerLink="/cookies-settings" class="hover:text-black">
-              Cookies Settings
-            </a>
-          </div>
-        </div>
-        <div class="flex items-center gap-4 mt-4 md:mt-0">
-          <a routerLink="/facebook" class="text-[#505050] hover:text-black">
-            <span class="sr-only">Facebook</span>
-            <span class="icon-facebook"></span>
-          </a>
-          <a routerLink="/instagram" class="text-[#505050] hover:text-black">
-            <span class="sr-only">Instagram</span>
-            <span class="icon-instagram"></span>
-          </a>
-          <a routerLink="/twitter" class="text-[#505050] hover:text-black">
-            <span class="sr-only">Twitter</span>
-            <span class="icon-twitter"></span>
-          </a>
-          <a routerLink="/linkedin" class="text-[#505050] hover:text-black">
-            <span class="sr-only">LinkedIn</span>
-            <span class="icon-linkedin"></span>
-          </a>
-        </div>
-      </div>
-      <p class="text-xs text-[#a6a6a6] mt-4 text-center md:text-left">A LawGrid Product</p>
+      <section id="data-storage">
+        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Data storage and security</h2>
+        <p class="text-[#505050] mb-4">
+          Lorem ipsum dolor sit amet consectetur. Amet tincidunt cras nunc ac a. Varius ultrices elementum vel
+          in a ut tempus eleifend libero. Augue montes egestas sem mi dolor egestas adipiscing vel vivamus.
+          Mattis sed leo tincidunt volutpat in euismod. Mollis in amet neque in felis id. Ullamcorper velit
+          metus convallis pulvinar id. Ultrices luctus senectus at aliquet in consectetur.
+        </p>
+      </section>
+
+      <section id="access-control">
+        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Access and control of your information</h2>
+        <p class="text-[#505050] mb-4">
+          Lorem ipsum dolor sit amet consectetur. Et duis aliquam ac eget dignissim elit tellus lorem etiam.
+          Semper volutpat lacus et sodales integer habitasse quisque vestibulum. Dictum elit egestas libero
+          volutpat lacus risus urna ornare velit. Pulvinar orci sit gravida viverra fermentum ut at tempus diam.
+        </p>
+        <p class="text-[#505050] mb-4">
+          Urna mattis purus tempor placerat risus mauris non sed. Est in eget sodales vitae in maecenas aliquet
+          eleifend. Quis at nec semper nunc arci facilisis maecenas ut. Eu urna morbi faucibus.
+        </p>
+      </section>
+
+      <section id="contact-us">
+        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Contact us:</h2>
+        <p class="text-[#505050] mb-4">
+          If you have any questions or concerns about this privacy policy, please contact us at 13 rd Floor, 18
+          Uptown Road, Canada A2 5AA
+        </p>
+      </section>
     </div>
-  </footer>
+  </div>
 </div>

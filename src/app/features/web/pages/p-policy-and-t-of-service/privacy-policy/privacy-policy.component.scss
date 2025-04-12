@@ -1,41 +1,30 @@
-// Icon styles for social media icons
-.icon-facebook,
-.icon-instagram,
-.icon-twitter,
-.icon-youtube,
-.icon-linkedin {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+// Custom padding values for indentation
+.pl-10 {
+  padding-left: 2.5rem;
 }
 
-.icon-facebook {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z'%3E%3C/path%3E%3C/svg%3E");
+.pl-14 {
+  padding-left: 3.5rem;
 }
 
-.icon-instagram {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='2' width='20' height='20' rx='5' ry='5'%3E%3C/rect%3E%3Cpath d='M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z'%3E%3C/path%3E%3Cline x1='17.5' y1='6.5' x2='17.51' y2='6.5'%3E%3C/line%3E%3C/svg%3E");
+.pl-18 {
+  padding-left: 4.5rem;
 }
 
-.icon-twitter {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z'%3E%3C/path%3E%3C/svg%3E");
-}
-
-.icon-youtube {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z'%3E%3C/path%3E%3Cpolygon points='9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02'%3E%3C/polygon%3E%3C/svg%3E");
-}
-
-.icon-linkedin {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z'%3E%3C/path%3E%3Crect x='2' y='9' width='4' height='12'%3E%3C/rect%3E%3Ccircle cx='4' cy='4' r='2'%3E%3C/circle%3E%3C/svg%3E");
+.pl-22 {
+  padding-left: 5.5rem;
 }
 
 // Sticky sidebar
 .sticky {
   position: sticky;
   top: 2rem;
+}
+
+// Break words utility
+.break-words {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 // Ensure smooth scrolling for the whole page
@@ -46,4 +35,37 @@ html {
 // Add some spacing for the sections to ensure they're properly visible when scrolled to
 section {
   scroll-margin-top: 2rem;
+}
+
+// Grid utilities if not provided by your Tailwind setup
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.gap-16 {
+  gap: 4rem;
+}
+
+@media (min-width: 768px) {
+  .md\:col-span-6 {
+    grid-column: span 6 / span 6;
+  }
+  
+  .md\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:col-span-5 {
+    grid-column: span 5 / span 5;
+  }
+  
+  .lg\:col-span-7 {
+    grid-column: span 7 / span 7;
+  }
 }
