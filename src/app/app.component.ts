@@ -1,6 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-root',
@@ -15,7 +16,9 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (typeof window !== 'undefined') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
                 const fragment = this.router.parseUrl(this.router.url).fragment;
                 if (fragment) {
                     const element = document.getElementById(fragment);
