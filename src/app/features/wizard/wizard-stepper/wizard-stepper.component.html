@@ -1,0 +1,29 @@
+<div class="w-full">
+    <div class="hidden sm:block">
+        <ol class="grid grid-cols-1 divide-y divide-border sm:grid-cols-5 sm:divide-y-0">
+            <li *ngFor="let step of steps; let i = index" class="relative flex items-center justify-center"
+                [class.after:absolute]="i !== steps.length - 1" [class.after:right-0]="i !== steps.length - 1"
+                [class.after:top-1]="i !== steps.length - 1" [class.after:h-[2px]]="i !== steps.length - 1"
+                [class.after:w-full]="i !== steps.length - 1" [class.after:translate-y-0]="i !== steps.length - 1"
+                [class.after:bg-border]="i !== steps.length - 1" [class.sm:after:left-1]="i !== steps.length - 1"
+                [class.sm:after:top-5]="i !== steps.length - 1" [class.sm:after:translate-y-0]="i !== steps.length - 1"
+                [class.after:bg-primary]="currentStep > i">
+                <div class="relative flex flex-col items-center gap-2 pb-6 pt-3 sm:pt-0"
+                    [class.text-primary]="currentStep === i">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-full border-2 border-border bg-background text-center text-sm font-medium"
+                        [class.border-primary]="currentStep === i" [class.border-primary]="currentStep > i"
+                        [class.bg-primary]="currentStep > i" [class.text-white]="currentStep > i">
+                        <mat-icon *ngIf="currentStep > i" class="h-5 w-5">check</mat-icon>
+                        <span *ngIf="currentStep <= i">{{i + 1}}</span>
+                    </div>
+                    <span class="text-center text-sm font-medium">{{step.label}}</span>
+                </div>
+            </li>
+        </ol>
+    </div>
+    <div class="sm:hidden">
+        <p class="text-sm font-medium">
+            Step {{currentStep + 1}} of {{steps.length}}: {{steps[currentStep].label}}
+        </p>
+    </div>
+</div>
