@@ -1,0 +1,59 @@
+<div>
+    <h2 class="text-3xl font-bold text-easywills-black font-DM_Serif mb-8">Tell us about you.</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div>
+            <label class="flex items-center mb-2 text-easywills-black">
+                What is your date of birth?
+            </label>
+            <mat-form-field appearance="outline" class="w-full">
+                <!-- <mat-label>What is your date of birth?</mat-label> -->
+                <input matInput [matDatepicker]="picker" placeholder="MM/DD/YYYY" formControlName="dateOfBirth" [max]="maxDate">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="form.get('dateOfBirth')?.hasError('required')">
+                    Date of birth is required
+                </mat-error>
+                <mat-error *ngIf="form.get('dateOfBirth')?.hasError('futureDate')">
+                    Date of birth cannot be in the future
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div>
+            <label class="flex items-center mb-2 text-easywills-black">
+                What is your state of origin?
+            </label>
+            <mat-form-field appearance="outline" class="w-full">
+                <!-- <mat-label>What is your state of origin?</mat-label> -->
+                <mat-select formControlName="stateOfOrigin" placeholder="Please Select">
+                    <!-- <mat-option value="" disabled>Select your state</mat-option> -->
+                    <mat-option value="al">Alabama</mat-option>
+                    <mat-option value="ak">Alaska</mat-option>
+                    <mat-option value="az">Arizona</mat-option>
+                    <mat-option value="ar">Arkansas</mat-option>
+                    <mat-option value="ca">California</mat-option>
+                    <mat-option value="co">Colorado</mat-option>
+                    <mat-option value="ct">Connecticut</mat-option>
+                    <mat-option value="de">Delaware</mat-option>
+                    <mat-option value="fl">Florida</mat-option>
+                    <mat-option value="ga">Georgia</mat-option>
+                    <mat-option value="hi">Hawaii</mat-option>
+                    <mat-option value="id">Idaho</mat-option>
+                    <mat-option value="il">Illinois</mat-option>
+                    <!-- Add more states as needed -->
+                </mat-select>
+                <mat-error *ngIf="form.get('stateOfOrigin')?.hasError('required')">
+                    State of origin is required
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="absolute bottom-24 right-8">
+            <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
+                <span class="mr-2">Need help?</span>
+                <mat-icon>help</mat-icon>
+            </div>
+        </div>
+    </form>
+</div>

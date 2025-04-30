@@ -1,11 +1,68 @@
 import { Component } from '@angular/core';
+import { HeaderComponent } from '../widget/header/header.component';
+import { FooterComponent } from '../widget/footer/footer.component';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { PersonalDetailsData } from '../../../core/models/interfaces/will-data.interface';
+import { WillDataService } from '../../../core/services/Wizard/will-data.service';
+import { IntroScreenComponent } from './intro-screen/intro-screen.component';
+import { AssetDistributionFormComponent } from './asset-distribution-form/asset-distribution-form.component';
 
 @Component({
-  selector: 'app-estate-distribution',
-  imports: [],
-  templateUrl: './estate-distribution.component.html',
-  styleUrl: './estate-distribution.component.scss'
+    selector: 'app-estate-distribution',
+    imports: [
+        HeaderComponent,
+        FooterComponent,
+        IntroScreenComponent,
+        AssetDistributionFormComponent,
+        CommonModule,
+    ],
+    templateUrl: './estate-distribution.component.html',
+    styleUrl: './estate-distribution.component.scss',
 })
 export class EstateDistributionComponent {
+    step = 0;
+    data: PersonalDetailsData;
+    isFormValid = true;
 
+    constructor(
+        private router: Router,
+        private willDataService: WillDataService
+    ) {
+        this.data = this.willDataService.getPersonalDetails();
+    }
+
+    ngOnInit(): void {}
+
+    updateData(newData: Partial<PersonalDetailsData>): void {
+        this.willDataService.updatePersonalDetails(newData);
+        this.data = this.willDataService.getPersonalDetails();
+    }
+
+    handleNext(): void {
+        if (this.step === 2) {
+            this.router.navigate(['/wiz/will/executor-and-witnesses']);
+        } else {
+            this.step++;
+            window.scrollTo(0, 0);
+        }
+    }
+
+    handleBack(): void {
+        if (this.step === 0) {
+            this.router.navigate(['/wiz/will/asset-inventory']);
+        } else {
+            this.step--;
+            window.scrollTo(0, 0);
+        }
+    }
+
+    setFormValidity(isValid: boolean): void {
+        this.isFormValid = isValid;
+    }
+
+    onSaveAndExit(): void {
+        this.willDataService.saveWillData();
+        this.router.navigate(['/wiz/welcome']);
+    }
 }

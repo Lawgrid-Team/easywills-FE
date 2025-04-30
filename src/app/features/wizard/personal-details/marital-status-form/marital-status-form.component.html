@@ -1,0 +1,119 @@
+<div>
+    <h2 class="text-3xl font-bold text-easywills-black mb-8">Are you currently married?</h2>
+
+    <form (ngSubmit)="onSubmit()" class="space-y-6">
+
+        <mat-radio-group [(ngModel)]="isMarried" name="maritalStatus"
+            (change)="handleMaritalStatusChange($event.value ? 'yes' : 'no')">
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
+                    <mat-radio-button [value]="true" color="primary">Yes</mat-radio-button>
+                    <div class="flex-grow"></div>
+                    <mat-icon *ngIf="isMarried">check</mat-icon>
+                </div>
+
+                <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
+                    <mat-radio-button [value]="false" color="primary">No</mat-radio-button>
+                    <div class="flex-grow"></div>
+                    <mat-icon *ngIf="!isMarried">check</mat-icon>
+                </div>
+            </div>
+        </mat-radio-group>
+
+        <div *ngIf="isMarried" class="space-y-4">
+            <!-- Display existing spouses -->
+            <mat-card *ngFor="let spouse of spouses" class="bg-easywills-dark-grey text-white p-4 rounded-md">
+                <div class="flex justify-between items-start">
+                    <h3 class="text-xl font-semibold">
+                        {{spouse.firstName}} {{spouse.lastName}}
+                    </h3>
+                    <button type="button" mat-icon-button (click)="handleEditSpouse(spouse)" class="text-easywills-white">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
+                <p class="text-grey">Spouse</p>
+                <p>Born {{spouse.dateOfBirth}}</p>
+                <p>Married {{spouse.dateOfMarriage}}</p>
+            </mat-card>
+
+            <!-- Form to add/edit spouse -->
+            <div *ngIf="isAddingSpouse" class="space-y-4">
+                <form [formGroup]="spouseForm">
+                    <div>
+                        <label class="block mb-2">What is the legal name of your spouse?</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <mat-form-field appearance="outline">
+                                <!-- <mat-label>First name</mat-label> -->
+                                <input matInput formControlName="firstName" placeholder="First name">
+                                <mat-error *ngIf="spouseForm.get('firstName')?.hasError('required')">
+                                    First name is required
+                                </mat-error>
+                                <mat-error *ngIf="spouseForm.get('firstName')?.hasError('minlength')">
+                                    First name must be at least 2 characters
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <!-- <mat-label>Last name</mat-label> -->
+                                <input matInput formControlName="lastName" placeholder="Last name">
+                                <mat-error *ngIf="spouseForm.get('lastName')?.hasError('required')">
+                                    Last name is required
+                                </mat-error>
+                                <mat-error *ngIf="spouseForm.get('lastName')?.hasError('minlength')">
+                                    Last name must be at least 2 characters
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2">What is their date of birth?</label>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <!-- <mat-label>Date of birth</mat-label> -->
+                            <input matInput [matDatepicker]="birthPicker" formControlName="dateOfBirth">
+                            <mat-datepicker-toggle matIconSuffix [for]="birthPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #birthPicker></mat-datepicker>
+                            <mat-error *ngIf="spouseForm.get('dateOfBirth')?.hasError('required')">
+                                Date of birth is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        <label class="block mb-2">What is your date of marriage?</label>
+                        <mat-form-field appearance="outline" class="w-full">
+                            <!-- <mat-label>Date of marriage</mat-label> -->
+                            <input matInput [matDatepicker]="marriagePicker" formControlName="dateOfMarriage">
+                            <mat-datepicker-toggle matIconSuffix [for]="marriagePicker"></mat-datepicker-toggle>
+                            <mat-datepicker #marriagePicker></mat-datepicker>
+                            <mat-error *ngIf="spouseForm.get('dateOfMarriage')?.hasError('required')">
+                                Date of marriage is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                     <br>
+                    <button type="button" mat-flat-button color="primary" (click)="handleSaveSpouse()" class="w-full">
+                        Save
+                    </button>
+                </form>
+            </div>
+
+            <button *ngIf="!isAddingSpouse" type="button" mat-flat-button color="primary"
+                (click)="handleAddAnotherSpouse()" class="w-full flex items-center justify-center">
+                <mat-icon class="mr-2">add</mat-icon>
+                Add another spouse
+            </button>
+        </div>
+
+        <div *ngIf="!isMarried" >
+            <p> This is us texting</p>
+        </div>
+
+        <div class="absolute bottom-24 right-8">
+            <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
+                <span class="mr-2">Need help?</span>
+                <mat-icon>help</mat-icon>
+            </div>
+        </div>
+    </form>
+</div>
