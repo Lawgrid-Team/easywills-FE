@@ -27,7 +27,15 @@ body {
             outlined-outline-color: #dedede,
             container-height: 1rem,
             container-vertical-padding: 0.8rem,
-            outlined-input-text-placeholder-color: var(--Placeholder-text, #8a8989)
+            outlined-input-text-placeholder-color:
+                var(--Placeholder-text, #8a8989),
+            outlined-input-text-color: var(--Input-text, #444),
+        )
+    );
+
+    @include mat.card-overrides(
+        (
+          elevated-container-color: var(--easywills-dark-grey, #737373),
         )
     );
 
@@ -42,6 +50,11 @@ body {
         font-family: Poppins;
         font-size: 0.9rem;
     }
+
+    .mdc-text-field {
+        background-color: #fdfdfd !important;
+        border-radius: 14px !important;
+    }
 }
 
 // Toast Notification
@@ -49,23 +62,24 @@ body {
     background: #bc0000 !important;
     color: #dcdcdc !important;
     button {
-      background-color: rgba(255, 255, 255, 0.3) !important;
-      color: #dcdcdc !important;
+        background-color: rgba(255, 255, 255, 0.3) !important;
+        color: #dcdcdc !important;
     }
-  }
-  .notification-warning {
+}
+.notification-warning {
     background: #eebe00 !important;
     color: #dcdcdc !important;
     button {
-      background-color: rgba(255, 255, 255, 0.3) !important;
-      color: dimgray !important;
+        background-color: rgba(255, 255, 255, 0.3) !important;
+        color: dimgray !important;
     }
-  }
-  .notification-success {
+}
+.notification-success {
     background: #14780d !important;
     color: #dcdcdc !important;
     button {
-      background-color: rgba(255, 255, 255, 0.3) !important;
-      color: #dcdcdc !important;
+        background-color: rgba(255, 255, 255, 0.3) !important;
+        color: #dcdcdc !important;
     }
-  }
+}
+

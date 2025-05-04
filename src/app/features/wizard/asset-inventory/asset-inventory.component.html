@@ -1,1 +1,45 @@
-<p>asset-inventory works!</p>
+<div class="min-h-screen bg-background">
+    <app-header></app-header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-3xl mx-auto">
+            <!-- <ng-container *ngIf="currentAssetForm === 'real-estate'">
+                <app-real-estate-form [data]="data" [editingAssetId]="editingAssetId" (updateData)="updateData($event)"
+                    (save)="handleAssetSaved('real-estate')">
+                </app-real-estate-form>
+            </ng-container>
+
+            <ng-container *ngIf="currentAssetForm === 'bank-account'">
+                <app-bank-account-form [data]="data" [editingAssetId]="editingAssetId" (updateData)="updateData($event)"
+                    (save)="handleAssetSaved('bank-account')">
+                </app-bank-account-form>
+            </ng-container>
+
+            -->
+
+            <ng-container *ngIf="currentAssetForm === null">
+                <app-asset-intro-screen *ngIf="step === 0" (next)="handleNext()"></app-asset-intro-screen>
+
+                <!-- <app-asset-type-selection *ngIf="step === 1" [data]="data"
+                    (assetTypeSelect)="handleAssetTypeSelect($event)"
+                    (editAsset)="handleEditAsset($event.type, $event.id)">
+                </app-asset-type-selection> -->
+            </ng-container>
+
+            <!-- <div class="mt-8 flex justify-between">
+                <button mat-stroked-button color="primary" (click)="handleBack()">
+                    <mat-icon>chevron_left</mat-icon>
+                    Go back
+                </button>
+
+                <button *ngIf="step > 0 && currentAssetForm === null" mat-flat-button color="primary"
+                    (click)="handleNext()">
+                    Next
+                </button>
+            </div> -->
+        </div>
+    </main>
+
+    <app-footer [step]="step" [isNextDisabled]="!isFormValid" (back)="handleBack()" (next)="handleNext()">
+    </app-footer>
+</div>

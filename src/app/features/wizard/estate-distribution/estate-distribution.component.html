@@ -1,1 +1,22 @@
-<p>estate-distribution works!</p>
+<div class="min-h-screen">
+    <app-header></app-header>
+
+    <main class="container mx-auto px-4 py-8 pt-16">
+        <div class="max-w-3xl mx-auto">
+            <ng-container [ngSwitch]="step">
+                <app-intro-screen *ngSwitchCase="0" (next)="handleNext()"></app-intro-screen>
+                <!-- <app-asset-distribution-form *ngSwitchCase="1" [data]="data" (updateData)="updateData($event)"
+                    (next)="handleNext()" (setFormValidity)="setFormValidity($event)">
+                </app-asset-distribution-form> -->
+
+               <!--  <app-exclusion-form *ngSwitchCase="2" [data]="data" (updateData)="updateData($event)"
+                    (next)="handleNext()" (setFormValidity)="setFormValidity($event)">
+                </app-exclusion-form> -->
+            </ng-container>
+        </div>
+    </main>
+
+    <app-footer [step]="step" [isNextDisabled]="!isFormValid" (back)="handleBack()" (next)="handleNext()">
+    </app-footer>
+</div>
+

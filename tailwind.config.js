@@ -5,6 +5,8 @@ export default {
         extend: {
             colors: {
                 "easywills-black": "rgba(68, 68, 68, 1)",
+                "easywills-black-11%": "rgba(105, 130, 181, 0.11)",
+                "easywills-background": "rgba(239, 239, 239, 1)",
                 "easywills-white": "rgba(239, 239, 239, 1)",
                 "easywills-blue": "rgba(105, 130, 181, 1)",
                 "easywills-colour-1": "rgba(105, 130, 181, 1)",
@@ -96,6 +98,8 @@ export default {
                 fraunces: "Fraunces",
                 inter: "Inter",
                 georgia: "Georgia",
+                Poppins: "Poppins",
+                DM_Serif: "DM Serif Text",
             },
         },
     },
