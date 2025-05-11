@@ -165,9 +165,9 @@ input[type="number"]::-webkit-inner-spin-button {
   color: white;
   font-size: 12px;
   font-weight: 500;
-  padding: 2px 8px;
+  padding: 4px 10px;
   border-radius: 4px;
-  height: 24px;
+  height: 28px;
   position: absolute;
   top: 16px;
   right: 16px;
@@ -176,9 +176,9 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .badge-icon {
-  font-size: 14px;
-  height: 14px;
-  width: 14px;
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
   margin-right: 4px;
 }
 
@@ -193,11 +193,31 @@ input[type="number"]::-webkit-inner-spin-button {
   margin-right: 8px;
 }
 
-/* Edit beneficiary button styling */
-button.border {
+/* Edit beneficiary link styling */
+.edit-beneficiary-link {
+  background: none;
+  border: none;
+  color: #444444;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 500;
   transition: all 0.2s ease;
+  width: auto;
+  margin: 0 auto;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-button.border:hover {
-  background-color: rgba(68, 68, 68, 0.05);
+.edit-beneficiary-link:hover {
+  opacity: 0.8;
+}
+
+.edit-beneficiary-link mat-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
 }
