@@ -4,6 +4,7 @@ import type {
     WillData,
     PersonalDetailsData,
     AssetInventoryData,
+    EstateDistributionData,
 } from '../../models/interfaces/will-data.interface';
 
 @Injectable({
@@ -38,9 +39,14 @@ export class WillDataService {
         completedAssetTypes: [],
     };
 
+    private initialEstateDistribution: EstateDistributionData = {
+        sharingAsAWhole: true,
+    };
+
     private willDataSubject = new BehaviorSubject<WillData>({
         personalDetails: this.initialPersonalDetails,
         assetInventory: this.initialAssetInventory,
+        estateDistribution: this.initialEstateDistribution,
     });
 
     willData$: Observable<WillData> = this.willDataSubject.asObservable();
@@ -69,6 +75,17 @@ export class WillDataService {
         });
     }
 
+    updateEstateDistribution(data: Partial<EstateDistributionData>): void {
+        const currentData = this.willDataSubject.value;
+        this.willDataSubject.next({
+            ...currentData,
+            estateDistribution: {
+                ...currentData.estateDistribution,
+                ...data,
+            },
+        });
+    }
+
     getWillData(): WillData {
         return this.willDataSubject.value;
     }
@@ -79,6 +96,10 @@ export class WillDataService {
 
     getAssetInventory(): AssetInventoryData {
         return this.willDataSubject.value.assetInventory;
+    }
+
+    getEstateDistribution(): EstateDistributionData {
+        return this.willDataSubject.value.estateDistribution;
     }
 
     saveWillData(): void {

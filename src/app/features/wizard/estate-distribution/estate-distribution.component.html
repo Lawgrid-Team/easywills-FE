@@ -5,9 +5,9 @@
         <div class="max-w-3xl mx-auto">
             <ng-container [ngSwitch]="step">
                 <app-intro-screen *ngSwitchCase="0" (next)="handleNext()"></app-intro-screen>
-                <!-- <app-asset-distribution-form *ngSwitchCase="1" [data]="data" (updateData)="updateData($event)"
+                <app-asset-distribution-form *ngSwitchCase="1" [data]="data" (updateData)="updateData($event)"
                     (next)="handleNext()" (setFormValidity)="setFormValidity($event)">
-                </app-asset-distribution-form> -->
+                </app-asset-distribution-form>
 
                <!--  <app-exclusion-form *ngSwitchCase="2" [data]="data" (updateData)="updateData($event)"
                     (next)="handleNext()" (setFormValidity)="setFormValidity($event)">
