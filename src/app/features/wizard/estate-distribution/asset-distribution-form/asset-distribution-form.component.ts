@@ -37,6 +37,13 @@ interface AssetType {
     icon: string;
     count: number;
     assets: Asset[];
+    expanded?: boolean; // Track if the asset type is expanded
+}
+
+// Interface for beneficiary assignments
+interface BeneficiaryAssignment {
+    beneficiaryId: string;
+    percentage: number;
 }
 
 // Interface for individual assets
@@ -44,7 +51,11 @@ interface Asset {
     id: string;
     name: string;
     details: string;
+    address?: string;
+    ownershipType?: string;
     assignedTo?: string; // Beneficiary ID
+    beneficiaries?: BeneficiaryAssignment[]; // Add this line
+    remainingShare?: number; // Add this line
 }
 
 @Component({
@@ -98,10 +109,36 @@ export class AssetDistributionFormComponent implements OnInit {
     // Dummy data for asset types
     dummyAssetTypes: AssetType[] = [
         {
+            id: 'real-estate',
+            name: 'Real Estate/Landed Property',
+            icon: 'svg/asset-type-icons/real-estate.svg',
+            count: 2,
+            expanded: false,
+            assets: [
+                {
+                    id: 'property1',
+                    name: 'Commercial property',
+                    details: 'Commercial property',
+                    ownershipType: 'Sole owner',
+                    address:
+                        '5400 Awolowo Road, Off Obafemi Isabu Crescent, Lagos State, L899NO',
+                },
+                {
+                    id: 'property2',
+                    name: 'Residential property',
+                    details: 'Residential property',
+                    ownershipType: 'Sole owner',
+                    address:
+                        '5400 Awolowo Road, Off Obafemi Isabu Crescent, Lagos State, L899NO',
+                },
+            ],
+        },
+        {
             id: 'bank-accounts',
             name: 'Bank accounts',
-            icon: 'svg/asset-type-icons/bank-accounts.svg', // Path for icon to be uploaded later
+            icon: 'svg/asset-type-icons/bank-accounts.svg',
             count: 2,
+            expanded: false,
             assets: [
                 {
                     id: 'bank1',
@@ -118,8 +155,9 @@ export class AssetDistributionFormComponent implements OnInit {
         {
             id: 'pension-funds',
             name: 'Pension funds',
-            icon: 'svg/asset-type-icons/pension-funds.svg', // Path for icon to be uploaded later
+            icon: 'svg/asset-type-icons/pension-funds.svg',
             count: 1,
+            expanded: false,
             assets: [
                 {
                     id: 'pension1',
@@ -131,8 +169,9 @@ export class AssetDistributionFormComponent implements OnInit {
         {
             id: 'investments',
             name: 'Investments',
-            icon: 'svg/asset-type-icons/investments.svg', // Path for icon to be uploaded later
+            icon: 'svg/asset-type-icons/investments.svg',
             count: 1,
+            expanded: false,
             assets: [
                 {
                     id: 'investment1',
@@ -142,28 +181,11 @@ export class AssetDistributionFormComponent implements OnInit {
             ],
         },
         {
-            id: 'real-estate',
-            name: 'Real estate/landed property',
-            icon: 'svg/asset-type-icons/real-estate.svg', // Path for icon to be uploaded later
-            count: 2,
-            assets: [
-                {
-                    id: 'property1',
-                    name: 'Primary Residence',
-                    details: '123 Main St, Anytown',
-                },
-                {
-                    id: 'property2',
-                    name: 'Vacation Home',
-                    details: '456 Beach Rd, Coastville',
-                },
-            ],
-        },
-        {
             id: 'business',
             name: 'Business/ Intellectual property',
-            icon: 'svg/asset-type-icons/intellectual-property.svg', // Path for icon to be uploaded later
+            icon: 'svg/asset-type-icons/intellectual-property.svg',
             count: 1,
+            expanded: false,
             assets: [
                 {
                     id: 'business1',
@@ -175,8 +197,9 @@ export class AssetDistributionFormComponent implements OnInit {
         {
             id: 'valuables',
             name: 'Personal valuables',
-            icon: 'svg/asset-type-icons/personal-valuables.svg', // Path for icon to be uploaded later
+            icon: 'svg/asset-type-icons/personal-valuables.svg',
             count: 3,
+            expanded: false,
             assets: [
                 {
                     id: 'valuable1',
@@ -198,8 +221,9 @@ export class AssetDistributionFormComponent implements OnInit {
         {
             id: 'digital',
             name: 'Digital assets',
-            icon: 'svg/asset-type-icons/digital-assets.svg', // Path for icon to be uploaded later
+            icon: 'svg/asset-type-icons/digital-assets.svg',
             count: 2,
+            expanded: false,
             assets: [
                 {
                     id: 'digital1',
@@ -216,8 +240,9 @@ export class AssetDistributionFormComponent implements OnInit {
         {
             id: 'cash',
             name: 'Cash/Liquid assets',
-            icon: 'svg/asset-type-icons/liquid-assets.svg', // Path for icon to be uploaded later
+            icon: 'svg/asset-type-icons/liquid-assets.svg',
             count: 1,
+            expanded: false,
             assets: [
                 {
                     id: 'cash1',
@@ -251,20 +276,18 @@ export class AssetDistributionFormComponent implements OnInit {
             });
         }
 
-        // If we have existing individual asset assignments, apply them
-        if (this.data?.individualAssetAssignments) {
-            this.assetTypes.forEach((assetType) => {
-                assetType.assets.forEach((asset) => {
-                    if (
-                        this.data.individualAssetAssignments &&
-                        this.data.individualAssetAssignments[asset.id]
-                    ) {
-                        asset.assignedTo =
-                            this.data.individualAssetAssignments[asset.id];
-                    }
-                });
+        // Initialize remaining share for all assets
+        this.assetTypes.forEach((assetType) => {
+            assetType.assets.forEach((asset) => {
+                // Initialize beneficiaries array if not exists
+                if (!asset.beneficiaries) {
+                    asset.beneficiaries = [];
+                }
+
+                // Calculate remaining share
+                asset.remainingShare = this.calculateRemainingShare(asset);
             });
-        }
+        });
 
         // Check initial form validity
         this.checkFormValidity();
@@ -288,6 +311,113 @@ export class AssetDistributionFormComponent implements OnInit {
         }
 
         this.updateData.emit(updatedData);
+
+        // Check form validity
+        this.checkFormValidity();
+    }
+
+    // Toggle asset type expansion
+    toggleAssetType(assetType: AssetType): void {
+        // Close all other asset types
+        this.assetTypes.forEach((type) => {
+            if (type.id !== assetType.id) {
+                type.expanded = false;
+            }
+        });
+
+        // Toggle the clicked asset type
+        assetType.expanded = !assetType.expanded;
+    }
+
+    // Calculate remaining share for an asset:
+    calculateRemainingShare(asset: Asset): number {
+        if (!asset.beneficiaries || asset.beneficiaries.length === 0) {
+            return 100;
+        }
+
+        const totalAllocated = asset.beneficiaries.reduce(
+            (sum, assignment) => sum + assignment.percentage,
+            0
+        );
+        return 100 - totalAllocated;
+    }
+
+    // Assign beneficiary to an asset:
+    assignBeneficiary(asset: Asset): void {
+        // In a real implementation, this would open a dialog
+        // For now, we'll simulate adding beneficiaries
+
+        if (!asset.beneficiaries) {
+            asset.beneficiaries = [];
+        }
+
+        // Find beneficiaries not yet assigned to this asset
+        const unassignedBeneficiaries = this.beneficiaryList.filter(
+            (beneficiary) =>
+                !asset.beneficiaries?.some(
+                    (assignment) => assignment.beneficiaryId === beneficiary.id
+                )
+        );
+
+        if (unassignedBeneficiaries.length > 0) {
+            // Assign the first unassigned beneficiary with a default percentage
+            const beneficiary = unassignedBeneficiaries[0];
+            const remainingShare = this.calculateRemainingShare(asset);
+
+            asset.beneficiaries.push({
+                beneficiaryId: beneficiary.id,
+                percentage: remainingShare > 0 ? remainingShare : 0,
+            });
+
+            // Update the remaining share
+            asset.remainingShare = this.calculateRemainingShare(asset);
+
+            // Update data
+            this.updateIndividualAssetAssignments();
+        }
+    }
+
+    // Update beneficiary percentage for an asset:
+    updateBeneficiaryPercentage(
+        asset: Asset,
+        beneficiaryId: string,
+        percentage: number
+    ): void {
+        if (!asset.beneficiaries) return;
+
+        const assignment = asset.beneficiaries.find(
+            (a) => a.beneficiaryId === beneficiaryId
+        );
+        if (assignment) {
+            assignment.percentage = percentage;
+            asset.remainingShare = this.calculateRemainingShare(asset);
+
+            // Update data
+            this.updateIndividualAssetAssignments();
+        }
+    }
+
+    // Remove a beneficiary from an asset:
+    removeBeneficiaryFromAsset(asset: Asset, beneficiaryId: string): void {
+        if (!asset.beneficiaries) return;
+
+        asset.beneficiaries = asset.beneficiaries.filter(
+            (a) => a.beneficiaryId !== beneficiaryId
+        );
+        asset.remainingShare = this.calculateRemainingShare(asset);
+
+        // Update data
+        this.updateIndividualAssetAssignments();
+    }
+
+    // Save beneficiary assignments for an asset:
+    saveAssetAssignments(asset: Asset): void {
+        // In a real implementation, this would save to a database
+        // For now, we'll just update the UI state
+        asset.remainingShare = this.calculateRemainingShare(asset);
+
+        // Update data
+        this.updateIndividualAssetAssignments();
 
         // Check form validity
         this.checkFormValidity();
@@ -319,13 +449,28 @@ export class AssetDistributionFormComponent implements OnInit {
 
         this.assetTypes.forEach((assetType) => {
             assetType.assets.forEach((asset) => {
-                if (asset.assignedTo) {
-                    assignments[asset.id] = asset.assignedTo;
+                if (asset.beneficiaries && asset.beneficiaries.length > 0) {
+                    // For simplicity, we'll just store the first beneficiary in the assignedTo field
+                    // In a real implementation, you'd want to store the full assignment data
+                    assignments[asset.id] =
+                        asset.beneficiaries[0].beneficiaryId;
                 }
             });
         });
 
         return assignments;
+    }
+
+    // Update individual asset assignments:
+    updateIndividualAssetAssignments(): void {
+        // Update data
+        this.updateData.emit({
+            sharingAsAWhole: this.sharingAsAWhole,
+            individualAssetAssignments: this.getIndividualAssetAssignments(),
+        });
+
+        // Check form validity
+        this.checkFormValidity();
     }
 
     // Update percentage for a beneficiary
@@ -388,8 +533,23 @@ export class AssetDistributionFormComponent implements OnInit {
             isValid = this.getRemainingPercentage() === 0;
         } else {
             // For sharing individually, all assets must be assigned
-            // This is a placeholder - we'll implement this later
-            isValid = true;
+            let allAssetsAssigned = true;
+
+            this.assetTypes.forEach((assetType) => {
+                assetType.assets.forEach((asset) => {
+                    // An asset is considered assigned if it has beneficiaries and remaining share is 0
+                    if (
+                        !asset.beneficiaries ||
+                        asset.beneficiaries.length === 0 ||
+                        (asset.remainingShare !== undefined &&
+                            asset.remainingShare > 0)
+                    ) {
+                        allAssetsAssigned = false;
+                    }
+                });
+            });
+
+            isValid = allAssetsAssigned;
         }
 
         this.setFormValidity.emit(isValid);
@@ -410,5 +570,10 @@ export class AssetDistributionFormComponent implements OnInit {
 
         this.updateData.emit(updatedData);
         this.next.emit();
+    }
+
+    // Add a helper method to get beneficiary by ID:
+    getBeneficiaryById(id: string): BeneficiaryShare | undefined {
+        return this.beneficiaryList.find((b) => b.id === id);
     }
 }

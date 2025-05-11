@@ -78,19 +78,93 @@
                 
                 <!-- Asset type cards -->
                 <div class="space-y-4">
-                    <div *ngFor="let assetType of assetTypes" class="asset-type-card">
-                        <div class="flex items-center justify-between p-4 bg-white rounded-md border border-border">
+                    <div *ngFor="let assetType of assetTypes" class="asset-type-section">
+                        <!-- Asset type header card -->
+                        <div 
+                            class="flex items-center justify-between p-6 bg-white rounded-md border border-border cursor-pointer"
+                            [class.mb-0]="assetType.expanded"
+                            [class.rounded-b-none]="assetType.expanded"
+                            [class.border-b-0]="assetType.expanded"
+                            (click)="toggleAssetType(assetType)"
+                        >
                             <div class="flex items-center">
-                                <div class="asset-icon mr-3">
-                                    <!-- Replace with actual icon -->
-                                    <img [src]="assetType.icon" [alt]="assetType.name + ' icon'" class="w-6 h-6">
+                                <div class="asset-icon mr-4">
+                                    <img [src]="assetType.icon" [alt]="assetType.name + ' icon'" class="w-8 h-8">
                                 </div>
-                                <span class="font-medium">{{ assetType.name }}</span>
+                                <span class="text-lg font-medium">{{ assetType.name }}</span>
                             </div>
                             <div class="asset-count">
                                 <span class="count-badge">{{ assetType.count }}</span>
                             </div>
                         </div>
+                        
+                        <!-- Expanded asset list -->
+                        <div *ngIf="assetType.expanded" class="bg-white rounded-b-md border border-t-0 border-border p-4">
+    <div *ngFor="let asset of assetType.assets" class="asset-item bg-white rounded-md border border-border p-4 mb-4 last:mb-0">
+        <div class="mb-4">
+            <h4 class="text-lg font-medium">{{ asset.name }}</h4>
+            <p class="text-sm text-gray-600">{{ asset.ownershipType }}</p>
+            <p class="text-sm text-gray-600">{{ asset.address || asset.details }}</p>
+        </div>
+        
+        <!-- Remaining share indicator -->
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-sm text-gray-600">Remaining share of Asset</span>
+            <span class="bg-gray-100 px-4 py-2 rounded-md text-sm font-medium">{{ asset.remainingShare || 100 }}%</span>
+        </div>
+        
+        <!-- Beneficiary assignments (if any) -->
+        <div *ngIf="asset.beneficiaries && asset.beneficiaries.length > 0" class="mb-4">
+            <div *ngFor="let assignment of asset.beneficiaries" class="bg-gray-600 rounded-md p-4 text-white mb-4">
+                <div class="distribution-row">
+                    <div class="label-column">
+                        <p class="text-sm opacity-80">Dependant's name</p>
+                        <p class="font-medium">{{ getBeneficiaryById(assignment.beneficiaryId)?.name }}</p>
+                        <p class="text-sm mt-1">{{ getBeneficiaryById(assignment.beneficiaryId)?.dateInfo }}</p>
+                    </div>
+                    <div class="percentage-column">
+                        <div class="percentage-input-container">
+                            <input 
+                                type="number" 
+                                [ngModel]="assignment.percentage" 
+                                (ngModelChange)="updateBeneficiaryPercentage(asset, assignment.beneficiaryId, $event)"
+                                (focus)="onPercentageFocus($event)"
+                                (blur)="onPercentageBlur($event)"
+                                name="percentage-{{assignment.beneficiaryId}}" 
+                                class="percentage-input"
+                                min="0" 
+                                max="100"
+                            >
+                        </div>
+                        <button type="button" (click)="removeBeneficiaryFromAsset(asset, assignment.beneficiaryId)" class="remove-button">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Save button for beneficiary assignments -->
+            <button 
+                type="button" 
+                class="w-full py-3 bg-[#444444] text-white rounded-md flex items-center justify-center"
+                (click)="saveAssetAssignments(asset)"
+            >
+                Save
+            </button>
+        </div>
+        
+        <!-- Assign beneficiary button (if no beneficiaries or remaining share > 0) -->
+        <button 
+            *ngIf="!asset.beneficiaries || asset.beneficiaries.length === 0 || asset.remainingShare! > 0"
+            type="button" 
+            class="w-full py-3 bg-[#444444] text-white rounded-md flex items-center justify-center"
+            (click)="assignBeneficiary(asset)"
+        >
+            <mat-icon class="mr-2">person_add</mat-icon>
+            Assign Beneficiary
+        </button>
+    </div>
+</div>
                     </div>
                 </div>
             </div>
