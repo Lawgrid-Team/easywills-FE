@@ -7,6 +7,7 @@ import { EstateDistributionData } from '../../../core/models/interfaces/will-dat
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
 import { IntroScreenComponent } from './intro-screen/intro-screen.component';
 import { AssetDistributionFormComponent } from './asset-distribution-form/asset-distribution-form.component';
+import { ExclusionFormComponent } from './exclusion-form/exclusion-form.component';
 
 @Component({
     selector: 'app-estate-distribution',
@@ -15,6 +16,7 @@ import { AssetDistributionFormComponent } from './asset-distribution-form/asset-
         FooterComponent,
         IntroScreenComponent,
         AssetDistributionFormComponent,
+        ExclusionFormComponent,
         CommonModule,
     ],
     templateUrl: './estate-distribution.component.html',
