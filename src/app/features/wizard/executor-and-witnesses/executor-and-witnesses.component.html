@@ -5,13 +5,13 @@
         <div class="max-w-3xl mx-auto">
             <ng-container [ngSwitch]="step">
                 <app-intro-screen *ngSwitchCase="0" (next)="handleNext()"></app-intro-screen>
-                <!-- <app-executors-form *ngSwitchCase="1" [data]="data" (updateData)="updateData($event)"
+                <app-executors-form *ngSwitchCase="1" [data]="data" (updateData)="updateData($event)"
                     (next)="handleNext()" (setFormValidity)="setFormValidity($event)">
-                </app-executors-form> -->
+                </app-executors-form>
 
-               <!--  <app-witnesses-form *ngSwitchCase="2" [data]="data" (updateData)="updateData($event)"
+               <app-witnesses-form *ngSwitchCase="2" [data]="data" (updateData)="updateData($event)"
                     (next)="handleNext()" (setFormValidity)="setFormValidity($event)">
-                </app-witnesses-form> -->
+                </app-witnesses-form>
             </ng-container>
         </div>
     </main>

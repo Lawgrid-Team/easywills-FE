@@ -14,6 +14,25 @@ export interface Child {
     email: string;
 }
 
+export interface Executor {
+    id: string;
+    type: 'individual' | 'organization';
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    address: string;
+}
+
+export interface Witness {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    relationship: string;
+}
+
 export interface Beneficiary {
     id: string;
     type: 'individual' | 'organization';
@@ -32,6 +51,8 @@ export interface PersonalDetailsData {
     otherFullName: string;
     dateOfBirth: string;
     stateOfOrigin: string;
+    email: string;
+    phoneNumber: string;
     // Address fields
     streetAddress: string;
     city: string;
@@ -43,6 +64,11 @@ export interface PersonalDetailsData {
     hasChildren: boolean;
     children: Child[];
     beneficiaries: Beneficiary[];
+    // Executor and witnesses
+    executors: Executor[];
+    hasExecutor: boolean;
+    witnesses: Witness[];
+    hasWitnesses: boolean;
 }
 
 export interface RealEstateProperty {
