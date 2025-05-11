@@ -103,7 +103,7 @@
     <div *ngFor="let asset of assetType.assets" class="asset-item bg-white rounded-md border border-border p-4 mb-4 last:mb-0 relative">
         <!-- Asset assigned badge - positioned in top right corner -->
         <span *ngIf="asset.remainingShare === 0 && !asset.showAssignments" class="asset-assigned-badge">
-            <mat-icon class="badge-icon">check_circle</mat-icon>
+            <mat-icon class="badge-icon">done</mat-icon>
             Asset assigned
         </span>
         
@@ -161,10 +161,10 @@
         </div>
         
         <!-- When not in edit mode and asset is fully assigned (remaining share = 0) -->
-        <div *ngIf="!asset.showAssignments && asset.remainingShare === 0" class="mb-4">
+        <div *ngIf="!asset.showAssignments && asset.remainingShare === 0">
             <button 
                 type="button" 
-                class="w-full py-3 border border-[#444444] text-[#444444] rounded-md flex items-center justify-center"
+                class="edit-beneficiary-link flex items-center justify-center"
                 (click)="showAssetAssignments(asset)"
             >
                 <mat-icon class="mr-2">edit</mat-icon>
