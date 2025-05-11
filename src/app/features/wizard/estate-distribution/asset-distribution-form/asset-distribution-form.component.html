@@ -100,21 +100,28 @@
                         
                         <!-- Expanded asset list -->
                         <div *ngIf="assetType.expanded" class="bg-white rounded-b-md border border-t-0 border-border p-4">
-    <div *ngFor="let asset of assetType.assets" class="asset-item bg-white rounded-md border border-border p-4 mb-4 last:mb-0">
+    <div *ngFor="let asset of assetType.assets" class="asset-item bg-white rounded-md border border-border p-4 mb-4 last:mb-0 relative">
+        <!-- Asset assigned badge - positioned in top right corner -->
+        <span *ngIf="asset.remainingShare === 0 && !asset.showAssignments" class="asset-assigned-badge">
+            <mat-icon class="badge-icon">check_circle</mat-icon>
+            Asset assigned
+        </span>
+        
         <div class="mb-4">
             <h4 class="text-lg font-medium">{{ asset.name }}</h4>
             <p class="text-sm text-gray-600">{{ asset.ownershipType }}</p>
             <p class="text-sm text-gray-600">{{ asset.address || asset.details }}</p>
         </div>
         
-        <!-- Remaining share indicator -->
-        <div class="flex justify-between items-center mb-4">
-            <span class="text-sm text-gray-600">Remaining share of Asset</span>
-            <span class="bg-gray-100 px-4 py-2 rounded-md text-sm font-medium">{{ asset.remainingShare || 100 }}%</span>
-        </div>
-        
-        <!-- Beneficiary assignments (if any) -->
-        <div *ngIf="asset.beneficiaries && asset.beneficiaries.length > 0" class="mb-4">
+        <!-- Beneficiary assignments (if being edited) -->
+        <div *ngIf="asset.showAssignments" class="mb-4">
+            <!-- Remaining share indicator -->
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-sm text-gray-600">Remaining share of Asset</span>
+                <span class="bg-gray-100 px-4 py-2 rounded-md text-sm font-medium">{{ asset.remainingShare || 100 }}%</span>
+            </div>
+            
+            <!-- Beneficiary cards -->
             <div *ngFor="let assignment of asset.beneficiaries" class="bg-gray-600 rounded-md p-4 text-white mb-4">
                 <div class="distribution-row">
                     <div class="label-column">
@@ -153,16 +160,36 @@
             </button>
         </div>
         
-        <!-- Assign beneficiary button (if no beneficiaries or remaining share > 0) -->
-        <button 
-            *ngIf="!asset.beneficiaries || asset.beneficiaries.length === 0 || asset.remainingShare! > 0"
-            type="button" 
-            class="w-full py-3 bg-[#444444] text-white rounded-md flex items-center justify-center"
-            (click)="assignBeneficiary(asset)"
-        >
-            <mat-icon class="mr-2">person_add</mat-icon>
-            Assign Beneficiary
-        </button>
+        <!-- When not in edit mode and asset is fully assigned (remaining share = 0) -->
+        <div *ngIf="!asset.showAssignments && asset.remainingShare === 0" class="mb-4">
+            <button 
+                type="button" 
+                class="w-full py-3 border border-[#444444] text-[#444444] rounded-md flex items-center justify-center"
+                (click)="showAssetAssignments(asset)"
+            >
+                <mat-icon class="mr-2">edit</mat-icon>
+                Edit Beneficiary
+            </button>
+        </div>
+        
+        <!-- When not in edit mode and asset is not fully assigned or has no beneficiaries -->
+        <div *ngIf="!asset.showAssignments && (asset.remainingShare === undefined || asset.remainingShare > 0)">
+            <!-- Remaining share indicator - only show if there are some beneficiaries assigned -->
+            <div *ngIf="asset.beneficiaries && asset.beneficiaries.length > 0" class="flex justify-between items-center mb-4">
+                <span class="text-sm text-gray-600">Remaining share of Asset</span>
+                <span class="bg-gray-100 px-4 py-2 rounded-md text-sm font-medium">{{ asset.remainingShare }}%</span>
+            </div>
+            
+            <!-- Assign beneficiary button -->
+            <button 
+                type="button" 
+                class="w-full py-3 bg-[#444444] text-white rounded-md flex items-center justify-center"
+                (click)="assignBeneficiary(asset)"
+            >
+                <mat-icon class="mr-2">person_add</mat-icon>
+                Assign Beneficiary
+            </button>
+        </div>
     </div>
 </div>
                     </div>

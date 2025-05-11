@@ -139,6 +139,7 @@ input[type="number"]::-webkit-inner-spin-button {
 /* Asset item styling */
 .asset-item {
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .asset-item:hover {
@@ -153,4 +154,50 @@ input[type="number"]::-webkit-inner-spin-button {
 /* Add custom CSS variable for the primary color */
 :root {
   --mat-primary-color: #444444;
+}
+
+/* Asset assigned badge styling */
+.asset-assigned-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6982b5;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  height: 24px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.badge-icon {
+  font-size: 14px;
+  height: 14px;
+  width: 14px;
+  margin-right: 4px;
+}
+
+/* Add styles for the property title container to properly align items */
+.property-title-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.property-title {
+  margin-right: 8px;
+}
+
+/* Edit beneficiary button styling */
+button.border {
+  transition: all 0.2s ease;
+}
+
+button.border:hover {
+  background-color: rgba(68, 68, 68, 0.05);
 }
