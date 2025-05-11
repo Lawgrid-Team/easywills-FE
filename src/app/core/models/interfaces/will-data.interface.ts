@@ -69,8 +69,16 @@ export interface AssetInventoryData {
     completedAssetTypes: string[];
 }
 
+// Individual asset assignment interface
+export interface AssetAssignment {
+    assetId: string;
+    beneficiaryId: string;
+}
+
 export interface EstateDistributionData {
     sharingAsAWhole: boolean;
+    beneficiaryShares?: { [key: string]: number }; // Maps beneficiary ID to percentage
+    individualAssetAssignments?: { [assetId: string]: string }; // Maps asset ID to beneficiary ID
 }
 
 export interface WillData {
@@ -78,4 +86,3 @@ export interface WillData {
     assetInventory: AssetInventoryData;
     estateDistribution: EstateDistributionData;
 }
-

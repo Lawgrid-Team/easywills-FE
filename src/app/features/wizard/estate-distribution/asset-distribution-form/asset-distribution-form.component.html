@@ -3,33 +3,97 @@
         <h2 class="text-3xl font-bold text-easywills-black">How would you like to distribute your estate?</h2>
         <mat-icon class="ml-2">help</mat-icon>
     </div>
-    <p class="text-easywills-dark-grey mb-6">Select one of the options below  to distribute your estate to your loved ones.</p>
+    <p class="text-easywills-dark-grey mb-6">Select one of the options below to distribute your estate to your loved ones.</p>
 
     <form (ngSubmit)="onSubmit()" class="space-y-6">
 
-        <mat-radio-group [(ngModel)]="sharingAsAWhole" name="estateDistributionType"
-            (change)="handleEstateDistributionType($event.value ? 'yes' : 'no')">
-            <div class="space-y-3">
-                <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
-                    <mat-radio-button [value]="true" color="primary">Yes</mat-radio-button>
-                    <div class="flex-grow"></div>
-                    <mat-icon *ngIf="sharingAsAWhole">check</mat-icon>
-                </div>
+        <div class="space-y-3">
+            <!-- Share as a whole option -->
+            <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
+                <mat-radio-button [value]="true" [checked]="sharingAsAWhole" (change)="handleEstateDistributionType('yes')" color="primary">
+                    Share my estate as a whole
+                </mat-radio-button>
+                <div class="flex-grow"></div>
+                <mat-icon *ngIf="sharingAsAWhole">check</mat-icon>
+            </div>
 
-                <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
-                    <mat-radio-button [value]="false" color="primary">No</mat-radio-button>
-                    <div class="flex-grow"></div>
-                    <mat-icon *ngIf="!sharingAsAWhole">check</mat-icon>
+            <!-- White box that appears when "Share as a whole" is selected -->
+            <div *ngIf="sharingAsAWhole" class="bg-white rounded-md p-6 border border-border">
+                <h3 class="text-xl font-bold mb-4">Share entire Estate</h3>
+                
+                <!-- Remaining share indicator with grid layout -->
+                <div class="distribution-row mb-6">
+                    <div class="label-column">
+                        <span class="text-easywills-dark-grey">Remaining share of estate</span>
+                    </div>
+                    <div class="percentage-column">
+                        <div class="percentage-input-container remaining-share">
+                            <span class="percentage-value">{{ getRemainingPercentage() }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Beneficiary cards -->
+                <div *ngFor="let beneficiary of beneficiaryList" class="bg-gray-600 rounded-md p-4 text-white mb-4">
+                    <div class="distribution-row">
+                        <div class="label-column">
+                            <p class="text-sm opacity-80">Dependant's name</p>
+                            <p class="font-medium">{{ beneficiary.name }}</p>
+                            <p class="text-sm mt-1">{{ beneficiary.dateInfo }}</p>
+                        </div>
+                        <div class="percentage-column">
+                            <div class="percentage-input-container">
+                                <input 
+                                    type="number" 
+                                    [ngModel]="beneficiary.percentage" 
+                                    (ngModelChange)="updatePercentage(beneficiary, $event)"
+                                    (focus)="onPercentageFocus($event)"
+                                    (blur)="onPercentageBlur($event)"
+                                    name="percentage-{{beneficiary.id}}" 
+                                    class="percentage-input"
+                                    min="0" 
+                                    max="100"
+                                >
+                            </div>
+                            <button type="button" (click)="removeBeneficiary(beneficiary.id)" class="remove-button">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </mat-radio-group>
 
-        <div *ngIf="sharingAsAWhole" class="space-y-4">
-            <p> This is sharing as a whole</p>
-        </div>
+            <!-- Share individually option -->
+            <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
+                <mat-radio-button [value]="false" [checked]="!sharingAsAWhole" (change)="handleEstateDistributionType('no')" color="primary">
+                    Share my assets individually
+                </mat-radio-button>
+                <div class="flex-grow"></div>
+                <mat-icon *ngIf="!sharingAsAWhole">check</mat-icon>
+            </div>
 
-        <div *ngIf="!sharingAsAWhole" >
-            <p> This is sharing individually</p>
+            <!-- White box that appears when "Share individually" is selected -->
+            <div *ngIf="!sharingAsAWhole" class="bg-white rounded-md p-6 border border-border">
+                <h3 class="text-xl font-bold mb-4">Share individual assets</h3>
+                
+                <!-- Asset type cards -->
+                <div class="space-y-4">
+                    <div *ngFor="let assetType of assetTypes" class="asset-type-card">
+                        <div class="flex items-center justify-between p-4 bg-white rounded-md border border-border">
+                            <div class="flex items-center">
+                                <div class="asset-icon mr-3">
+                                    <!-- Replace with actual icon -->
+                                    <img [src]="assetType.icon" [alt]="assetType.name + ' icon'" class="w-6 h-6">
+                                </div>
+                                <span class="font-medium">{{ assetType.name }}</span>
+                            </div>
+                            <div class="asset-count">
+                                <span class="count-badge">{{ assetType.count }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="absolute bottom-24 right-8">
