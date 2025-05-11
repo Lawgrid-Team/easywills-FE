@@ -41,6 +41,7 @@ export class WillDataService {
 
     private initialEstateDistribution: EstateDistributionData = {
         sharingAsAWhole: true,
+        exclusions: [], // Added this property to match the updated interface
     };
 
     private willDataSubject = new BehaviorSubject<WillData>({

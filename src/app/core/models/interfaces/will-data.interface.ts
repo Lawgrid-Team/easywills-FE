@@ -42,6 +42,14 @@ export interface Beneficiary {
     dateOfBirth: string;
 }
 
+export interface Exclusion {
+    id: string;
+    firstName: string;
+    lastName: string;
+    relationship: string;
+    reason?: string;
+}
+
 export interface PersonalDetailsData {
     title: string;
     firstName: string;
@@ -105,6 +113,7 @@ export interface EstateDistributionData {
     sharingAsAWhole: boolean;
     beneficiaryShares?: { [key: string]: number }; // Maps beneficiary ID to percentage
     individualAssetAssignments?: { [assetId: string]: string }; // Maps asset ID to beneficiary ID
+    exclusions: Exclusion[]; // List of excluded individuals or entities
 }
 
 export interface WillData {
