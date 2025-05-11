@@ -1,1 +1,42 @@
-<p>asset-distribution-form works!</p>
+<div>
+    <div class="flex items-center mb-8">
+        <h2 class="text-3xl font-bold text-easywills-black">How would you like to distribute your estate?</h2>
+        <mat-icon class="ml-2">help</mat-icon>
+    </div>
+    <p class="text-easywills-dark-grey mb-6">Select one of the options below  to distribute your estate to your loved ones.</p>
+
+    <form (ngSubmit)="onSubmit()" class="space-y-6">
+
+        <mat-radio-group [(ngModel)]="sharingAsAWhole" name="estateDistributionType"
+            (change)="handleEstateDistributionType($event.value ? 'yes' : 'no')">
+            <div class="space-y-3">
+                <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
+                    <mat-radio-button [value]="true" color="primary">Yes</mat-radio-button>
+                    <div class="flex-grow"></div>
+                    <mat-icon *ngIf="sharingAsAWhole">check</mat-icon>
+                </div>
+
+                <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
+                    <mat-radio-button [value]="false" color="primary">No</mat-radio-button>
+                    <div class="flex-grow"></div>
+                    <mat-icon *ngIf="!sharingAsAWhole">check</mat-icon>
+                </div>
+            </div>
+        </mat-radio-group>
+
+        <div *ngIf="sharingAsAWhole" class="space-y-4">
+            <p> This is sharing as a whole</p>
+        </div>
+
+        <div *ngIf="!sharingAsAWhole" >
+            <p> This is sharing individually</p>
+        </div>
+
+        <div class="absolute bottom-24 right-8">
+            <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
+                <span class="mr-2">Need help?</span>
+                <mat-icon>help</mat-icon>
+            </div>
+        </div>
+    </form>
+</div>

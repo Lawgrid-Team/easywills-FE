@@ -3,7 +3,7 @@ import { HeaderComponent } from '../widget/header/header.component';
 import { FooterComponent } from '../widget/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { PersonalDetailsData } from '../../../core/models/interfaces/will-data.interface';
+import { EstateDistributionData } from '../../../core/models/interfaces/will-data.interface';
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
 import { IntroScreenComponent } from './intro-screen/intro-screen.component';
 import { AssetDistributionFormComponent } from './asset-distribution-form/asset-distribution-form.component';
@@ -22,21 +22,21 @@ import { AssetDistributionFormComponent } from './asset-distribution-form/asset-
 })
 export class EstateDistributionComponent {
     step = 0;
-    data: PersonalDetailsData;
+    data: EstateDistributionData;
     isFormValid = true;
 
     constructor(
         private router: Router,
         private willDataService: WillDataService
     ) {
-        this.data = this.willDataService.getPersonalDetails();
+        this.data = this.willDataService.getEstateDistribution();
     }
 
     ngOnInit(): void {}
 
-    updateData(newData: Partial<PersonalDetailsData>): void {
-        this.willDataService.updatePersonalDetails(newData);
-        this.data = this.willDataService.getPersonalDetails();
+    updateData(newData: Partial<EstateDistributionData>): void {
+        this.willDataService.updateEstateDistribution(newData);
+        this.data = this.willDataService.getEstateDistribution();
     }
 
     handleNext(): void {

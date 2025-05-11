@@ -69,8 +69,13 @@ export interface AssetInventoryData {
     completedAssetTypes: string[];
 }
 
+export interface EstateDistributionData {
+    sharingAsAWhole: boolean;
+}
+
 export interface WillData {
     personalDetails: PersonalDetailsData;
     assetInventory: AssetInventoryData;
+    estateDistribution: EstateDistributionData;
 }
 
