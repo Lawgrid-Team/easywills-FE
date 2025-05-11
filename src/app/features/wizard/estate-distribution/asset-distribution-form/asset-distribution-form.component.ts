@@ -56,6 +56,7 @@ interface Asset {
     assignedTo?: string; // Beneficiary ID
     beneficiaries?: BeneficiaryAssignment[]; // Add this line
     remainingShare?: number; // Add this line
+    showAssignments?: boolean; // Add this property to track if assignments are being shown/edited
 }
 
 @Component({
@@ -351,6 +352,9 @@ export class AssetDistributionFormComponent implements OnInit {
             asset.beneficiaries = [];
         }
 
+        // Show the assignments section
+        asset.showAssignments = true;
+
         // Find beneficiaries not yet assigned to this asset
         const unassignedBeneficiaries = this.beneficiaryList.filter(
             (beneficiary) =>
@@ -415,6 +419,9 @@ export class AssetDistributionFormComponent implements OnInit {
         // In a real implementation, this would save to a database
         // For now, we'll just update the UI state
         asset.remainingShare = this.calculateRemainingShare(asset);
+
+        // Hide the assignments section
+        asset.showAssignments = false;
 
         // Update data
         this.updateIndividualAssetAssignments();
@@ -575,5 +582,10 @@ export class AssetDistributionFormComponent implements OnInit {
     // Add a helper method to get beneficiary by ID:
     getBeneficiaryById(id: string): BeneficiaryShare | undefined {
         return this.beneficiaryList.find((b) => b.id === id);
+    }
+
+    // Add a method to show the assignments for editing
+    showAssetAssignments(asset: Asset): void {
+        asset.showAssignments = true;
     }
 }
