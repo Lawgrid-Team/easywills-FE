@@ -1,185 +1,189 @@
 <div>
     <h2 class="text-3xl font-bold text-easywills-black mb-8">Assign your Executor(s)</h2>
-     <label class="text-easywills-black flex items-center mb-2" for="title">Select one of the options below to proceed</label>
-            <mat-form-field appearance="outline" class="w-full">
+    <label class="text-easywills-black flex items-center mb-2" for="title">Select one of the options below to
+        proceed</label>
+    <!-- <mat-form-field appearance="outline" class="w-full"> -->
 
-    <form (ngSubmit)="onSubmit()" class="space-y-6">
-        <mat-radio-group [(ngModel)]="hasExecutor" name="hasChildren"
-            (change)="handleHasExecutorChange($event.value ? 'yes' : 'no')">
-            <div class="space-y-3">
-                <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
-                    <mat-radio-button [value]="true" color="primary">I have my own Executor</mat-radio-button>
-                    <div class="flex-grow"></div>
-                    <mat-icon *ngIf="hasExecutor">check</mat-icon>
+        <form (ngSubmit)="onSubmit()" class="space-y-6">
+            <mat-radio-group [(ngModel)]="hasExecutor" name="hasChildren"
+                (change)="handleHasExecutorChange($event.value ? 'yes' : 'no')">
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
+                        <mat-radio-button [value]="true" color="primary">I have my own Executor</mat-radio-button>
+                        <div class="flex-grow"></div>
+                        <mat-icon *ngIf="hasExecutor">check</mat-icon>
+                    </div>
+
+                    <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
+                        <mat-radio-button [value]="false" color="primary">I would like to use easyWills
+                            Executor</mat-radio-button>
+                        <div class="flex-grow"></div>
+                        <mat-icon *ngIf="!hasExecutor">check</mat-icon>
+                    </div>
                 </div>
+            </mat-radio-group>
 
-                <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
-                    <mat-radio-button [value]="false" color="primary">I would like to use easyWills Executor</mat-radio-button>
-                    <div class="flex-grow"></div>
-                    <mat-icon *ngIf="!hasExecutor">check</mat-icon>
-                </div>
-            </div>
-        </mat-radio-group>
+            <div *ngIf="hasExecutor" class="space-y-4">
+                <!-- Display existing executor -->
+                <mat-card *ngFor="let executor of executors" class="bg-easywills-dark-grey text-white p-4 rounded-md">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-semibold">
+                            {{executor.firstName }} {{executor.lastName}}
+                        </h3>
+                        <button type="button" mat-icon-button (click)="handleEditExecutor(executor)" class="text-white">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </div>
+                    <p class="text-grey">Lawyer</p>
+                    <p>Email: {{executor.email}}</p>
+                    <p>Phone: {{executor.phoneNumber}}</p>
+                </mat-card>
 
-        <div *ngIf="hasExecutor" class="space-y-4">
-            <!-- Display existing executor -->
-            <mat-card *ngFor="let executor of executors" class="bg-easywills-dark-grey text-white p-4 rounded-md">
-                <div class="flex justify-between items-start">
-                    <h3 class="text-xl font-semibold">
-                        {{executor.firstName }} {{executor.lastName}}
-                    </h3>
-                    <button type="button" mat-icon-button (click)="handleEditExecutor(executor)" class="text-white">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                </div>
-                <p class="text-grey">Lawyer</p>
-                <p>Email: {{executor.email}}</p>
-                <p>Phone: {{executor.phoneNumber}}</p>
-            </mat-card>
-
-            <!-- Form to add/edit executor -->
-            <div *ngIf="isAddingExecutor" class="space-y-4">
-                <h3 class="text-xl font-semibold text-foreground">Add Executor</h3>
-                <div [formGroup]="executorForm">
-                     <div>
-                    <label class="flex items-center mb-2">
-                        Is your executor an individual or an organization?
-                        <mat-icon class="ml-2 text-sm">help</mat-icon>
-                    </label>
-                    <mat-form-field appearance="outline" class="w-full">
-                        <!-- <mat-label>Select type</mat-label> -->
-                        <mat-select formControlName="type">
-                            <mat-option value="individual">Individual</mat-option>
-                            <mat-option value="organization">Organization</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <ng-container *ngIf="executorForm.get('type')?.value === 'individual'">
-                    <div>
-                        <label class="block mb-2">What is the name of the individual?</label>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <mat-form-field appearance="outline">
-                                <!-- <mat-label>First name</mat-label> -->
-                                <input matInput formControlName="firstName" placeholder="First name">
-                                <mat-error *ngIf="executorForm.get('firstName')?.hasError('required')">
-                                    First name is required
-                                </mat-error>
-                                <mat-error *ngIf="executorForm.get('firstName')?.hasError('minlength')">
-                                    First name must be at least 2 characters
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <!-- <mat-label>Last name</mat-label> -->
-                                <input matInput formControlName="lastName" placeholder="Last name">
-                                <mat-error *ngIf="executorForm.get('lastName')?.hasError('required')">
-                                    Last name is required
-                                </mat-error>
-                                <mat-error *ngIf="executorForm.get('lastName')?.hasError('minlength')">
-                                    Last name must be at least 2 characters
-                                </mat-error>
+                <!-- Form to add/edit executor -->
+                <div *ngIf="isAddingExecutor" class="space-y-4">
+                    <h3 class="text-xl font-semibold text-foreground">Add Executor</h3>
+                    <div [formGroup]="executorForm">
+                        <div>
+                            <label class="flex items-center mb-2">
+                                Is your executor an individual or an organization?
+                                <mat-icon class="ml-2 text-sm">help</mat-icon>
+                            </label>
+                            <mat-form-field appearance="outline" class="w-full">
+                                <!-- <mat-label>Select type</mat-label> -->
+                                <mat-select formControlName="type">
+                                    <mat-option value="individual">Individual</mat-option>
+                                    <mat-option value="organization">Organization</mat-option>
+                                </mat-select>
                             </mat-form-field>
                         </div>
-                    </div>
+                        <ng-container *ngIf="executorForm.get('type')?.value === 'individual'">
+                            <div>
+                                <label class="block mb-2">What is the name of the individual?</label>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <mat-form-field appearance="outline">
+                                        <!-- <mat-label>First name</mat-label> -->
+                                        <input matInput formControlName="firstName" placeholder="First name">
+                                        <mat-error *ngIf="executorForm.get('firstName')?.hasError('required')">
+                                            First name is required
+                                        </mat-error>
+                                        <mat-error *ngIf="executorForm.get('firstName')?.hasError('minlength')">
+                                            First name must be at least 2 characters
+                                        </mat-error>
+                                    </mat-form-field>
 
-                    <div>
-                        <label class="block mb-2">Email</label>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <!-- <mat-label>Email</mat-label> -->
-                            <input matInput type="email" formControlName="email" placeholder="Enter email">
-                            <mat-error *ngIf="executorForm.get('email')?.hasError('required')">
-                                Email is required
-                            </mat-error>
-                            <mat-error *ngIf="executorForm.get('email')?.hasError('email')">
-                                Please enter a valid email address
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    <div>
-                        <label class="block mb-2">Phone Number</label>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <!-- <mat-label>Phone Number</mat-label> -->
-                            <input matInput type="phone" formControlName="phoneNumber" placeholder="Enter Executor's Phone Number">
-                            <mat-error *ngIf="executorForm.get('phoneNumber')?.hasError('required')">
-                                Email is required
-                            </mat-error>
-                            <mat-error *ngIf="executorForm.get('email')?.hasError('email')">
-                                Please enter a valid phone number
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                    </ng-container>
-                    <ng-container class="mb-2" *ngIf="executorForm.get('type')?.value === 'organization'">
-                         <div>
-                        <label class="block mb-2">What is the name of the organization?</label>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <!-- <mat-label>Organization name</mat-label> -->
-                            <input matInput formControlName="firstName" placeholder="Organization name">
-                            <mat-error *ngIf="executorForm.get('firstName')?.hasError('required')">
-                                Organization name is required
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                     <div>
-                        <label class="block mb-2">What is the organization’s business address?</label>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <!-- <mat-label>Organization name</mat-label> -->
-                            <input matInput formControlName="address" placeholder="Organization Business Address">
-                            <mat-error *ngIf="executorForm.get('address')?.hasError('required')">
-                                Address is required
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
+                                    <mat-form-field appearance="outline">
+                                        <!-- <mat-label>Last name</mat-label> -->
+                                        <input matInput formControlName="lastName" placeholder="Last name">
+                                        <mat-error *ngIf="executorForm.get('lastName')?.hasError('required')">
+                                            Last name is required
+                                        </mat-error>
+                                        <mat-error *ngIf="executorForm.get('lastName')?.hasError('minlength')">
+                                            Last name must be at least 2 characters
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
 
-                    <div>
-                        <label class="block mb-2">Email</label>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <!-- <mat-label>Email</mat-label> -->
-                            <input matInput type="email" formControlName="email" placeholder="Enter email">
-                            <mat-error *ngIf="executorForm.get('email')?.hasError('required')">
-                                Email is required
-                            </mat-error>
-                            <mat-error *ngIf="executorForm.get('email')?.hasError('email')">
-                                Please enter a valid email address
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
+                            <div>
+                                <label class="block mb-2">Email</label>
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <!-- <mat-label>Email</mat-label> -->
+                                    <input matInput type="email" formControlName="email" placeholder="Enter email">
+                                    <mat-error *ngIf="executorForm.get('email')?.hasError('required')">
+                                        Email is required
+                                    </mat-error>
+                                    <mat-error *ngIf="executorForm.get('email')?.hasError('email')">
+                                        Please enter a valid email address
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <label class="block mb-2">Phone Number</label>
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <!-- <mat-label>Phone Number</mat-label> -->
+                                    <input matInput type="phone" formControlName="phoneNumber"
+                                        placeholder="Enter Executor's Phone Number">
+                                    <mat-error *ngIf="executorForm.get('phoneNumber')?.hasError('required')">
+                                        Email is required
+                                    </mat-error>
+                                    <mat-error *ngIf="executorForm.get('email')?.hasError('email')">
+                                        Please enter a valid phone number
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                        <ng-container class="mb-2" *ngIf="executorForm.get('type')?.value === 'organization'">
+                            <div>
+                                <label class="block mb-2">What is the name of the organization?</label>
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <!-- <mat-label>Organization name</mat-label> -->
+                                    <input matInput formControlName="firstName" placeholder="Organization name">
+                                    <mat-error *ngIf="executorForm.get('firstName')?.hasError('required')">
+                                        Organization name is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <label class="block mb-2">What is the organization’s business address?</label>
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <!-- <mat-label>Organization name</mat-label> -->
+                                    <input matInput formControlName="address"
+                                        placeholder="Organization Business Address">
+                                    <mat-error *ngIf="executorForm.get('address')?.hasError('required')">
+                                        Address is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
 
-                    <div>
-                        <label class="block mb-2">Phone Number</label>
-                        <mat-form-field appearance="outline" class="w-full">
-                            <!-- <mat-label>Phone Number</mat-label> -->
-                            <input matInput type="phone" formControlName="phoneNumber" placeholder="Enter Executor's Phone Number">
-                            <mat-error *ngIf="executorForm.get('phoneNumber')?.hasError('required')">
-                                Email is required
-                            </mat-error>
-                            <mat-error *ngIf="executorForm.get('email')?.hasError('email')">
-                                Please enter a valid phone number
-                            </mat-error>
-                        </mat-form-field>
+                            <div>
+                                <label class="block mb-2">Email</label>
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <!-- <mat-label>Email</mat-label> -->
+                                    <input matInput type="email" formControlName="email" placeholder="Enter email">
+                                    <mat-error *ngIf="executorForm.get('email')?.hasError('required')">
+                                        Email is required
+                                    </mat-error>
+                                    <mat-error *ngIf="executorForm.get('email')?.hasError('email')">
+                                        Please enter a valid email address
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div>
+                                <label class="block mb-2">Phone Number</label>
+                                <mat-form-field appearance="outline" class="w-full">
+                                    <!-- <mat-label>Phone Number</mat-label> -->
+                                    <input matInput type="phone" formControlName="phoneNumber"
+                                        placeholder="Enter Executor's Phone Number">
+                                    <mat-error *ngIf="executorForm.get('phoneNumber')?.hasError('required')">
+                                        Email is required
+                                    </mat-error>
+                                    <mat-error *ngIf="executorForm.get('email')?.hasError('email')">
+                                        Please enter a valid phone number
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </ng-container>
+                        <br>
+                        <button type="button" mat-flat-button color="primary" (click)="handleSaveExecutor()"
+                            class="w-full">
+                            Save
+                        </button>
                     </div>
-                    </ng-container>
-                    <br>
-                    <button type="button" mat-flat-button color="primary" (click)="handleSaveExecutor()" class="w-full">
-                        Save
-                    </button>
+                </div>
+
+                <button *ngIf="!isAddingExecutor" type="button" mat-flat-button color="primary"
+                    (click)="handleAddAnotherExecutor()" class="w-full flex items-center justify-center">
+                    <mat-icon class="mr-2">add</mat-icon>
+                    Add another Executor
+                </button>
+            </div>
+
+            <div class="absolute bottom-24 right-8">
+                <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
+                    <span class="mr-2">Need help?</span>
+                    <mat-icon>help</mat-icon>
                 </div>
             </div>
-
-            <button *ngIf="!isAddingExecutor" type="button" mat-flat-button color="primary"
-                (click)="handleAddAnotherExecutor()" class="w-full flex items-center justify-center">
-                <mat-icon class="mr-2">add</mat-icon>
-                Add another Executor
-            </button>
-        </div>
-
-        <div class="absolute bottom-24 right-8">
-            <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
-                <span class="mr-2">Need help?</span>
-                <mat-icon>help</mat-icon>
-            </div>
-        </div>
-    </form>
+        </form>
 </div>
-
-

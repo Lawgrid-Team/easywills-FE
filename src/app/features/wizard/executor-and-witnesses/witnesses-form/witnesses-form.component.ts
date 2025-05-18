@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { PersonalDetailsData, Witness } from '../../../../core/models/interfaces/will-data.interface';
+import { ExecutorAndWitnessData, Witness } from '../../../../core/models/interfaces/will-data.interface';
 
 @Component({
   selector: 'app-witnesses-form',
@@ -33,8 +33,8 @@ import { PersonalDetailsData, Witness } from '../../../../core/models/interfaces
   styleUrl: './witnesses-form.component.scss',
 })
 export class WitnessesFormComponent {
-    @Input() data!: PersonalDetailsData;
-    @Output() updateData = new EventEmitter<Partial<PersonalDetailsData>>();
+    @Input() data!: ExecutorAndWitnessData;
+    @Output() updateData = new EventEmitter<Partial<ExecutorAndWitnessData>>();
     @Output() next = new EventEmitter<void>();
     @Output() setFormValidity = new EventEmitter<boolean>();
 
