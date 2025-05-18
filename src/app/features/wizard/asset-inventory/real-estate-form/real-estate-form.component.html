@@ -1,1 +1,118 @@
-<p>real-estate-form works!</p>
+<div>
+    <div class="flex items-center mb-4">
+        <h2 class="text-3xl font-bold text-easywills-black">List all your assets</h2>
+        <mat-icon class="ml-2">help</mat-icon>
+    </div>
+
+    <p class="text-easywills-dark-grey mb-6">Including bank accounts, real estate, bonds, cryptocurrency, and so on.</p>
+
+    <div class="p-6 rounded-lg border border-[#b7b7b7] border-border bg-easywills-white">
+        <div class="flex items-center mb-6">
+            <mat-icon class="mr-2">home</mat-icon>
+            <h3 class="text-xl font-medium">Real Estate/Landed Property</h3>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+
+            <div>
+                <label class="block pb-2 text-easywills-black">Property Type</label>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-select formControlName="propertyType">
+                        <mat-option *ngFor="let type of propertyTypes" [value]="type.value">
+                            {{type.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix>help</mat-icon>
+                    <mat-error *ngIf="form.get('propertyType')?.hasError('required')">
+                        Property type is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <label class="block pb-2 text-easywills-black">Property Title</label>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-select formControlName="propertyTitle">
+                        <mat-option *ngFor="let title of propertyTitles" [value]="title.value">
+                            {{title.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix>help</mat-icon>
+                    <mat-error *ngIf="form.get('propertyTitle')?.hasError('required')">
+                        Property title is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <label class="block pb-2 text-easywills-black">Property address</label>
+                <mat-form-field appearance="outline" class="w-full">
+                    <input matInput formControlName="address" placeholder="street number, unit number, street name">
+                    <mat-hint>The address must be the same as on the legal ownership documents for this
+                        property.</mat-hint>
+                    <mat-error *ngIf="form.get('address')?.hasError('required')">
+                        Address is required
+                    </mat-error>
+                    <mat-error *ngIf="form.get('address')?.hasError('minlength')">
+                        Address must be at least 5 characters
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block pb-2 text-easywills-black">City</label>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-select formControlName="city">
+                            <mat-option *ngFor="let city of cities" [value]="city.value">
+                                {{city.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('city')?.hasError('required')">
+                            City is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div>
+                    <label class="block pb-2 text-easywills-black">State/Province</label>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-select formControlName="state">
+                            <mat-option *ngFor="let state of states" [value]="state.value">
+                                {{state.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('state')?.hasError('required')">
+                            State is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div>
+                <label class="block pb-2 text-easywills-black">Country</label>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-select formControlName="country">
+                        <mat-option *ngFor="let country of countries" [value]="country.value">
+                            {{country.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('country')?.hasError('required')">
+                        Country is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-4">
+                <button mat-flat-button color="primary" type="submit" class="w-full">
+                    Save
+                </button>
+                <button *ngIf="!editingAssetId" mat-stroked-button color="primary" type="button"
+                    (click)="onAddAnother()" class="w-full">
+                    <mat-icon>add</mat-icon>
+                    List another property
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
