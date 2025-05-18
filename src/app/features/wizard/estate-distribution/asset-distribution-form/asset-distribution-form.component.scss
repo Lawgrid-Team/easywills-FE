@@ -1,0 +1,223 @@
+/* Custom styles for the asset distribution form */
+
+/* Style for the percentage input */
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Style for the beneficiary cards */
+.bg-gray-600 {
+  background-color: #737373;
+}
+
+/* Grid layout for perfect alignment */
+.distribution-row {
+  display: grid;
+  grid-template-columns: 1fr 118px;
+  align-items: center;
+  width: 100%;
+}
+
+.label-column {
+  padding-right: 16px;
+}
+
+.percentage-column {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Percentage input styling */
+.percentage-input-container {
+  position: relative;
+  width: 70px;
+  height: 40px;
+  background-color: white;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.percentage-input-container::after {
+  content: '%';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: black;
+  pointer-events: none;
+}
+
+.percentage-input-container.focused::after {
+  display: none;
+}
+
+.percentage-input {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border: none;
+  border-radius: 6px;
+  padding: 0 8px;
+  font-size: 16px;
+  color: black;
+  background: transparent;
+}
+
+.percentage-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Remaining share styling */
+.remaining-share {
+  background-color: #f3f4f6;
+}
+
+.percentage-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: black;
+  padding-right: 12px; /* Make room for the % sign */
+}
+
+/* Remove button styling */
+.remove-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
+}
+
+/* Asset type section styling */
+.asset-type-section {
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+}
+
+/* Asset type card styling */
+.asset-type-section > div:first-child {
+  transition: all 0.2s ease;
+}
+
+.asset-type-section > div:first-child:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Asset count badge styling */
+.count-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: #444444;
+  color: white;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Asset icon styling */
+.asset-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Asset item styling */
+.asset-item {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.asset-item:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Primary color for buttons and badges */
+.bg-primary {
+  background-color: #444444;
+}
+
+/* Add custom CSS variable for the primary color */
+:root {
+  --mat-primary-color: #444444;
+}
+
+/* Asset assigned badge styling */
+.asset-assigned-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #6982b5;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 4px;
+  height: 28px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.badge-icon {
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  margin-right: 4px;
+}
+
+/* Add styles for the property title container to properly align items */
+.property-title-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.property-title {
+  margin-right: 8px;
+}
+
+/* Edit beneficiary link styling */
+.edit-beneficiary-link {
+  background: none;
+  border: none;
+  color: #444444;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  width: auto;
+  margin: 0 auto;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-beneficiary-link:hover {
+  opacity: 0.8;
+}
+
+.edit-beneficiary-link mat-icon {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}

@@ -1,0 +1,51 @@
+.exclusion-form-container {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.legal-declaration {
+  display: block;
+  
+  .declaration-text {
+    font-size: 14px;
+    
+    ul {
+      list-style-type: disc;
+    }
+  }
+}
+
+.exclusions-list {
+  margin-top: 16px;
+  
+  .exclusion-item {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    
+    .exclusion-details {
+      h4 {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.4;
+      }
+      
+      .relationship-text {
+        margin: 4px 0 0 0;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      
+      .reason-text {
+        margin: 8px 0 0 0;
+        font-size: 14px;
+        line-height: 1.5;
+        max-width: 90%;
+      }
+    }
+  }
+}
