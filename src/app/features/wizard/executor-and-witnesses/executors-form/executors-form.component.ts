@@ -1,9 +1,10 @@
-import { 
+import {
     Component,
     Input,
     Output,
     EventEmitter,
-    type OnInit,} from '@angular/core';
+    type OnInit,
+} from '@angular/core';
 
 import {
     FormBuilder,
@@ -13,7 +14,11 @@ import {
     Validators,
 } from '@angular/forms';
 
-import { PersonalDetailsData, Executor } from '../../../../core/models/interfaces/will-data.interface';
+import {
+    PersonalDetailsData,
+    ExecutorAndWitnessData,
+    Executor,
+} from '../../../../core/models/interfaces/will-data.interface';
 import { CommonModule } from '@angular/common';
 import { v4 as uuidv4 } from 'uuid';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,27 +33,25 @@ import { MatCardModule } from '@angular/material/card';
 @Component({
     selector: 'app-executors-form',
     standalone: true,
-      imports: [
-          MatFormFieldModule,
-          MatInputModule,
-          MatButtonModule,
-          MatIconModule,
-          ReactiveFormsModule,
-          FormsModule,
-          MatSelectModule,
-          MatCheckboxModule,
-          MatRadioModule,
-          CommonModule,
-          MatCardModule,
+    imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        CommonModule,
+        MatCardModule,
     ],
     templateUrl: './executors-form.component.html',
     styleUrl: './executors-form.component.scss',
 })
-
-
 export class ExecutorsFormComponent {
-    @Input() data!: PersonalDetailsData;
-    @Output() updateData = new EventEmitter<Partial<PersonalDetailsData>>();
+    @Input() data!: ExecutorAndWitnessData;
+    @Output() updateData = new EventEmitter<Partial<ExecutorAndWitnessData>>();
     @Output() next = new EventEmitter<void>();
     @Output() setFormValidity = new EventEmitter<boolean>();
 
@@ -77,7 +80,7 @@ export class ExecutorsFormComponent {
             address: ['', [Validators.required]],
         });
 
-         // Add conditional validation based on executor type
+        // Add conditional validation based on executor type
         this.executorForm.get('type')?.valueChanges.subscribe((type) => {
             const lastNameControl = this.executorForm.get('lastName');
             const addressControl = this.executorForm.get('address');
@@ -94,8 +97,14 @@ export class ExecutorsFormComponent {
             addressControl?.updateValueAndValidity();
         });
 
+        // Update form validity whenever the form value changes
+         this.executorForm.statusChanges.subscribe(() => {
+            this.setFormValidity.emit(this.executorForm.valid);
+        });
+
         // Initial form validity
         this.setFormValidity.emit(true);
+
     }
 
     handleHasExecutorChange(value: string): void {
@@ -116,7 +125,10 @@ export class ExecutorsFormComponent {
                 // Update existing executor
                 this.executors = this.executors.map((executor) =>
                     executor.id === this.editingExecutorId
-                        ? { ...this.executorForm.value, id: this.editingExecutorId }
+                        ? {
+                              ...this.executorForm.value,
+                              id: this.editingExecutorId,
+                          }
                         : executor
                 );
             } else {
@@ -160,4 +172,3 @@ export class ExecutorsFormComponent {
         this.next.emit();
     }
 }
-

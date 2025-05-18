@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-background">
     <app-header></app-header>
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 pb-24">
         <div class="max-w-3xl mx-auto">
             <ng-container *ngIf="currentAssetForm === 'real-estate'">
                 <app-real-estate-form [data]="data" [editingAssetId]="editingAssetId" (updateData)="updateData($event)"

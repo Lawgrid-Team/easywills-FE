@@ -6,7 +6,7 @@ import { ExecutorsFormComponent } from './executors-form/executors-form.componen
 import { IntroScreenComponent } from './intro-screen/intro-screen.component';
 import { WitnessesFormComponent } from './witnesses-form/witnesses-form.component';
 import { Router } from '@angular/router';
-import { PersonalDetailsData } from '../../../core/models/interfaces/will-data.interface';
+import { ExecutorAndWitnessData } from '../../../core/models/interfaces/will-data.interface';
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
 
 @Component({
@@ -24,21 +24,21 @@ import { WillDataService } from '../../../core/services/Wizard/will-data.service
 })
 export class ExecutorAndWitnessesComponent {
     step = 0;
-    data: PersonalDetailsData;
+    data: ExecutorAndWitnessData;
     isFormValid = true;
 
     constructor(
         private router: Router,
         private willDataService: WillDataService
     ) {
-        this.data = this.willDataService.getPersonalDetails();
+        this.data = this.willDataService.getExecutorAndWitness();
     }
 
     ngOnInit(): void {}
 
-    updateData(newData: Partial<PersonalDetailsData>): void {
-        this.willDataService.updatePersonalDetails(newData);
-        this.data = this.willDataService.getPersonalDetails();
+    updateData(newData: Partial<ExecutorAndWitnessData>): void {
+        this.willDataService.updateExecutorAndWitness(newData);
+        this.data = this.willDataService.getExecutorAndWitness();
     }
 
     handleNext(): void {

@@ -5,12 +5,15 @@ import type {
     PersonalDetailsData,
     AssetInventoryData,
     EstateDistributionData,
+    ExecutorAndWitnessData,
 } from '../../models/interfaces/will-data.interface';
 
 @Injectable({
     providedIn: 'root',
 })
 export class WillDataService {
+    constructor() {}
+
     private initialPersonalDetails: PersonalDetailsData = {
         title: '',
         firstName: '',
@@ -39,6 +42,13 @@ export class WillDataService {
         completedAssetTypes: [],
     };
 
+    private initialExecutorAndWitness: ExecutorAndWitnessData = {
+        executors: [],
+        hasExecutor: false,
+        witnesses: [],
+        hasWitnesses: false,
+    };
+
     private initialEstateDistribution: EstateDistributionData = {
         sharingAsAWhole: true,
         exclusions: [], // Added this property to match the updated interface
@@ -47,12 +57,11 @@ export class WillDataService {
     private willDataSubject = new BehaviorSubject<WillData>({
         personalDetails: this.initialPersonalDetails,
         assetInventory: this.initialAssetInventory,
+        executorAndWitness: this.initialExecutorAndWitness,
         estateDistribution: this.initialEstateDistribution,
     });
 
     willData$: Observable<WillData> = this.willDataSubject.asObservable();
-
-    constructor() {}
 
     updatePersonalDetails(data: Partial<PersonalDetailsData>): void {
         const currentData = this.willDataSubject.value;
@@ -71,6 +80,17 @@ export class WillDataService {
             ...currentData,
             assetInventory: {
                 ...currentData.assetInventory,
+                ...data,
+            },
+        });
+    }
+
+    updateExecutorAndWitness(data: Partial<ExecutorAndWitnessData>): void {
+        const currentData = this.willDataSubject.value;
+        this.willDataSubject.next({
+            ...currentData,
+            executorAndWitness: {
+                ...currentData.executorAndWitness,
                 ...data,
             },
         });
@@ -97,6 +117,10 @@ export class WillDataService {
 
     getAssetInventory(): AssetInventoryData {
         return this.willDataSubject.value.assetInventory;
+    }
+
+    getExecutorAndWitness(): ExecutorAndWitnessData {
+        return this.willDataSubject.value.executorAndWitness;
     }
 
     getEstateDistribution(): EstateDistributionData {

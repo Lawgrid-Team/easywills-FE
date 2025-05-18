@@ -59,8 +59,8 @@ export interface PersonalDetailsData {
     otherFullName: string;
     dateOfBirth: string;
     stateOfOrigin: string;
-    email: string;
-    phoneNumber: string;
+    // email: string;
+    // phoneNumber: string;
     // Address fields
     streetAddress: string;
     city: string;
@@ -72,7 +72,15 @@ export interface PersonalDetailsData {
     hasChildren: boolean;
     children: Child[];
     beneficiaries: Beneficiary[];
-    // Executor and witnesses
+
+    // executors: Executor[];
+    // hasExecutor: boolean;
+    // witnesses: Witness[];
+    // hasWitnesses: boolean;
+}
+
+ // Executor and witnesses
+export interface  ExecutorAndWitnessData {
     executors: Executor[];
     hasExecutor: boolean;
     witnesses: Witness[];
@@ -120,4 +128,5 @@ export interface WillData {
     personalDetails: PersonalDetailsData;
     assetInventory: AssetInventoryData;
     estateDistribution: EstateDistributionData;
+    executorAndWitness: ExecutorAndWitnessData;
 }
