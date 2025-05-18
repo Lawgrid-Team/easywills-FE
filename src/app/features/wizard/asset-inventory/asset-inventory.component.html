@@ -3,11 +3,12 @@
 
     <main class="container mx-auto px-4 py-8">
         <div class="max-w-3xl mx-auto">
-            <!-- <ng-container *ngIf="currentAssetForm === 'real-estate'">
+            <ng-container *ngIf="currentAssetForm === 'real-estate'">
                 <app-real-estate-form [data]="data" [editingAssetId]="editingAssetId" (updateData)="updateData($event)"
                     (save)="handleAssetSaved('real-estate')">
                 </app-real-estate-form>
             </ng-container>
+
 
             <ng-container *ngIf="currentAssetForm === 'bank-account'">
                 <app-bank-account-form [data]="data" [editingAssetId]="editingAssetId" (updateData)="updateData($event)"
@@ -15,15 +16,13 @@
                 </app-bank-account-form>
             </ng-container>
 
-            -->
-
             <ng-container *ngIf="currentAssetForm === null">
                 <app-asset-intro-screen *ngIf="step === 0" (next)="handleNext()"></app-asset-intro-screen>
 
-                <!-- <app-asset-type-selection *ngIf="step === 1" [data]="data"
+                <app-asset-type-selection *ngIf="step === 1" [data]="data"
                     (assetTypeSelect)="handleAssetTypeSelect($event)"
                     (editAsset)="handleEditAsset($event.type, $event.id)">
-                </app-asset-type-selection> -->
+                </app-asset-type-selection>
             </ng-container>
 
             <!-- <div class="mt-8 flex justify-between">

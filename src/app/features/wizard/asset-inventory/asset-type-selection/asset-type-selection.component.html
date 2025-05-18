@@ -1,1 +1,69 @@
-<p>asset-type-selection works!</p>
+<div>
+    <div class="flex items-center mb-4">
+        <h2 class="text-3xl font-bold text-easywills-black">List all your assets</h2>
+        <mat-icon class="ml-2">help</mat-icon>
+    </div>
+
+    <p class="text-easywills-dark-grey mb-6">Click on one of the asset types to list an asset.</p>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+        <div *ngFor="let assetType of assetTypes"
+            class="p-6 cursor-pointer hover:shadow-md transition-shadow relative rounded-lg border border-[#b7b7b7] border-border bg-easywills-white"
+            [class.border-secondary]="assetType.completed" (click)="handleAssetTypeClick(assetType.id)">
+
+            <div *ngIf="assetType.count > 0"
+                class="absolute top-2 right-2 bg-foreground text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                {{assetType.count}}
+            </div>
+
+            <div class="flex items-center justify-center flex-col">
+                 <img class="mx-auto mb-2" src='icons/{{ assetType.icon }}.svg' alt="assets_icons">
+
+                <h3 class="font-normal text-sm text-center text-easywills-black">{{assetType.name}}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display added assets -->
+    <div *ngIf="data.bankAccounts.length > 0" class="mt-8">
+        <h3 class="text-xl font-bold text-foreground mb-4">Bank Accounts</h3>
+        <mat-card *ngFor="let account of data.bankAccounts" class="p-4 mb-4">
+            <div class="flex justify-between">
+                <div>
+                    <p class="font-medium">{{account.accountType}}</p>
+                    <p>{{account.institution}}</p>
+                    <p>Account ending in {{account.accountNumber}}</p>
+                </div>
+                <button mat-icon-button (click)="handleEditAsset('bank-account', account.id); $event.stopPropagation()">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+        </mat-card>
+    </div>
+
+    <div *ngIf="data.realEstateProperties.length > 0" class="mt-8">
+        <h3 class="text-xl font-bold text-foreground mb-4">Real Estate Properties</h3>
+        <mat-card *ngFor="let property of data.realEstateProperties" class="p-4 mb-4">
+            <div class="flex justify-between">
+                <div>
+                    <p class="font-medium">{{property.propertyType}} property</p>
+                    <p>{{property.ownershipType}}</p>
+                    <p>{{property.address}}</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button mat-icon-button
+                        (click)="handleEditAsset('real-estate', property.id); $event.stopPropagation()">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <div class="absolute bottom-24 right-8">
+        <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
+            <span class="mr-2">Need help?</span>
+            <mat-icon>help</mat-icon>
+        </div>
+    </div>
+</div>

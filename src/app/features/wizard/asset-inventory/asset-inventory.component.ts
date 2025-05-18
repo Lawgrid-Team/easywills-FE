@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AssetIntroScreenComponent } from './asset-intro-screen/asset-intro-screen.component';
 import { RealEstateFormComponent } from './real-estate-form/real-estate-form.component';
 import { BankAccountFormComponent } from './bank-account-form/bank-account-form.component';
+import { AssetTypeSelectionComponent } from './asset-type-selection/asset-type-selection.component';
 
 type AssetFormType = 'real-estate' | 'bank-account' | null;
 
@@ -20,6 +21,7 @@ type AssetFormType = 'real-estate' | 'bank-account' | null;
         MatIconModule,
         CommonModule,
         AssetIntroScreenComponent,
+        AssetTypeSelectionComponent,
         RealEstateFormComponent,
         BankAccountFormComponent,
     ],
