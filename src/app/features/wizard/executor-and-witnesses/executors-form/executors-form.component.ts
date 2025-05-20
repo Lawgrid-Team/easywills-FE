@@ -76,31 +76,30 @@ export class ExecutorsFormComponent {
             lastName: ['', [Validators.required, Validators.minLength(2)]],
             email: ['', [Validators.required, Validators.email]],
             phoneNumber: ['', [Validators.required, Validators.minLength(10)]],
-            type: ['individual', Validators.required],
-            address: ['', [Validators.required]],
+            type: ['', Validators.required],
+            address: [''],
         });
 
         // Add conditional validation based on executor type
         this.executorForm.get('type')?.valueChanges.subscribe((type) => {
             const lastNameControl = this.executorForm.get('lastName');
             const addressControl = this.executorForm.get('address');
+            const firstNameControl = this.executorForm.get('firstName');
 
             if (type === 'organization') {
-                lastNameControl?.setValidators([Validators.required]);
-                addressControl?.setValidators([Validators.required]);
-            } else {
                 lastNameControl?.clearValidators();
+                addressControl?.setValidators([Validators.required]);
+                lastNameControl?.updateValueAndValidity();
+                addressControl?.updateValueAndValidity();
+                
+            } else {
                 addressControl?.clearValidators();
+                addressControl?.updateValueAndValidity();
+
             }
-
-            lastNameControl?.updateValueAndValidity();
-            addressControl?.updateValueAndValidity();
+            
         });
-
-        // Update form validity whenever the form value changes
-         this.executorForm.statusChanges.subscribe(() => {
-            this.setFormValidity.emit(this.executorForm.valid);
-        });
+    
 
         // Initial form validity
         this.setFormValidity.emit(true);
@@ -110,6 +109,15 @@ export class ExecutorsFormComponent {
     handleHasExecutorChange(value: string): void {
         this.hasExecutor = value === 'yes';
 
+        if (this.hasExecutor && this.executors.length > 0) {
+            this.setFormValidity.emit(true);
+        } else if (!this.hasExecutor) {
+            this.setFormValidity.emit(true);
+        } else {
+            this.setFormValidity.emit(false);
+        }
+
+
         if (this.hasExecutor && this.executors.length === 0) {
             this.isAddingExecutor = true;
         } else {
@@ -117,6 +125,7 @@ export class ExecutorsFormComponent {
         }
 
         this.updateData.emit({ hasExecutor: this.hasExecutor });
+        console.log(this.hasExecutor);
     }
 
     handleSaveExecutor(): void {
@@ -141,11 +150,15 @@ export class ExecutorsFormComponent {
             }
 
             this.updateData.emit({ executors: this.executors });
+            this.setFormValidity.emit(true);
             this.executorForm.reset();
             this.isAddingExecutor = false;
             this.editingExecutorId = null;
         }
-    }
+        
+    }  
+
+
 
     handleEditExecutor(executor: Executor): void {
         this.executorForm.patchValue({

@@ -5,7 +5,7 @@
     <!-- <mat-form-field appearance="outline" class="w-full"> -->
 
         <form (ngSubmit)="onSubmit()" class="space-y-6">
-            <mat-radio-group [(ngModel)]="hasExecutor" name="hasChildren"
+            <mat-radio-group [(ngModel)]="hasExecutor" name="hasExecutor"
                 (change)="handleHasExecutorChange($event.value ? 'yes' : 'no')">
                 <div class="space-y-3">
                     <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
@@ -55,7 +55,7 @@
                                     <mat-option value="organization">Organization</mat-option>
                                 </mat-select>
                             </mat-form-field>
-                        </div>
+                        </div> <br>
                         <ng-container *ngIf="executorForm.get('type')?.value === 'individual'">
                             <div>
                                 <label class="block mb-2">What is the name of the individual?</label>
@@ -83,6 +83,7 @@
                                     </mat-form-field>
                                 </div>
                             </div>
+                            <br>
 
                             <div>
                                 <label class="block mb-2">Email</label>
@@ -96,7 +97,7 @@
                                         Please enter a valid email address
                                     </mat-error>
                                 </mat-form-field>
-                            </div>
+                            </div> <br>
                             <div>
                                 <label class="block mb-2">Phone Number</label>
                                 <mat-form-field appearance="outline" class="w-full">
@@ -165,7 +166,7 @@
                             </div>
                         </ng-container>
                         <br>
-                        <button type="button" mat-flat-button color="primary" (click)="handleSaveExecutor()"
+                        <button type="button" [disabled]="executorForm.invalid" mat-flat-button color="primary" (click)="handleSaveExecutor()"
                             class="w-full">
                             Save
                         </button>
@@ -180,10 +181,10 @@
             </div>
 
             <div class="absolute bottom-24 right-8">
-                <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
-                    <span class="mr-2">Need help?</span>
-                    <mat-icon>help</mat-icon>
-                </div>
+            <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
+                <span class="mr-2">Need help?</span>
+                <mat-icon>help</mat-icon>
             </div>
+        </div>
         </form>
 </div>
