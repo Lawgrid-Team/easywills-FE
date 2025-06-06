@@ -8,7 +8,7 @@
   display: flex;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 20px 20px 40px 20px; // Reduced top padding to align content higher
   gap: 80px;
   
   @media (max-width: 992px) {
@@ -23,7 +23,7 @@
   max-width: 450px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; // Changed from center to flex-start to align with PDF
   
   @media (max-width: 992px) {
     max-width: 100%;
@@ -36,6 +36,7 @@
   color: #272727;
   margin-bottom: 32px;
   line-height: 1.2;
+  margin-top: 90px; // Ensure no extra top margin
   
   @media (max-width: 768px) {
     font-size: 32px;
@@ -90,21 +91,21 @@
   }
 }
 
-.pdf-header {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+// New edit link container styles
+.edit-link-container {
   margin-bottom: 16px;
+  text-align: left; // Left aligned as per Figma
 }
 
-.edit-prompt {
+.edit-link {
   color: #6982b5;
+  text-decoration: none;
   font-size: 16px;
-  margin-right: 8px;
-}
-
-.edit-button {
-  color: #6982b5;
+  cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .pdf-container {
@@ -138,6 +139,18 @@
   .page {
     box-shadow: none !important;
     border: none !important;
+  }
+  
+  // Prevent scrolling
+  .ng2-pdf-viewer-container {
+    overflow: hidden !important;
+  }
+  
+  // Ensure the page fits the container
+  canvas {
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 auto !important;
   }
 }
 
@@ -193,12 +206,29 @@
   }
 }
 
-// PDF navigation controls
+// PDF navigation controls - matching Figma design
 .pdf-navigation {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 16px;
+  
+  button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #272727;
+    color: white;
+    
+    &:disabled {
+      background-color: #dedede;
+      color: #a6a6a6;
+    }
+    
+    mat-icon {
+      font-size: 20px;
+    }
+  }
 }
 
 .page-indicator {

@@ -36,7 +36,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 export class ReviewAndDownloadComponent implements OnInit {
     willData!: WillData;
     isLoading = true;
-    pdfSrc: string | ArrayBuffer | null = null;
+    pdfSrc: string | Uint8Array | null = null;
     isBrowser: boolean;
     pdfError = true; // Start with error state, will set to false if PDF loads
 
@@ -46,21 +46,6 @@ export class ReviewAndDownloadComponent implements OnInit {
     showAll = true;
     currentPage = 1;
     totalPages = 0;
-
-    // Array of paths to try
-    pdfPaths = [
-        '/doc/sample-will.pdf',
-        'doc/sample-will.pdf',
-        '/public/doc/sample-will.pdf',
-        'public/doc/sample-will.pdf',
-        'assets/doc/sample-will.pdf',
-        '/assets/doc/sample-will.pdf',
-        './doc/sample-will.pdf',
-        '../doc/sample-will.pdf',
-        '../../doc/sample-will.pdf',
-        '../../../doc/sample-will.pdf',
-        '../../../public/doc/sample-will.pdf',
-    ];
 
     constructor(
         private router: Router,
@@ -87,53 +72,35 @@ export class ReviewAndDownloadComponent implements OnInit {
 
     // Try to load PDF as a blob
     loadPdfAsBlob(): void {
-        console.log('Attempting to load PDF as blob');
+        console.log('Loading PDF from confirmed path: /doc/sample-will.pdf');
 
-        // Try each path
-        for (const path of this.pdfPaths) {
-            console.log(`Checking path: ${path}`);
-
-            // Use HTTP client to fetch the PDF as a blob
-            this.http
-                .get(path, {
-                    responseType: 'blob',
-                    observe: 'response',
+        // Use HTTP client to fetch the PDF as arraybuffer
+        this.http
+            .get('/doc/sample-will.pdf', {
+                responseType: 'arraybuffer',
+            })
+            .pipe(
+                catchError((error) => {
+                    console.error('Failed to load PDF:', error.message);
+                    this.pdfError = true;
+                    this.isLoading = false;
+                    return of(null);
                 })
-                .pipe(
-                    catchError((error) => {
-                        console.log(
-                            `Failed to load from ${path}: ${error.message}`
-                        );
-                        return of(null);
-                    })
-                )
-                .subscribe((response) => {
-                    if (response && response.body) {
-                        console.log(`Successfully loaded PDF from ${path}`);
+            )
+            .subscribe((response) => {
+                if (response) {
+                    console.log('Successfully loaded PDF');
 
-                        // Create a FileReader to convert blob to data URL
-                        const reader = new FileReader();
-                        reader.onload = () => {
-                            this.pdfSrc = reader.result;
-                            this.pdfError = false;
-                            this.isLoading = false;
-                        };
-                        reader.readAsDataURL(response.body);
-
-                        // Break the loop by not checking other paths
-                        return;
-                    }
-                });
-        }
-
-        // Set a timeout to show error state if PDF doesn't load
-        setTimeout(() => {
-            if (this.isLoading) {
-                console.error('Could not load PDF from any path');
-                this.pdfError = true;
-                this.isLoading = false;
-            }
-        }, 5000);
+                    // Convert ArrayBuffer to Uint8Array
+                    this.pdfSrc = new Uint8Array(response);
+                    this.pdfError = false;
+                    this.isLoading = false;
+                } else {
+                    console.error('No response received for PDF');
+                    this.pdfError = true;
+                    this.isLoading = false;
+                }
+            });
     }
 
     signAndValidate(): void {
@@ -146,22 +113,25 @@ export class ReviewAndDownloadComponent implements OnInit {
 
         console.log('Download watermarked version clicked');
 
-        // Create a link element
-        const link = document.createElement('a');
-
-        // If pdfSrc is a data URL, use it directly
-        if (
-            typeof this.pdfSrc === 'string' &&
-            this.pdfSrc.startsWith('data:')
-        ) {
-            link.href = this.pdfSrc;
+        // Create a blob from the Uint8Array
+        let blob: Blob;
+        if (this.pdfSrc instanceof Uint8Array) {
+            blob = new Blob([this.pdfSrc], { type: 'application/pdf' });
         } else {
-            // Fallback to a default path
-            link.href = 'doc/sample-will.pdf';
+            // Fallback - try to fetch the PDF again
+            console.warn('PDF source is not available, using fallback');
+            return;
         }
 
+        // Create a link element
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
         link.download = 'your-will-watermarked.pdf';
         link.click();
+
+        // Clean up the object URL
+        URL.revokeObjectURL(url);
     }
 
     editWill(): void {
@@ -184,11 +154,21 @@ export class ReviewAndDownloadComponent implements OnInit {
     }
 
     // Called when PDF is loaded
+    // Update the onPdfLoaded method
     onPdfLoaded(pdf: any): void {
         console.log('PDF loaded successfully:', pdf);
         this.totalPages = pdf.numPages;
         this.isLoading = false;
         this.pdfError = false;
+
+        // Calculate zoom to fit container
+        this.calculateZoom();
+    }
+
+    // Add this method to calculate appropriate zoom
+    calculateZoom(): void {
+        // Default zoom that works well for most PDFs
+        this.zoom = 0.75;
     }
 
     // Called when PDF fails to load

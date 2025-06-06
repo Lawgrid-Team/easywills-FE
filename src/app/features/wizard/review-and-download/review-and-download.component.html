@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header [showSaveExitButton]="false"></app-header>
 
 <div class="review-container">
   <!-- Left column: Congratulations and actions -->
@@ -22,11 +22,9 @@
   
   <!-- Right column: PDF preview -->
   <div class="pdf-preview-column">
-    <div class="pdf-header">
-      <span class="edit-prompt">Would you like to make some changes?</span>
-      <button mat-icon-button class="edit-button" (click)="editWill()">
-        <mat-icon>edit</mat-icon>
-      </button>
+    <!-- Edit link above PDF -->
+    <div class="edit-link-container">
+      <a href="#" class="edit-link" (click)="editWill()">Would you like to make some changes ?</a>
     </div>
     
     <div class="pdf-container">
@@ -39,16 +37,17 @@
       <!-- PDF Viewer - Only render in browser environment -->
       <ng-container *ngIf="isBrowser && pdfSrc && !pdfError && !isLoading">
         <pdf-viewer
-          [src]="pdfSrc"
-          [render-text]="true"
-          [original-size]="false"
-          [show-all]="true"
-          [page]="currentPage"
-          [zoom]="zoom"
-          (after-load-complete)="onPdfLoaded($event)"
-          (error)="onPdfError($event)"
-          style="display: block; height: 100%;"
-        ></pdf-viewer>
+        [src]="pdfSrc"
+        [render-text]="true"
+        [original-size]="false"
+        [show-all]="false"
+        [page]="currentPage"
+        [zoom]="zoom"
+        [fit-to-page]="true"
+        (after-load-complete)="onPdfLoaded($event)"
+        (error)="onPdfError($event)"
+        style="display: block; height: 100%;"
+      ></pdf-viewer>
       </ng-container>
       
       <!-- Fallback content for SSR or errors -->
