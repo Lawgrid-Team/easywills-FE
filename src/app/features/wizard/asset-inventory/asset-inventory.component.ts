@@ -54,8 +54,12 @@ export class AssetInventoryComponent {
     }
 
     handleNext(): void {
-        this.step++;
-        window.scrollTo(0, 0);
+        if (this.step === 1) {
+            this.router.navigate(['/wiz/will/estate-distribution']);
+        } else {
+            this.step++;
+            window.scrollTo(0, 0);
+        }
     }
 
     handleBack(): void {
