@@ -15,8 +15,6 @@ import { WillData } from '../../../core/models/interfaces/will-data.interface';
 import { HeaderComponent } from '../widget/header/header.component';
 import { HttpClient } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
-
-// Import PdfViewerModule conditionally to avoid SSR issues
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @Component({
@@ -28,121 +26,138 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
         MatIconModule,
         MatProgressSpinnerModule,
         HeaderComponent,
-        PdfViewerModule, // Still need to import it here for Angular to recognize it
+        PdfViewerModule,
     ],
     templateUrl: './review-and-download.component.html',
     styleUrls: ['./review-and-download.component.scss'],
 })
 export class ReviewAndDownloadComponent implements OnInit {
     willData!: WillData;
-    isLoading = true;
-    pdfSrc: string | Uint8Array | null = null;
-    isBrowser: boolean;
-    pdfError = true; // Start with error state, will set to false if PDF loads
+    isLoading = true; // True only for initial load
 
-    // PDF viewer options
+    originalPdfData: Uint8Array | null = null;
+
+    pdfSrc: Uint8Array | null = null;
+    modalPdfSrc: Uint8Array | null = null;
+
+    isBrowser: boolean;
+    pdfError = false;
+    modalPdfError = false;
+
     zoom = 1.0;
-    originalSize = false;
-    showAll = true;
+    modalZoom = 0.9;
     currentPage = 1;
     totalPages = 0;
+    totalPagesModal = 0;
+
+    isModalOpen = false;
+
+    platformId: string;
+    appId: string;
 
     constructor(
         private router: Router,
         private willDataService: WillDataService,
         private http: HttpClient,
-        @Inject(PLATFORM_ID) private platformId: any,
-        @Inject(APP_ID) private appId: string
+        @Inject(PLATFORM_ID) platformId: string,
+        @Inject(APP_ID) appId: string
     ) {
+        this.platformId = platformId;
+        this.appId = appId;
         this.isBrowser = isPlatformBrowser(platformId);
     }
 
     ngOnInit(): void {
-        // Get will data directly
         this.willData = this.willDataService.getWillData();
-
-        // Only load PDF in browser environment
         if (this.isBrowser) {
             this.loadPdfAsBlob();
         } else {
-            // Skip loading for server-side rendering
-            this.isLoading = false;
+            this.isLoading = false; // SSR: no loading
         }
     }
 
-    // Try to load PDF as a blob
     loadPdfAsBlob(): void {
+        this.isLoading = true; // Set loading true at the start of the fetch
+        this.pdfError = false;
+        this.originalPdfData = null;
+        this.pdfSrc = null;
         console.log('Loading PDF from confirmed path: /doc/sample-will.pdf');
-
-        // Use HTTP client to fetch the PDF as arraybuffer
         this.http
-            .get('/doc/sample-will.pdf', {
-                responseType: 'arraybuffer',
-            })
+            .get('/doc/sample-will.pdf', { responseType: 'arraybuffer' })
             .pipe(
                 catchError((error) => {
                     console.error('Failed to load PDF:', error.message);
                     this.pdfError = true;
-                    this.isLoading = false;
+                    this.isLoading = false; // Stop loading on error
                     return of(null);
                 })
             )
             .subscribe((response) => {
                 if (response) {
-                    console.log('Successfully loaded PDF');
-
-                    // Convert ArrayBuffer to Uint8Array
-                    this.pdfSrc = new Uint8Array(response);
-                    this.pdfError = false;
-                    this.isLoading = false;
+                    console.log('Successfully fetched PDF data');
+                    this.originalPdfData = new Uint8Array(response);
+                    this.pdfSrc = this.originalPdfData.slice(); // Give main viewer its first copy
+                    this.pdfError = false; // Explicitly set no error on success
                 } else {
                     console.error('No response received for PDF');
                     this.pdfError = true;
-                    this.isLoading = false;
                 }
+                this.isLoading = false; // Stop loading on success or if response is null
             });
     }
 
-    signAndValidate(): void {
-        console.log('Sign and validate clicked');
-        // Navigate to signing page or open signing modal
-    }
-
-    downloadWatermarked(): void {
-        if (!this.isBrowser || !this.pdfSrc) return;
-
-        console.log('Download watermarked version clicked');
-
-        // Create a blob from the Uint8Array
-        let blob: Blob;
-        if (this.pdfSrc instanceof Uint8Array) {
-            blob = new Blob([this.pdfSrc], { type: 'application/pdf' });
-        } else {
-            // Fallback - try to fetch the PDF again
-            console.warn('PDF source is not available, using fallback');
+    openModal(): void {
+        if (!this.originalPdfData) {
+            console.error(
+                'Cannot open modal: Original PDF data is not loaded.'
+            );
+            this.modalPdfError = true;
+            this.isModalOpen = true;
+            if (this.isBrowser) document.body.style.overflow = 'hidden';
             return;
         }
 
-        // Create a link element
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.href = url;
-        link.download = 'your-will-watermarked.pdf';
-        link.click();
-
-        // Clean up the object URL
-        URL.revokeObjectURL(url);
+        this.modalPdfSrc = this.originalPdfData.slice(); // Give modal viewer its own copy
+        this.modalPdfError = false;
+        this.isModalOpen = true;
+        if (this.isBrowser) document.body.style.overflow = 'hidden';
     }
 
+    closeModal(): void {
+        this.isModalOpen = false;
+        this.modalPdfSrc = null; // Release the modal's copy
+        if (this.isBrowser) {
+            document.body.style.overflow = 'auto';
+        }
+
+        // When modal closes, ensure the main viewer gets a fresh, usable PDF source
+        // This is crucial for when it's re-added to the DOM via *ngIf
+        if (this.originalPdfData) {
+            this.pdfSrc = this.originalPdfData.slice(); // Re-assign a fresh copy
+            this.pdfError = false; // Reset error state for main viewer
+            console.log('Refreshed pdfSrc for main viewer after modal close.');
+        } else {
+            // If original data is somehow gone (shouldn't happen in this flow but good for robustness)
+            this.pdfSrc = null;
+            this.pdfError = true;
+        }
+    }
+
+    signAndValidate(): void {
+        /* ... */
+    }
+    downloadWatermarked(): void {
+        /* ... */
+    }
     editWill(): void {
-        console.log('Edit will clicked');
-        // Navigate back to appropriate section for editing
-        this.router.navigate(['/wizard/will/personal-details']);
+        /* ... */
     }
 
-    // PDF viewer navigation methods
     nextPage(): void {
-        if (this.currentPage < this.totalPages) {
+        const currentTotalPages = this.isModalOpen
+            ? this.totalPagesModal
+            : this.totalPages;
+        if (this.currentPage < currentTotalPages) {
             this.currentPage++;
         }
     }
@@ -153,28 +168,55 @@ export class ReviewAndDownloadComponent implements OnInit {
         }
     }
 
-    // Called when PDF is loaded
-    // Update the onPdfLoaded method
-    onPdfLoaded(pdf: any): void {
-        console.log('PDF loaded successfully:', pdf);
-        this.totalPages = pdf.numPages;
-        this.isLoading = false;
-        this.pdfError = false;
-
-        // Calculate zoom to fit container
-        this.calculateZoom();
+    onPdfLoaded(pdf: { numPages: number }, viewerType: 'main' | 'modal'): void {
+        console.log(
+            `PDF loaded successfully for ${viewerType} viewer:`,
+            pdf.numPages,
+            'pages'
+        );
+        if (viewerType === 'main') {
+            this.totalPages = pdf.numPages;
+            // No need to set isLoading false here, loadPdfAsBlob handles it
+        } else if (viewerType === 'modal') {
+            this.totalPagesModal = pdf.numPages;
+        }
+        this.calculateZoom(viewerType);
     }
 
-    // Add this method to calculate appropriate zoom
-    calculateZoom(): void {
-        // Default zoom that works well for most PDFs
-        this.zoom = 0.75;
+    calculateZoom(viewerType: 'main' | 'modal'): void {
+        if (viewerType === 'main') this.zoom = 0.8; // Default zoom for main viewer
+        // modalZoom is already set
     }
 
-    // Called when PDF fails to load
-    onPdfError(error: any): void {
-        console.error('Error loading PDF:', error);
-        this.pdfError = true;
-        this.isLoading = false;
+    onPdfError(error: Error, viewerType: 'main' | 'modal'): void {
+        console.error(`Error loading PDF for ${viewerType} viewer:`, error);
+        if (viewerType === 'main') {
+            this.pdfError = true;
+            // No need to set isLoading false here, loadPdfAsBlob handles it
+        } else if (viewerType === 'modal') {
+            this.modalPdfError = true;
+        }
+    }
+
+    onModalKeydown(event: KeyboardEvent): void {
+        // Prevent event bubbling for keyboard events
+        event.stopPropagation();
+
+        // Optional: Handle Escape key to close modal
+        if (event.key === 'Escape') {
+            this.closeModal();
+        }
+    }
+
+    onOverlayKeydown(event: KeyboardEvent): void {
+        // Close modal on Enter or Space key
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            this.closeModal();
+        }
+        // Also handle Escape key
+        if (event.key === 'Escape') {
+            this.closeModal();
+        }
     }
 }

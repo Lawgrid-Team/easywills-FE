@@ -14,9 +14,9 @@
         Sign and Validate your will
       </button>
       
-      <a class="download-link" (click)="downloadWatermarked()">
+      <button type="button" class="download-link" (click)="downloadWatermarked()">
         Download watermarked version of your will
-      </a>
+      </button>
     </div>
   </div>
   
@@ -28,73 +28,120 @@
     </div>
     
     <div class="pdf-container">
+      <!-- Expand icon in top-right corner -->
+      <button class="expand-button" mat-icon-button (click)="openModal()" [disabled]="isLoading || !originalPdfData || pdfError">
+        <mat-icon>open_in_full</mat-icon>
+      </button>
+      
       <!-- Loading spinner -->
       <div class="loading-container" *ngIf="isLoading">
         <mat-spinner diameter="40"></mat-spinner>
         <p>Loading your will...</p>
       </div>
       
-      <!-- PDF Viewer - Only render in browser environment -->
-      <ng-container *ngIf="isBrowser && pdfSrc && !pdfError && !isLoading">
+      <!-- PDF Viewer - Main -->
+      <ng-container *ngIf="isBrowser && pdfSrc && !pdfError && !isLoading && !isModalOpen">
         <pdf-viewer
-        [src]="pdfSrc"
-        [render-text]="true"
-        [original-size]="false"
-        [show-all]="false"
-        [page]="currentPage"
-        [zoom]="zoom"
-        [fit-to-page]="true"
-        (after-load-complete)="onPdfLoaded($event)"
-        (error)="onPdfError($event)"
-        style="display: block; height: 100%;"
-      ></pdf-viewer>
+          [src]="pdfSrc"
+          [render-text]="true"
+          [original-size]="false"
+          [show-all]="false"
+          [page]="currentPage"
+          [zoom]="zoom"
+          [fit-to-page]="true"
+          (after-load-complete)="onPdfLoaded($event, 'main')"
+          (error)="onPdfError($event, 'main')"
+          style="display: block; height: 100%;"
+        ></pdf-viewer>
       </ng-container>
       
-      <!-- Fallback content for SSR or errors -->
-      <div class="sample-will" *ngIf="(!isBrowser || pdfError || !pdfSrc) && !isLoading">
+      <!-- Fallback content for SSR or errors - Main -->
+      <div class="sample-will" *ngIf="(!isBrowser || pdfError || !pdfSrc) && !isLoading && !isModalOpen">
         <div class="sample-will-content">
           <h2 class="sample-will-title">LAST WILL AND TESTAMENT OF</h2>
           <h3 class="sample-will-name">Jane Doe</h3>
-          
-          <p class="sample-will-text">
-            I, [Full Name], of [Address], being of sound mind and lawful age, declare this document to be my Last Will and Testament. I revoke all previous wills and codicils made by me and confirm that this document reflects my final wishes for the distribution of my estate.
-          </p>
-          
-          <h4 class="sample-will-section">1. DECLARATION AS TO SANITY AND AGAINST</h4>
-          <p class="sample-will-text">
-            I hereby declare that I make and execute this Will in a perfect state of mental health and I am not under any undue influence whatsoever in making this disposition.
-          </p>
-          
-          <h4 class="sample-will-section">DECLARATION AS TO NAME</h4>
-          <p class="sample-will-text">
-            I hereby declare that during my lifetime, I answer to the following names: <strong>Jane Doe</strong>. Any document including conveyances and any other document of title to real and personal properties bearing the aforesaid names thereby refer to me.
-          </p>
-          
-          <h4 class="sample-will-section">I DECLARE THAT WHEREVER THE WORD "WIFE" </h4>
-          <p class="sample-will-text">
-            shall appear in this Will, it shall be taken that I am referring only to:
-          </p>
-          <ul class="sample-will-list">
-            <li>Mary Jane (Wife)</li>
-          </ul>
-          
-          <h4 class="sample-will-section">I DECLARE THAT WHEREVER THE WORD "CHILD" OR "CHILDREN"</h4>
-          <p class="sample-will-text">
-            shall appear in this Will, it shall be taken that I am referring only to the following or one of them as the case may be, to wit:
-          </p>
+          <p class="sample-will-text">Could not load PDF preview. Please try again or check your connection.</p>
         </div>
       </div>
     </div>
     
     <!-- PDF navigation controls -->
-    <div class="pdf-navigation" *ngIf="!isLoading">
-      <button mat-icon-button [disabled]="currentPage <= 1" (click)="previousPage()">
-        <mat-icon>arrow_back</mat-icon>
+    <div class="pdf-navigation" *ngIf="!isLoading && !isModalOpen && pdfSrc && !pdfError">
+      <button class="prev" mat-icon-button [disabled]="currentPage <= 1" (click)="previousPage()">
+        <mat-icon>arrow_back_ios</mat-icon>
       </button>
-      <span class="page-indicator">Page {{ currentPage }} of {{ totalPages || 5 }}.</span>
-      <button mat-icon-button [disabled]="currentPage >= (totalPages || 5)" (click)="nextPage()">
-        <mat-icon>arrow_forward</mat-icon>
+      <span class="page-indicator">Page {{ currentPage }} of {{ totalPages || '...' }}.</span>
+      <button class="next" mat-icon-button [disabled]="currentPage >= (totalPages || 1)" (click)="nextPage()">
+        <mat-icon>arrow_forward_ios</mat-icon>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div 
+  class="modal-overlay" 
+  *ngIf="isModalOpen" 
+  (click)="closeModal()"
+  (keydown)="onOverlayKeydown($event)"
+  tabindex="0"
+  role="button"
+  aria-label="Close modal">
+  <!-- Close button (top right) -->
+  <button class="modal-close-button-overlay" mat-icon-button (click)="closeModal()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <!-- Side Navigation Arrows -->
+  <button class="modal-nav-button-side prev" 
+          mat-icon-button 
+          [disabled]="currentPage <= 1" 
+          (click)="previousPage(); $event.stopPropagation()">
+    <mat-icon>arrow_back_ios</mat-icon>
+  </button>
+  <button class="modal-nav-button-side next" 
+          mat-icon-button 
+          [disabled]="currentPage >= (totalPagesModal || 1)" 
+          (click)="nextPage(); $event.stopPropagation()">
+    <mat-icon>arrow_forward_ios</mat-icon>
+  </button>
+
+  <!-- Main Modal Content -->
+  <div class="modal-container" 
+       (click)="$event.stopPropagation()"
+       (keydown)="onModalKeydown($event)"
+       tabindex="0"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="modal-title"
+       aria-describedby="modal-description">
+<div class="modal-pdf-container">
+<ng-container *ngIf="isBrowser && modalPdfSrc && !modalPdfError">
+ <pdf-viewer
+   [src]="modalPdfSrc"
+   [render-text]="true"
+   [original-size]="false"
+   [show-all]="true" 
+   [page]="currentPage" 
+   [zoom]="modalZoom"
+   (after-load-complete)="onPdfLoaded($event, 'modal')"
+   (error)="onPdfError($event, 'modal')"
+   style="display: block; width: 100%; height: 100%;"
+   aria-label="PDF document viewer">
+ </pdf-viewer>
+</ng-container>
+<div class="modal-sample-will" *ngIf="(!isBrowser || modalPdfError || !modalPdfSrc)">
+  <div class="sample-will-content">
+     <h2 class="sample-will-title" id="modal-title">LAST WILL AND TESTAMENT OF</h2>
+     <h3 class="sample-will-name">Jane Doe</h3>
+     <p class="sample-will-text" id="modal-description">Could not load PDF in expanded view.</p>
+ </div>
+</div>
+</div>
+</div>
+
+  <!-- Bottom Page Indicator -->
+  <div class="modal-page-indicator-bottom" *ngIf="modalPdfSrc && !modalPdfError">
+    Page {{ currentPage }} of {{ totalPagesModal || '...' }}.
   </div>
 </div>
