@@ -1,0 +1,26 @@
+<header class="flex justify-between items-center w-full">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Welcome back, {{ userName }}!</h1>
+      <p class="text-gray-500">Here's an overview of your Will planning progress.</p>
+    </div>
+    <div class="flex items-center gap-6">
+      <button class="bg-[#6982b5] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-opacity-90 transition-colors">
+        <span *ngIf="!isWillCompleted">Free</span>
+        <span *ngIf="isWillCompleted">Legacy+</span>
+        Upgrade Plan
+      </button>
+      <div class="relative">
+        <!-- Notification Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+        <span *ngIf="notificationCount > 0" class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+      </div>
+      <div class="flex items-center gap-3">
+        <img [src]="userAvatarUrl || '/svg/avatar.svg'" alt="User Avatar" class="w-12 h-12 rounded-full object-cover" />
+        <div>
+          <p class="font-semibold text-gray-800">{{ userName }} Doe</p>
+          <p class="text-sm text-gray-500">{{ userEmail }}</p>
+        </div>
+      </div>
+    </div>
+  </header>
+  

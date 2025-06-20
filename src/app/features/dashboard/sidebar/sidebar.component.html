@@ -1,0 +1,40 @@
+<aside class="w-64 bg-white p-6 flex flex-col space-y-8 border-r border-gray-200">
+    <div class="mb-4">
+      <img src="/images/easywill_logo.png" alt="easyWills Logo" class="h-8 w-auto" />
+    </div>
+  
+    <nav class="flex-grow">
+      <ul>
+        <li *ngFor="let item of navItems" class="mb-2">
+          <a
+            [routerLink]="item.link"
+            routerLinkActive="bg-gray-100 text-[#6982b5] font-semibold"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-[#6982b5] transition-colors duration-150"
+            [class.text-[#6982b5]]="item.active"
+            [class.font-semibold]="item.active"
+            [class.bg-gray-100]="item.active"
+          >
+            <lucide-angular [name]="item.icon" class="mr-3 h-5 w-5"></lucide-angular>
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  
+    <div>
+      <ul>
+        <li *ngFor="let item of utilityItems" class="mb-2">
+          <a
+            [routerLink]="item.link"
+            routerLinkActive="bg-gray-100 text-[#6982b5] font-semibold"
+            class="flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-[#6982b5] transition-colors duration-150"
+          >
+            <lucide-angular [name]="item.icon" class="mr-3 h-5 w-5"></lucide-angular>
+            <span>{{ item.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+  
