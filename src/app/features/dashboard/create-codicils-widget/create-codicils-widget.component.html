@@ -1,0 +1,12 @@
+<div class="bg-codicils rounded-xl p-6 text-white shadow-sm h-full flex flex-col" 
+     style="background-image: url('/svg/codicils-bg.svg'); background-size: cover; background-position: center;">
+  <h3 class="text-2xl font-semibold mb-1">Create Codicils</h3>
+  <p class="text-sm text-gray-200 mb-6">Make addition or changes to your existing Will</p>
+  <div class="space-y-3 flex-grow flex flex-col justify-around">
+    <a *ngFor="let action of codicilActions" [href]="action.link"
+       class="flex items-center bg-white text-gray-800 p-4 rounded-lg hover:bg-gray-50 transition duration-150 ease-in-out shadow">
+      <img [src]="action.icon" [alt]="action.text" class="w-5 h-5 mr-3 text-gray-700">
+      <span>{{ action.text }}</span>
+    </a>
+  </div>
+</div>

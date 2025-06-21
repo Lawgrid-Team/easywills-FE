@@ -1,60 +1,52 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Import CommonModule
-
-// Importing Lucide icons
-import {
-    FileText,
-    Folder,
-    Lock,
-    Settings,
-    HelpCircle,
-    LogOut,
-    LucideAngularModule,
-} from 'lucide-angular';
+import { CommonModule } from '@angular/common';
+// Removed all lucide-angular imports
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
-    imports: [CommonModule, RouterLink, RouterLinkActive, LucideAngularModule],
+    imports: [CommonModule, RouterLink, RouterLinkActive],
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
-    // Making icons available in the template
-    icons = { FileText, Folder, Lock, Settings, HelpCircle, LogOut };
-
     navItems = [
         {
             label: 'My Will',
-            icon: 'FileText',
+            icon: '/svg/my-will.svg', 
             link: '/dashboard/my-will',
             active: true,
-        }, // Assuming '/dashboard/my-will' or similar
+        },
         {
             label: 'My Documents',
-            icon: 'Folder',
+            icon: '/svg/my-documents.svg', 
             link: '/dashboard/documents',
             active: false,
         },
         {
             label: 'Digital Vault',
-            icon: 'Lock',
+            icon: '/svg/digital-vault.svg', 
             link: '/dashboard/vault',
             active: false,
         },
     ];
 
     utilityItems = [
-        { label: 'Settings', icon: 'Settings', link: '/dashboard/settings' },
+        {
+            label: 'Settings',
+            icon: '/svg/settings.svg', 
+            link: '/dashboard/settings',
+        },
         {
             label: 'Help and support',
-            icon: 'HelpCircle',
+            icon: '/svg/help-and-support.svg', 
             link: '/dashboard/help',
         },
-        { label: 'Logout', icon: 'LogOut', link: '/logout' }, // Or a method to handle logout
+        {
+            label: 'Logout',
+            icon: '/svg/logout.svg', 
+            link: '/logout',
+        },
     ];
-
-    // TODO: Implement actual active state logic based on routing
-    // For now, 'My Will' is hardcoded as active for visual representation
 }
