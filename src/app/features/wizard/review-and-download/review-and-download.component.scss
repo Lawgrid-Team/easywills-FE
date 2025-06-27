@@ -121,25 +121,18 @@
   }
   
   .expand-button {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 10;
-  background-color: #272727;
-  color: white;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 100%;
   
-  &:hover {
-    background-color: #444444;
-  }
-  
-  mat-icon {
-    font-size: 20px;
-    margin-left: -2px;
-  }
+    .expand-icon {
+      width: 28px;
+      height: 28px;
+    }
   }
   
   .loading-container {
