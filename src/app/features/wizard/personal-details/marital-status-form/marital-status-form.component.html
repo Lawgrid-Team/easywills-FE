@@ -27,8 +27,7 @@
                     <h3 class="text-xl font-semibold">
                         {{spouse.firstName}} {{spouse.lastName}}
                     </h3>
-                    <button type="button" mat-icon-button (click)="handleEditSpouse(spouse)"
-                        class="text-easywills-white">
+                    <button type="button" mat-icon-button (click)="handleEditSpouse(spouse)" class="text-easywills-white">
                         <mat-icon>edit</mat-icon>
                     </button>
                 </div>
@@ -41,11 +40,11 @@
             <div *ngIf="isAddingSpouse" class="space-y-4">
                 <form [formGroup]="spouseForm">
                     <div>
-                        <label for="spouseName" class="block mb-2">What is the legal name of your spouse?</label>
+                        <label class="block mb-2">What is the legal name of your spouse?</label>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <mat-form-field appearance="outline">
                                 <!-- <mat-label>First name</mat-label> -->
-                                <input matInput id="spouseName" formControlName="firstName" placeholder="First name">
+                                <input matInput formControlName="firstName" placeholder="First name">
                                 <mat-error *ngIf="spouseForm.get('firstName')?.hasError('required')">
                                     First name is required
                                 </mat-error>
@@ -68,11 +67,10 @@
                     </div>
 
                     <div>
-                        <label for="dateOfBirth" class="block mb-2">What is their date of birth?</label>
+                        <label class="block mb-2">What is their date of birth?</label>
                         <mat-form-field appearance="outline" class="w-full">
                             <!-- <mat-label>Date of birth</mat-label> -->
-                            <input matInput id="dateOfBirth" [matDatepicker]="birthPicker"
-                                formControlName="dateOfBirth">
+                            <input matInput [matDatepicker]="birthPicker" formControlName="dateOfBirth">
                             <mat-datepicker-toggle matIconSuffix [for]="birthPicker"></mat-datepicker-toggle>
                             <mat-datepicker #birthPicker></mat-datepicker>
                             <mat-error *ngIf="spouseForm.get('dateOfBirth')?.hasError('required')">
@@ -82,11 +80,10 @@
                     </div>
 
                     <div>
-                        <label for="dateOfMarriage" class="block mb-2">What is your date of marriage?</label>
+                        <label class="block mb-2">What is your date of marriage?</label>
                         <mat-form-field appearance="outline" class="w-full">
                             <!-- <mat-label>Date of marriage</mat-label> -->
-                            <input matInput id="dateOfMarriage" [matDatepicker]="marriagePicker"
-                                formControlName="dateOfMarriage">
+                            <input matInput [matDatepicker]="marriagePicker" formControlName="dateOfMarriage">
                             <mat-datepicker-toggle matIconSuffix [for]="marriagePicker"></mat-datepicker-toggle>
                             <mat-datepicker #marriagePicker></mat-datepicker>
                             <mat-error *ngIf="spouseForm.get('dateOfMarriage')?.hasError('required')">
@@ -94,7 +91,7 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <br>
+                     <br>
                     <button type="button" mat-flat-button color="primary" (click)="handleSaveSpouse()" class="w-full">
                         Save
                     </button>

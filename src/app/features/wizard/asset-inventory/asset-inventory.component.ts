@@ -12,8 +12,34 @@ import { BankAccountFormComponent } from './bank-account-form/bank-account-form.
 import { AssetTypeSelectionComponent } from './asset-type-selection/asset-type-selection.component';
 
 type AssetFormType = 'real-estate' | 'bank-account' | null;
+import { FooterComponent } from '../widget/footer/footer.component';
+import { HeaderComponent } from '../widget/header/header.component';
+import { Router } from '@angular/router';
+import { AssetInventoryData } from '../../../core/models/interfaces/will-data.interface';
+import { WillDataService } from '../../../core/services/Wizard/will-data.service';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { AssetIntroScreenComponent } from './asset-intro-screen/asset-intro-screen.component';
+import { RealEstateFormComponent } from './real-estate-form/real-estate-form.component';
+import { BankAccountFormComponent } from './bank-account-form/bank-account-form.component';
+import { AssetTypeSelectionComponent } from './asset-type-selection/asset-type-selection.component';
+
+type AssetFormType = 'real-estate' | 'bank-account' | null;
 
 @Component({
+    selector: 'app-asset-inventory',
+    imports: [
+        HeaderComponent,
+        FooterComponent,
+        MatIconModule,
+        CommonModule,
+        AssetIntroScreenComponent,
+        AssetTypeSelectionComponent,
+        RealEstateFormComponent,
+        BankAccountFormComponent,
+    ],
+    templateUrl: './asset-inventory.component.html',
+    styleUrl: './asset-inventory.component.scss',
     selector: 'app-asset-inventory',
     imports: [
         HeaderComponent,
@@ -54,8 +80,12 @@ export class AssetInventoryComponent {
     }
 
     handleNext(): void {
-        this.step++;
-        window.scrollTo(0, 0);
+        if (this.step === 1) {
+            this.router.navigate(['/wiz/will/estate-distribution']);
+        } else {
+            this.step++;
+            window.scrollTo(0, 0);
+        }
     }
 
     handleBack(): void {
