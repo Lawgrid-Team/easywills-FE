@@ -9,8 +9,6 @@
     "test": "ng test",
     "serve:ssr:easywills-FE": "node dist/easywills-fe/server/server.mjs",
     "lint": "ng lint"
-    "serve:ssr:easywills-FE": "node dist/easywills-fe/server/server.mjs",
-    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
