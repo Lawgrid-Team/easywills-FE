@@ -1,0 +1,59 @@
+<aside class="w-64 bg-white p-6 flex flex-col h-screen border-r border-gray-200">
+  <div class="mb-8">
+    <img src="/svg/easywill_logo.svg" alt="easyWills Logo" class="h-8 w-auto" />
+  </div>
+
+  <nav class="flex-grow">
+    <ul>
+      <li *ngFor="let item of navItems" class="mb-2">
+        <a
+          [routerLink]="item.link"
+          routerLinkActive="bg-[#f7f7f7] text-[#6982b5] font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="flex items-center p-3 rounded-lg text-[#717171] hover:bg-gray-100 hover:text-[#6982b5] transition-colors duration-150 group"
+          [class.bg-[#f7f7f7]]="item.active"
+          [class.text-[#000000]]="item.active"
+          [class.font-semibold]="item.active"
+        >
+          <img
+            [src]="item.icon"
+            alt=""
+            class="mr-3 h-5 w-5"
+            [class.active-icon-filter]="item.active"
+            [class.inactive-icon-filter]="!item.active"
+            [class.group-hover:hover-icon-filter]="!item.active"
+          />
+          <!-- Note: Direct color change on external SVGs via CSS classes like text-gray-600 is not straightforward.
+               You might need to use CSS filters for simple color shifts (e.g., to make it darker/lighter)
+               or have different SVG versions for active/inactive states if specific color changes are needed.
+               For now, I've added placeholder classes active-icon-filter, inactive-icon-filter, hover-icon-filter.
+               You'll need to define these in your SCSS/CSS if you want to apply filters.
+               Alternatively, if your SVGs use 'currentColor' for fill/stroke, Tailwind text color classes might work.
+          -->
+          <span
+            [class.text-[#000000]]="item.active"
+            [class.text-[#717171]]="!item.active"
+            [class.group-hover:text-[#6982b5]]="!item.active"
+          >
+            {{ item.label }}
+          </span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div>
+    <ul>
+      <li *ngFor="let item of utilityItems" class="mb-2">
+        <a
+          [routerLink]="item.link"
+          routerLinkActive="bg-gray-100 text-[#6982b5] font-semibold"
+          class="flex items-center p-3 rounded-lg text-[#717171] hover:bg-gray-100 hover:text-[#6982b5] transition-colors duration-150 group"
+        >
+          <img [src]="item.icon" alt="" class="mr-3 h-5 w-5 inactive-icon-filter group-hover:hover-icon-filter" />
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>

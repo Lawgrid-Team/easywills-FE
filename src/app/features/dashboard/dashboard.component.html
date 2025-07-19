@@ -1,18 +1,18 @@
-<div class="flex min-h-screen font-sans bg-[#f7f7f7]">
+<div class="flex h-screen bg-gray-100">
     <app-sidebar></app-sidebar>
-    <main class="flex-1 p-8">
-      <app-header-widget
-        [userName]="currentUser.name"
-        [userEmail]="currentUser.email"
-        [userAvatarUrl]="currentUser.avatar"
-        [isWillCompleted]="isWillCompleted"
-      >
-      </app-header-widget>
-    
-      <!-- Main content area for other dashboard widgets will go here -->
-      <div class="mt-8">
-        <!-- Example: <app-your-will-widget></app-your-will-widget> -->
-      </div>
+    <main class="flex-1 p-8 overflow-y-auto">
+        <div class="bg-white rounded-xl p-8 shadow mb-8">
+            <app-header-widget
+                [userName]="currentUser.name"
+                [userEmail]="currentUser.email"
+                [userAvatarUrl]="currentUser.avatar"
+                [isWillCompleted]="isWillCompleted"
+                [hasUnreadNotifications]="true"
+            >
+            </app-header-widget>
+        </div>
+
+        <!-- Router Outlet for child routes (e.g., My Will page) -->
+        <router-outlet></router-outlet>
     </main>
-    </div>
-    
+</div>

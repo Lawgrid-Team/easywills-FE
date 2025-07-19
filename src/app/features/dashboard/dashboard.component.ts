@@ -1,21 +1,36 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, type OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderWidgetComponent } from './header-widget/header-widget.component';
-import { SidebarComponent } from './sidebar/sidebar.component'; // Import SidebarComponent
 
 @Component({
     selector: 'app-dashboard',
-    imports: [RouterOutlet, HeaderWidgetComponent, SidebarComponent], // Add SidebarComponent here
-    templateUrl: './dashboard.component.html',
-    styleUrl: './dashboard.component.scss',
     standalone: true,
+    imports: [
+        CommonModule,
+        RouterModule, // Add RouterModule for <router-outlet>
+        SidebarComponent,
+        HeaderWidgetComponent,
+    ],
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent {
-    // Placeholder data to simulate user state
-    isWillCompleted = false; // Set to `true` to see the "Completed" state
+export class DashboardComponent implements OnInit {
     currentUser = {
         name: 'John',
         email: 'johndoe@gmail.com',
-        avatar: '/images/expert-1.png', // Using an existing image as a placeholder
+        avatar: '/svg/display-pic.svg',
     };
+    currentPlan = {
+        type: 'Free', // or 'Legacy+'
+    };
+    isWillCompleted = true; // Set to true to test "Completed" state
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    constructor() {}
+
+    ngOnInit(): void {
+        this.currentPlan.type = this.isWillCompleted ? 'Legacy+' : 'Free';
+    }
 }
