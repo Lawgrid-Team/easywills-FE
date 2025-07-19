@@ -1,5 +1,6 @@
-import { Component, type OnInit } from '@angular/core';
+import { Component, type OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { YourWillWidgetComponent } from './your-will-widget/your-will-widget.component';
 import { QuickActionsWidgetComponent } from './quick-actions-widget/quick-actions-widget.component';
 import {
@@ -7,6 +8,7 @@ import {
     type Activity,
 } from './recent-activity-widget/recent-activity-widget.component';
 import { CreateCodicilsWidgetComponent } from './create-codicils-widget/create-codicils-widget.component';
+import { WillStateService } from '../../../shared/services/will-state.service';
 
 @Component({
     selector: 'app-my-will',
@@ -21,9 +23,11 @@ import { CreateCodicilsWidgetComponent } from './create-codicils-widget/create-c
     templateUrl: './my-will.component.html',
     styleUrls: ['./my-will.component.scss'],
 })
-export class MyWillComponent implements OnInit {
-    // This component now manages the state for the "My Will" page
-    isWillCompleted = true; // Set to true to test "Completed" state - CHANGE THIS TO SEE TOGGLE
+export class MyWillComponent implements OnInit, OnDestroy {
+    private subscriptions = new Subscription();
+
+    // State managed by WillStateService - initialized by service subscription
+    isWillCompleted!: boolean; // Using definite assignment assertion since it's set in ngOnInit
     willStatus: 'inProgress' | 'completed' = 'inProgress';
 
     recentActivities: Activity[] = [
@@ -49,10 +53,19 @@ export class MyWillComponent implements OnInit {
         },
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    constructor() {}
+    constructor(private willStateService: WillStateService) {}
 
     ngOnInit(): void {
-        this.willStatus = this.isWillCompleted ? 'completed' : 'inProgress';
+        // Subscribe to will completion status changes
+        this.subscriptions.add(
+            this.willStateService.isWillCompleted$.subscribe((completed) => {
+                this.isWillCompleted = completed;
+                this.willStatus = completed ? 'completed' : 'inProgress';
+            })
+        );
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 }

@@ -1,8 +1,10 @@
-import { Component, type OnInit } from '@angular/core';
+import { Component, type OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderWidgetComponent } from './header-widget/header-widget.component';
+import { WillStateService } from '../../shared/services/will-state.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -16,7 +18,9 @@ import { HeaderWidgetComponent } from './header-widget/header-widget.component';
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+    private subscriptions = new Subscription();
+
     currentUser = {
         name: 'John',
         email: 'johndoe@gmail.com',
@@ -25,12 +29,30 @@ export class DashboardComponent implements OnInit {
     currentPlan = {
         type: 'Free', // or 'Legacy+'
     };
-    isWillCompleted = false; // Set to true to test "Completed" state - CHANGE THIS TO SEE TOGGLE (should match my-will.component.ts)
+    isWillCompleted!: boolean; // This will be updated from the service subscription
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    constructor() {}
+    constructor(private willStateService: WillStateService) {}
 
     ngOnInit(): void {
-        this.currentPlan.type = this.isWillCompleted ? 'Legacy+' : 'Free';
+        // Subscribe to will completion status changes
+        this.subscriptions.add(
+            this.willStateService.isWillCompleted$.subscribe((completed) => {
+                this.isWillCompleted = completed;
+            })
+        );
+
+        // Subscribe to plan changes
+        this.subscriptions.add(
+            this.willStateService.currentPlan$.subscribe((plan) => {
+                this.currentPlan.type = plan;
+            })
+        );
+
+        // Set initial state for testing - CHANGE THIS TO TOGGLE STATE
+        this.willStateService.setWillCompleted(false);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 }
