@@ -1,18 +1,16 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface Document {
-    id: number;
-    date: string;
-    time: string;
-    name: string;
-    type: 'pdf' | 'doc';
-}
+import { OrganizationHubWidgetComponent } from './organization-hub-widget/organization-hub-widget.component';
+import { DocumentsListWidgetComponent, type Document } from './documents-list-widget/documents-list-widget.component';
 
 @Component({
     selector: 'app-my-documents',
     standalone: true,
-    imports: [CommonModule],
+    imports: [
+        CommonModule,
+        OrganizationHubWidgetComponent,
+        DocumentsListWidgetComponent,
+    ],
     templateUrl: './my-documents.component.html',
     styleUrls: ['./my-documents.component.scss'],
 })
@@ -54,8 +52,4 @@ export class MyDocumentsComponent {
             type: 'doc',
         },
     ];
-
-    getIcon(type: 'pdf' | 'doc'): string {
-        return type === 'pdf' ? '/svg/pdf-icon.png' : '/svg/my-documents.svg'; // Placeholder for .doc
-    }
 }

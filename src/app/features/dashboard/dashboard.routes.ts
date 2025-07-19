@@ -1,30 +1,34 @@
 import type { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
+import { MyWillComponent } from './my-will/my-will.component';
+import { MyDocumentsComponent } from './my-documents/my-documents.component';
 
-export const routes: Routes = [
+export const dashboardRoutes: Routes = [
     {
         path: '',
         component: DashboardComponent,
         children: [
+            { path: '', redirectTo: 'my-will', pathMatch: 'full' },
             {
                 path: 'my-will',
-                loadComponent: () =>
-                    import('./my-will/my-will.component').then(
-                        (m) => m.MyWillComponent
-                    ),
+                component: MyWillComponent,
+                data: {
+                    title: 'Welcome back, John Doe!',
+                    subtitle:
+                        "Here's an overview of your Will planning progress.",
+                },
             },
             {
                 path: 'my-documents',
-                loadComponent: () =>
-                    import('./my-documents/my-documents.component').then(
-                        (m) => m.MyDocumentsComponent
-                    ),
-            },
-            {
-                path: '',
-                redirectTo: 'my-will',
-                pathMatch: 'full',
+                component: MyDocumentsComponent,
+                data: {
+                    title: 'Documents',
+                    subtitle: 'Manage your Will documents and legal files',
+                },
             },
         ],
     },
 ];
+
+// Also export as 'routes' for app.routes.ts compatibility
+export const routes = dashboardRoutes;

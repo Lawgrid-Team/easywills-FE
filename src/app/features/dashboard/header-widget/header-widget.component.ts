@@ -9,9 +9,11 @@ import { CommonModule } from '@angular/common';
     styleUrls: ['./header-widget.component.scss'],
 })
 export class HeaderWidgetComponent {
+    @Input() title = '';
+    @Input() subtitle = '';
     @Input() userName = 'User';
     @Input() userEmail = 'user@example.com';
-    @Input() userAvatarUrl?: string; // Will be set to /svg/display-pic.svg from parent
+    @Input() userAvatarUrl?: string;
     @Input() isWillCompleted!: boolean;
     @Input() hasUnreadNotifications = true;
 }

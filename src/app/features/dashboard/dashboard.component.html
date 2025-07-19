@@ -1,18 +1,19 @@
-<div class="flex h-screen bg-gray-100">
+<div class="flex h-screen bg-gray-50">
     <app-sidebar></app-sidebar>
-    <main class="flex-1 p-8 overflow-y-auto">
-        <div class="bg-white rounded-xl p-8 shadow mb-8">
-            <app-header-widget
-                [userName]="currentUser.name"
-                [userEmail]="currentUser.email"
-                [userAvatarUrl]="currentUser.avatar"
-                [isWillCompleted]="isWillCompleted"
-                [hasUnreadNotifications]="true"
-            >
-            </app-header-widget>
+    <main class="flex-1 overflow-y-auto">
+        <div class="p-8">
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <app-header-widget
+                    [title]="headerTitle"
+                    [subtitle]="headerSubtitle"
+                    [userName]="userName"
+                    [userEmail]="userEmail"
+                    [userAvatarUrl]="userAvatarUrl"
+                    [isWillCompleted]="isWillCompleted"
+                    [hasUnreadNotifications]="hasUnreadNotifications"
+                ></app-header-widget>
+            </div>
+            <router-outlet></router-outlet>
         </div>
-
-        <!-- Router Outlet for child routes (e.g., My Will page) -->
-        <router-outlet></router-outlet>
     </main>
 </div>
