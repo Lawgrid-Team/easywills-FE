@@ -2,10 +2,13 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 // Removed all lucide-angular imports
+import { CommonModule } from '@angular/common';
+// Removed all lucide-angular imports
 
 @Component({
     selector: 'app-sidebar',
     standalone: true,
+    imports: [CommonModule, RouterLink, RouterLinkActive],
     imports: [CommonModule, RouterLink, RouterLinkActive],
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss'],
@@ -17,6 +20,7 @@ export class SidebarComponent {
             icon: '/svg/my-will.svg',
             link: '/dashboard/my-will',
             active: true,
+        },
         },
         {
             label: 'My Documents',

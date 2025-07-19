@@ -15,7 +15,9 @@ import { HeaderWidgetComponent } from './header-widget/header-widget.component';
     ],
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
+    styleUrls: ['./dashboard.component.scss'],
 })
+export class DashboardComponent implements OnInit {
 export class DashboardComponent implements OnInit {
     currentUser = {
         name: 'John',
