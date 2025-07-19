@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrganizationHubWidgetComponent } from './organization-hub-widget/organization-hub-widget.component';
 import {
     DocumentsListWidgetComponent,
     type Document,
 } from './documents-list-widget/documents-list-widget.component';
+import { UploadDocumentWidgetComponent } from './upload-document-widget/upload-document-widget.component';
 
 @Component({
     selector: 'app-my-documents',
@@ -13,11 +14,16 @@ import {
         CommonModule,
         OrganizationHubWidgetComponent,
         DocumentsListWidgetComponent,
+        UploadDocumentWidgetComponent,
     ],
     templateUrl: './my-documents.component.html',
     styleUrls: ['./my-documents.component.scss'],
 })
 export class MyDocumentsComponent {
+    @Output() uploadingStateChange = new EventEmitter<boolean>();
+
+    isUploading = false;
+
     documents: Document[] = [
         {
             id: 1,
@@ -55,4 +61,9 @@ export class MyDocumentsComponent {
             type: 'doc',
         },
     ];
+
+    toggleUploadState(state: boolean): void {
+        this.isUploading = state;
+        this.uploadingStateChange.emit(this.isUploading);
+    }
 }

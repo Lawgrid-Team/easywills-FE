@@ -11,6 +11,7 @@ import { filter } from 'rxjs/operators';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderWidgetComponent } from './header-widget/header-widget.component';
 import { WillStateService } from '../../shared/services/will-state.service';
+import { MyDocumentsComponent } from './my-documents/my-documents.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -26,17 +27,20 @@ import { WillStateService } from '../../shared/services/will-state.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
     private subscriptions = new Subscription();
+    private childComponent: any;
+    private childSub: Subscription | undefined;
 
     // User and will data
     userName = 'John Doe';
     userEmail = 'johndoe@gmail.com';
     userAvatarUrl = '/svg/display-pic.svg';
-    isWillCompleted = true;
+    isWillCompleted = false;
     hasUnreadNotifications = true;
 
     // Dynamic header data
     headerTitle = '';
     headerSubtitle = '';
+    isUploadingInChild = false;
 
     constructor(
         private willStateService: WillStateService,
@@ -45,32 +49,62 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit(): void {
-        // Subscribe to will completion status
         this.subscriptions.add(
             this.willStateService.isWillCompleted$.subscribe((completed) => {
                 this.isWillCompleted = completed;
             })
         );
 
-        // Subscribe to router events to update header
         this.subscriptions.add(
             this.router.events
                 .pipe(filter((event) => event instanceof NavigationEnd))
-                .subscribe((event: NavigationEnd) => {
-                    this.updateHeaderFromUrl(event.url);
+                .subscribe(() => {
+                    this.updateHeader();
                 })
         );
 
-        // Set initial header data
-        this.updateHeaderFromUrl(this.router.url);
+        this.updateHeader();
     }
 
     ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        this.childSub?.unsubscribe();
     }
 
-    private updateHeaderFromUrl(url: string): void {
-        if (url.includes('/my-will')) {
+    onActivate(component: any): void {
+        this.childComponent = component;
+        if (component instanceof MyDocumentsComponent) {
+            this.childSub = component.uploadingStateChange.subscribe(
+                (isUploading: boolean) => {
+                    this.isUploadingInChild = isUploading;
+                    this.updateHeader();
+                }
+            );
+        }
+    }
+
+    onDeactivate(): void {
+        this.childComponent = null;
+        this.childSub?.unsubscribe();
+        this.isUploadingInChild = false;
+    }
+
+    onGoBack(): void {
+        if (
+            this.childComponent &&
+            typeof this.childComponent.toggleUploadState === 'function'
+        ) {
+            this.childComponent.toggleUploadState(false);
+        }
+    }
+
+    private updateHeader(): void {
+        const url = this.router.url;
+
+        if (this.isUploadingInChild && url.includes('/my-documents')) {
+            this.headerTitle = 'Upload document';
+            this.headerSubtitle = '';
+        } else if (url.includes('/my-will')) {
             this.headerTitle = 'Welcome back, John Doe!';
             this.headerSubtitle =
                 "Here's an overview of your Will planning progress.";

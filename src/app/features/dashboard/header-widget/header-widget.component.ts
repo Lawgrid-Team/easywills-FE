@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -16,4 +16,7 @@ export class HeaderWidgetComponent {
     @Input() userAvatarUrl?: string;
     @Input() isWillCompleted!: boolean;
     @Input() hasUnreadNotifications = true;
+    @Input() showGoBackButton = false;
+
+    @Output() goBack = new EventEmitter<void>();
 }

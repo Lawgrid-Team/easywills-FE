@@ -11,9 +11,14 @@
                     [userAvatarUrl]="userAvatarUrl"
                     [isWillCompleted]="isWillCompleted"
                     [hasUnreadNotifications]="hasUnreadNotifications"
+                    [showGoBackButton]="isUploadingInChild"
+                    (goBack)="onGoBack()"
                 ></app-header-widget>
             </div>
-            <router-outlet></router-outlet>
+            <router-outlet
+                (activate)="onActivate($event)"
+                (deactivate)="onDeactivate()"
+            ></router-outlet>
         </div>
     </main>
 </div>

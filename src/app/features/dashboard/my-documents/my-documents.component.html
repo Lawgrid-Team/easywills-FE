@@ -1,8 +1,14 @@
-<div class="space-y-8">
-    <!-- Organization Hub Widget -->
-    <app-organization-hub-widget></app-organization-hub-widget>
+<!-- Organization Hub or Upload Widget -->
+<app-organization-hub-widget
+    *ngIf="!isUploading"
+    (uploadDocument)="toggleUploadState(true)"
+>
+</app-organization-hub-widget>
 
-    <!-- Documents List Widget -->
+<app-upload-document-widget *ngIf="isUploading"></app-upload-document-widget>
+
+<!-- Documents List Widget -->
+<div class="mt-8">
     <app-documents-list-widget
         [documents]="documents"
     ></app-documents-list-widget>

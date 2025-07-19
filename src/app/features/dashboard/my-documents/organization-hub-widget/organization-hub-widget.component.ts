@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,8 +9,9 @@ import { CommonModule } from '@angular/common';
     styleUrls: ['./organization-hub-widget.component.scss'],
 })
 export class OrganizationHubWidgetComponent {
+    @Output() uploadDocument = new EventEmitter<void>();
+
     onUploadDocument(): void {
-        // TODO: Implement document upload functionality
-        console.log('Upload document clicked');
+        this.uploadDocument.emit();
     }
 }
