@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-// Removed all lucide-angular imports
 
 @Component({
     selector: 'app-sidebar',
@@ -16,19 +15,16 @@ export class SidebarComponent {
             label: 'My Will',
             icon: '/svg/my-will.svg',
             link: '/dashboard/my-will',
-            active: true,
         },
         {
             label: 'My Documents',
             icon: '/svg/my-documents.svg',
-            link: '/dashboard/documents',
-            active: false,
+            link: '/dashboard/my-documents',
         },
         {
             label: 'Digital Vault',
             icon: '/svg/digital-vault.svg',
             link: '/dashboard/vault',
-            active: false,
         },
     ];
 

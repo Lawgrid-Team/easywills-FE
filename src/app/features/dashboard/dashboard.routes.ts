@@ -8,16 +8,19 @@ export const routes: Routes = [
         children: [
             {
                 path: 'my-will',
-                // Lazy load the MyWillComponent
                 loadComponent: () =>
                     import('./my-will/my-will.component').then(
                         (m) => m.MyWillComponent
                     ),
             },
-            // You can add other dashboard pages here in the future
-            // e.g., { path: 'my-documents', component: MyDocumentsComponent }
             {
-                // Redirect empty path to 'my-will' by default
+                path: 'my-documents',
+                loadComponent: () =>
+                    import('./my-documents/my-documents.component').then(
+                        (m) => m.MyDocumentsComponent
+                    ),
+            },
+            {
                 path: '',
                 redirectTo: 'my-will',
                 pathMatch: 'full',
