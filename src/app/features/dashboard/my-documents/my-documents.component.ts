@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrganizationHubWidgetComponent } from './organization-hub-widget/organization-hub-widget.component';
-import { DocumentsListWidgetComponent, type Document } from './documents-list-widget/documents-list-widget.component';
+import {
+    DocumentsListWidgetComponent,
+    type Document,
+} from './documents-list-widget/documents-list-widget.component';
 
 @Component({
     selector: 'app-my-documents',
