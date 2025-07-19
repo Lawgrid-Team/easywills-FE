@@ -15,9 +15,7 @@ import { HeaderWidgetComponent } from './header-widget/header-widget.component';
     ],
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
-    styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
 export class DashboardComponent implements OnInit {
     currentUser = {
         name: 'John',
@@ -27,7 +25,7 @@ export class DashboardComponent implements OnInit {
     currentPlan = {
         type: 'Free', // or 'Legacy+'
     };
-    isWillCompleted = true; // Set to true to test "Completed" state
+    isWillCompleted = false; // Set to true to test "Completed" state - CHANGE THIS TO SEE TOGGLE (should match my-will.component.ts)
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     constructor() {}

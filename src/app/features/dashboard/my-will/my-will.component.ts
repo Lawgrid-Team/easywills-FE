@@ -23,7 +23,7 @@ import { CreateCodicilsWidgetComponent } from './create-codicils-widget/create-c
 })
 export class MyWillComponent implements OnInit {
     // This component now manages the state for the "My Will" page
-    isWillCompleted = false; // Set to true to test "Completed" state
+    isWillCompleted = true; // Set to true to test "Completed" state - CHANGE THIS TO SEE TOGGLE
     willStatus: 'inProgress' | 'completed' = 'inProgress';
 
     recentActivities: Activity[] = [
