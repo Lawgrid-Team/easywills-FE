@@ -1,3 +1,12 @@
+<app-notification
+    *ngIf="showDeletionNotification"
+    [title]="'Deletion Successful'"
+    [message]="'Your document was deleted successfully'"
+    [type]="'success'"
+    (closeNotification)="showDeletionNotification = false"
+>
+</app-notification>
+
 <div class="bg-white rounded-xl shadow-sm">
     <div class="p-6 flex items-center justify-between">
         <div>

@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NotificationComponent } from './notification/notification.component';
 
 export interface Document {
     id: number;
@@ -12,7 +13,7 @@ export interface Document {
 @Component({
     selector: 'app-documents-list-widget',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, NotificationComponent],
     templateUrl: './documents-list-widget.component.html',
     styleUrls: ['./documents-list-widget.component.scss'],
 })
@@ -32,6 +33,7 @@ export class DocumentsListWidgetComponent {
 
     isDeleteModalOpen = false;
     documentToDelete: Document | null = null;
+    showDeletionNotification = false;
 
     onViewDocument(document: Document): void {
         // TODO: Implement document view functionality
@@ -51,6 +53,14 @@ export class DocumentsListWidgetComponent {
                 (doc) => doc.id !== this.documentToDelete!.id
             );
             this.closeDeleteModal();
+
+            // Show success notification
+            this.showDeletionNotification = true;
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                this.showDeletionNotification = false;
+            }, 5000);
         }
     }
 

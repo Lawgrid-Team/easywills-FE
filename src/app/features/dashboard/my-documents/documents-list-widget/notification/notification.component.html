@@ -1,0 +1,12 @@
+<div class="toast-container" [@toastAnimation]>
+    <div class="icon-container" [ngClass]="type">
+        <mat-icon>{{ type === "success" ? "check" : "error" }}</mat-icon>
+    </div>
+    <div class="text-container">
+        <p class="title">{{ title }}</p>
+        <p class="message">{{ message }}</p>
+    </div>
+    <button class="close-button" (click)="onClose()">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>

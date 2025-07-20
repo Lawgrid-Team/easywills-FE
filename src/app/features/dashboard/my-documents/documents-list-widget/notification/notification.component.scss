@@ -1,0 +1,87 @@
+:host {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    display: block;
+}
+
+.toast-container {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 350px;
+    max-width: 90vw;
+    border: 1px solid #e2e8f0;
+}
+
+.icon-container {
+    flex-shrink: 0;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+
+    &.success {
+        background-color: white;
+        border: 2px solid #6982b5;
+
+        mat-icon {
+            color: #6982b5;
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    &.error {
+        mat-icon {
+            color: #ef4444;
+            font-size: 24px;
+        }
+    }
+}
+
+.text-container {
+    flex-grow: 1;
+}
+
+.title {
+    font-weight: 600;
+    color: #1a202c;
+    margin: 0 0 4px 0;
+    font-size: 16px;
+}
+
+.message {
+    font-size: 14px;
+    color: #4a5568;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 16px;
+    color: #718096;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        color: #2d3748;
+    }
+
+    mat-icon {
+        font-size: 20px;
+    }
+}
