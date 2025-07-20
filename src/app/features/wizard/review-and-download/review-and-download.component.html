@@ -1,3 +1,8 @@
+<app-notification
+  *ngIf="showDownloadNotification"
+  (close)="showDownloadNotification = false"
+></app-notification>
+
 <app-header [showSaveExitButton]="false"></app-header>
 
 <div class="review-container">
@@ -14,8 +19,9 @@
         Sign and Validate your will
       </button>
       
-      <button type="button" class="download-link" (click)="downloadWatermarked()">
-        Download watermarked version of your will
+      <button type="button" class="download-link" (click)="downloadWatermarked()" [disabled]="isDownloading">
+        <ng-container *ngIf="!isDownloading">Download watermarked version of your will</ng-container>
+        <ng-container *ngIf="isDownloading">Downloading...</ng-container>
       </button>
     </div>
   </div>
