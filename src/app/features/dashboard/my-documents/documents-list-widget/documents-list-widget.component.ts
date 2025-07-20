@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface Document {
@@ -18,6 +18,17 @@ export interface Document {
 })
 export class DocumentsListWidgetComponent {
     @Input() documents: Document[] = [];
+    @Output() viewAllClicked = new EventEmitter<void>();
+
+    isFilterDropdownOpen = false;
+    selectedFilter = 'All';
+    filterOptions = [
+        'All',
+        'Wills & Trusts',
+        'Power of Attorney',
+        'Insurance & Finance',
+        'Personal IDs',
+    ];
 
     onViewDocument(document: Document): void {
         // TODO: Implement document view functionality
@@ -34,9 +45,19 @@ export class DocumentsListWidgetComponent {
         console.log('Search documents:', searchTerm);
     }
 
+    toggleFilterDropdown(): void {
+        this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
+    }
+
     onFilterChange(filter: string): void {
+        this.selectedFilter = filter;
+        this.isFilterDropdownOpen = false;
         // TODO: Implement filter functionality
         console.log('Filter changed:', filter);
+    }
+
+    onViewAll(): void {
+        this.viewAllClicked.emit();
     }
 
     getIcon(type: 'pdf' | 'doc'): string {

@@ -11,7 +11,9 @@
                     [userAvatarUrl]="userAvatarUrl"
                     [isWillCompleted]="isWillCompleted"
                     [hasUnreadNotifications]="hasUnreadNotifications"
-                    [showGoBackButton]="isUploadingInChild"
+                    [showGoBackButton]="
+                        isUploadingInChild || isViewingAllInChild
+                    "
                     (goBack)="onGoBack()"
                 ></app-header-widget>
             </div>

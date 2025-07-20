@@ -6,16 +6,46 @@
         <div class="flex items-center space-x-6">
             <div class="relative">
                 <button
-                    (click)="onFilterChange('all')"
-                    class="flex items-center justify-between border border-gray-300 rounded-md py-2 px-6 text-gray-700 hover:bg-gray-50 min-w-[120px]"
+                    (click)="toggleFilterDropdown()"
+                    class="flex items-center justify-between border border-gray-300 rounded-md py-2 px-6 text-gray-700 hover:bg-gray-50 min-w-[180px]"
                 >
-                    <span>All</span>
+                    <span>{{ selectedFilter }}</span>
                     <img
                         src="/svg/chevron-down-icon.svg"
                         alt="chevron down"
-                        class="h-4 w-4"
+                        class="h-4 w-4 transition-transform duration-200"
+                        [class.rotate-180]="isFilterDropdownOpen"
                     />
                 </button>
+                <div
+                    *ngIf="isFilterDropdownOpen"
+                    class="absolute z-10 mt-1 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                    <div
+                        class="p-1"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="options-menu"
+                    >
+                        <a
+                            *ngFor="let option of filterOptions"
+                            href="#"
+                            (click)="
+                                onFilterChange(option); $event.preventDefault()
+                            "
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                            [class.bg-[#444444]]="option === selectedFilter"
+                            [class.text-white]="option === selectedFilter"
+                            [class.hover:bg-[#444444]]="
+                                option === selectedFilter
+                            "
+                            [class.hover:text-white]="option === selectedFilter"
+                            role="menuitem"
+                        >
+                            {{ option }}
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="relative">
                 <img
@@ -32,6 +62,7 @@
                 />
             </div>
             <button
+                (click)="onViewAll()"
                 class="flex items-center space-x-2 border border-gray-300 rounded-md py-2 px-6 text-gray-700 hover:bg-gray-50 min-w-[120px]"
             >
                 <img

@@ -41,6 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     headerTitle = '';
     headerSubtitle = '';
     isUploadingInChild = false;
+    isViewingAllInChild = false;
 
     constructor(
         private willStateService: WillStateService,
@@ -80,6 +81,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     this.updateHeader();
                 }
             );
+
+            // Subscribe to viewing all state
+            this.childSub.add(
+                component.viewingAllStateChange.subscribe(
+                    (isViewingAll: boolean) => {
+                        this.isViewingAllInChild = isViewingAll;
+                        this.updateHeader();
+                    }
+                )
+            );
         }
     }
 
@@ -87,21 +98,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.childComponent = null;
         this.childSub?.unsubscribe();
         this.isUploadingInChild = false;
+        this.isViewingAllInChild = false;
     }
 
     onGoBack(): void {
         if (
             this.childComponent &&
-            typeof this.childComponent.toggleUploadState === 'function'
+            typeof this.childComponent.onGoBack === 'function'
         ) {
-            this.childComponent.toggleUploadState(false);
+            this.childComponent.onGoBack();
         }
     }
 
     private updateHeader(): void {
         const url = this.router.url;
 
-        if (this.isUploadingInChild && url.includes('/my-documents')) {
+        if (this.isViewingAllInChild && url.includes('/my-documents')) {
+            this.headerTitle = 'Documents';
+            this.headerSubtitle = '';
+        } else if (this.isUploadingInChild && url.includes('/my-documents')) {
             this.headerTitle = 'Upload document';
             this.headerSubtitle = '';
         } else if (url.includes('/my-will')) {

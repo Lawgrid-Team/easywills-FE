@@ -21,8 +21,10 @@ import { UploadDocumentWidgetComponent } from './upload-document-widget/upload-d
 })
 export class MyDocumentsComponent {
     @Output() uploadingStateChange = new EventEmitter<boolean>();
+    @Output() viewingAllStateChange = new EventEmitter<boolean>();
 
     isUploading = false;
+    isViewingAll = false;
 
     documents: Document[] = [
         {
@@ -65,5 +67,19 @@ export class MyDocumentsComponent {
     toggleUploadState(state: boolean): void {
         this.isUploading = state;
         this.uploadingStateChange.emit(this.isUploading);
+    }
+
+    onViewAll(): void {
+        this.isViewingAll = true;
+        this.isUploading = false; // Reset upload state
+        this.uploadingStateChange.emit(this.isUploading); // Emit the upload state change
+        this.viewingAllStateChange.emit(this.isViewingAll);
+    }
+
+    onGoBack(): void {
+        this.isViewingAll = false;
+        this.isUploading = false;
+        this.uploadingStateChange.emit(this.isUploading);
+        this.viewingAllStateChange.emit(this.isViewingAll);
     }
 }
