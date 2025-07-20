@@ -24,19 +24,24 @@
         </div>
 
         <!-- Notification Bell Section -->
-        <div
-            class="relative bg-gray-100 rounded-full h-10 w-10 flex items-center justify-center"
-        >
-            <img
-                [src]="
-                    hasUnreadNotifications
-                        ? '/svg/notification-unread.svg'
-                        : '/svg/notification-read.svg'
-                "
-                alt="Notifications"
-                class="h-6 w-6"
-            />
+        <div class="relative">
+            <button
+                (click)="toggleNotifications()"
+                class="bg-gray-100 rounded-full h-10 w-10 flex items-center justify-center focus:outline-none"
+            >
+                <img
+                    [src]="
+                        hasUnreadNotifications
+                            ? '/svg/notification-unread.svg'
+                            : '/svg/notification-read.svg'
+                    "
+                    alt="Notifications"
+                    class="h-6 w-6"
+                />
+            </button>
+            <app-notification-dropdown *ngIf="showNotifications"></app-notification-dropdown>
         </div>
+
 
         <!-- User Profile Section -->
         <div class="flex items-center gap-3">

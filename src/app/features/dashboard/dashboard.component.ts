@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     userName = 'John Doe';
     userEmail = 'johndoe@gmail.com';
     userAvatarUrl = '/svg/display-pic.svg';
-    isWillCompleted = false;
+    isWillCompleted!: boolean;
     hasUnreadNotifications = true;
 
     // Dynamic header data
