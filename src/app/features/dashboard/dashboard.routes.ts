@@ -26,6 +26,13 @@ export const dashboardRoutes: Routes = [
                     subtitle: 'Manage your Will documents and legal files',
                 },
             },
+            {
+                path: 'settings',
+                loadChildren: () =>
+                    import('./settings/settings.routes').then(
+                        (m) => m.settingsRoutes
+                    ),
+            },
         ],
     },
 ];

@@ -126,6 +126,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         } else if (url.includes('/my-documents')) {
             this.headerTitle = 'Documents';
             this.headerSubtitle = 'Manage your Will documents and legal files';
+        } else if (url.includes('/settings')) {
+            this.headerTitle = 'Settings';
+            this.headerSubtitle = 'Manage your account and preferences';
         } else {
             // Default for /dashboard root
             this.headerTitle = 'Welcome back, John Doe!';
