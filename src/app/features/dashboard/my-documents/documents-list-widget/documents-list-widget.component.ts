@@ -30,14 +30,33 @@ export class DocumentsListWidgetComponent {
         'Personal IDs',
     ];
 
+    isDeleteModalOpen = false;
+    documentToDelete: Document | null = null;
+
     onViewDocument(document: Document): void {
         // TODO: Implement document view functionality
         console.log('View document:', document.name);
     }
 
     onDeleteDocument(document: Document): void {
-        // TODO: Implement document delete functionality
-        console.log('Delete document:', document.name);
+        this.documentToDelete = document;
+        this.isDeleteModalOpen = true;
+    }
+
+    confirmDelete(): void {
+        if (this.documentToDelete) {
+            // TODO: Implement actual document delete functionality
+            console.log('Deleting document:', this.documentToDelete.name);
+            this.documents = this.documents.filter(
+                (doc) => doc.id !== this.documentToDelete!.id
+            );
+            this.closeDeleteModal();
+        }
+    }
+
+    closeDeleteModal(): void {
+        this.isDeleteModalOpen = false;
+        this.documentToDelete = null;
     }
 
     onSearch(searchTerm: string): void {
