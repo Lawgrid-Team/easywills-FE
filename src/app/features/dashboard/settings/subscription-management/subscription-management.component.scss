@@ -1,0 +1,21 @@
+:host {
+display: block;
+}
+
+.status-successful {
+background-color: #eaedf4; // bg-sky-100
+color: #6982b5; // text-sky-500
+padding: 0.25rem 0.75rem;
+border-radius: 9999px;
+font-size: 0.875rem;
+font-weight: 500;
+}
+
+.status-unsuccessful {
+background-color: #fce6e9; // bg-red-100
+color: #da0f0a; // text-red-500
+padding: 0.25rem 0.75rem;
+border-radius: 9999px;
+font-size: 0.875rem;
+font-weight: 500;
+}
