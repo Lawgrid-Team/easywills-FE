@@ -1,21 +1,27 @@
-<div class="flex flex-row gap-8">
-  <aside class="w-1/4">
-    <nav class="bg-white rounded-lg p-4">
-      <ul>
-        <li *ngFor="let item of navItems" class="mb-1">
-          <a
-            [routerLink]="item.link"
-            routerLinkActive="bg-gray-100 font-semibold text-gray-900"
-            [routerLinkActiveOptions]="{ exact: true }"
-            class="block w-full text-left px-4 py-2.5 rounded-md text-gray-600 hover:bg-gray-100"
-          >
-            {{ item.label }}
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </aside>
-  <div class="w-3/4">
-    <router-outlet></router-outlet>
-  </div>
+<div class="bg-white rounded-lg shadow-sm">
+    <div class="flex flex-row">
+        <aside class="w-1/4 p-4">
+            <nav>
+                <ul>
+                    <li *ngFor="let item of navItems" class="mb-1">
+                        <a
+                            [routerLink]="item.link"
+                            routerLinkActive="bg-gray-100 font-semibold text-gray-900"
+                            [routerLinkActiveOptions]="{ exact: true }"
+                            class="block w-full text-left px-4 py-2.5 rounded-md text-gray-600 hover:bg-gray-100"
+                        >
+                            {{ item.label }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Vertical separator line -->
+        <div class="w-px" style="background-color: #dedede;"></div>
+
+        <div class="w-3/4 p-8">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
 </div>
