@@ -1,11 +1,20 @@
 <div class="min-h-screen">
     <header class="container mx-auto px-4 py-6">
         <div class="flex items-center">
-            <a routerLink="/wiz/welcome" class="text-3xl font-bold text-foreground">
-                <img src="svg/easywill_logo.svg" alt="EasyWill Logo" class="w-32">
+            <a
+                routerLink="/wiz/welcome"
+                class="text-3xl font-bold text-foreground"
+            >
+                <img
+                    src="svg/easywill_logo.svg"
+                    alt="EasyWill Logo"
+                    class="w-32"
+                />
             </a>
-            <div class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center">
-                <img src="icons/icon_unverify.svg" alt="" srcset="">
+            <div
+                class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
+            >
+                <img src="icons/icon_unverify.svg" alt="" srcset="" />
                 <span>Unverified</span>
             </div>
         </div>
@@ -14,85 +23,169 @@
     <main class="container mx-auto px-24 py-8">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div class="max-w-xl">
-                <h2 class="text-4xl font-bold text-foreground font-DM_Serif text-easywills-black mb-4">Welcome!</h2>
-                <h3 class="text-4xl font-bold text-foreground font-DM_Serif text-easywills-black mb-6">Let's get started</h3>
-                <p class="text-foreground text-easywills-dark-grey text-lg">
-                    We understand that planning for the future can be a daunting task, but we're here to guide you
-                    through
-                    this process with ease and clarity.
-                </p>
+                <!-- New user welcome -->
+                <ng-container *ngIf="!hasStartedWill">
+                    <h2
+                        class="text-6xl font-bold text-foreground font-DM_Serif text-easywills-black mb-4"
+                    >
+                        Welcome!
+                    </h2>
+                    <h3
+                        class="text-6xl font-bold text-foreground font-DM_Serif text-easywills-black mb-6"
+                    >
+                        Let's get started
+                    </h3>
+                    <p class="text-foreground text-easywills-dark-grey text-lg">
+                        We understand that planning for the future can be a
+                        daunting task, but we're here to guide you through this
+                        process with ease and clarity.
+                    </p>
+                </ng-container>
+
+                <!-- Returning user welcome -->
+                <ng-container *ngIf="hasStartedWill">
+                    <h2
+                        class="text-6xl font-semibold text-foreground font-DM_Serif text-easywills-black mb-4"
+                    >
+                        Continue from where you last stopped.
+                    </h2>
+                    <h3
+                        class="text-2xl text-foreground font-DM_Serif text-easywills-black mb-2"
+                    >
+                        The Last Will and Testament of
+                        <span class="font-bold">John Doe.</span>
+                    </h3>
+                    <p
+                        class="text-foreground text-easywills-dark-grey text-lg mb-4"
+                    >
+                        Last updated: <span class="font-bold">15/02/2025</span>
+                    </p>
+                </ng-container>
             </div>
 
             <div class="space-y-4">
-                <!-- Step 1 -->
-                <div
-                    class="bg-easywills-white border border-border rounded-lg px-8 py-5 shadow-sm flex items-center justify-center">
+                <!-- Sections for new users (cards) -->
+                <ng-container *ngIf="!hasStartedWill">
                     <div
-                        class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center mr-4 flex-shrink-0">
-                        <span class="text-lg font-semibold text-foreground">1</span>
+                        *ngFor="let section of willSections"
+                        class="bg-easywills-white border border-border rounded-lg px-8 py-7 shadow-sm flex items-center"
+                    >
+                        <div
+                            class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center mr-4 flex-shrink-0"
+                        >
+                            <span
+                                class="text-lg font-semibold text-foreground"
+                                >{{ section.stepNumber }}</span
+                            >
+                        </div>
+                        <div>
+                            <h4
+                                class="text-lg font-semibold text-easywills-black text-foreground"
+                            >
+                                {{ section.title }}
+                            </h4>
+                            <p
+                                class="text-secondary text-easywills-dark-grey text-sm"
+                            >
+                                {{ section.description }}
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-easywills-black text-foreground">Your Personal Details
-                        </h4>
-                        <p class="text-secondary text-easywills-dark-grey text-sm">
-                            Provide essential information about yourself and your family, and any other beneficiaries.
-                        </p>
-                    </div>
-                </div>
+                </ng-container>
 
-                <!-- Step 2 -->
-                <div
-                    class="bg-easywills-white border border-border rounded-lg px-8 py-5 shadow-sm flex items-center justify-center">
+                <!-- Sections for returning users (accordions) -->
+                <ng-container *ngIf="hasStartedWill">
                     <div
-                        class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center mr-4 flex-shrink-0">
-                        <span class="text-lg font-semibold text-foreground">2</span>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-easywills-black text-foreground">List your assets
-                        </h4>
-                        <p class="text-secondary text-easywills-dark-grey text-sm">
-                            Outline the full scope of your assets ensuring nothing is overlooked.
-                        </p>
-                    </div>
-                </div>
+                        *ngFor="let section of willSections"
+                        class="bg-easywills-white border border-border rounded-lg shadow-sm"
+                    >
+                        <!-- Accordion Header -->
+                        <button
+                            class="w-full px-8 py-7 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+                            (click)="toggleSection(section.id)"
+                            [attr.aria-expanded]="section.expanded"
+                            [attr.aria-controls]="'section-' + section.id"
+                        >
+                            <div class="flex items-center">
+                                <div
+                                    class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center mr-4 flex-shrink-0"
+                                >
+                                    <span
+                                        class="text-lg font-semibold text-foreground"
+                                        >{{ section.stepNumber }}</span
+                                    >
+                                </div>
+                                <div>
+                                    <h4
+                                        class="text-lg font-semibold text-easywills-black text-foreground"
+                                    >
+                                        {{
+                                            section.returningUserTitle ||
+                                                section.title
+                                        }}
+                                    </h4>
+                                    <p
+                                        class="text-secondary text-easywills-dark-grey text-sm mt-1"
+                                    >
+                                        {{
+                                            section.returningUserDescription ||
+                                                section.description
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                            <mat-icon class="text-gray-500">{{
+                                section.expanded ? "expand_less" : "expand_more"
+                            }}</mat-icon>
+                        </button>
 
-                <!-- Step 3 -->
-                <div
-                    class="bg-easywills-white border border-border rounded-lg px-8 py-5 shadow-sm flex items-center justify-center">
-                    <div
-                        class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center mr-4 flex-shrink-0">
-                        <span class="text-lg font-semibold text-foreground">3</span>
+                        <!-- Accordion Content -->
+                        <div
+                            *ngIf="section.expanded"
+                            class="px-8 pb-5 border-t border-gray-100"
+                            [id]="'section-' + section.id"
+                        >
+                            <div class="pt-4">
+                                <p
+                                    class="text-secondary text-easywills-dark-grey text-sm mb-3"
+                                >
+                                    {{ section.description }}
+                                </p>
+                                <div class="bg-gray-50 rounded-md p-3">
+                                    <p
+                                        class="text-sm text-gray-700 font-medium"
+                                    >
+                                        Progress:
+                                    </p>
+                                    <p class="text-sm text-gray-600">
+                                        {{ getProgressPreview(section.id) }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-easywills-black text-foreground">Distribute your estate
-                        </h4>
-                        <p class="text-secondary text-easywills-dark-grey text-sm">
-                            Specify how you want your possessions to be divided among your loved ones.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Step 4 -->
-                <div
-                    class="bg-easywills-white border border-border rounded-lg px-8 py-5 shadow-sm flex items-center justify-center">
-                    <div
-                        class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center mr-4 flex-shrink-0">
-                        <span class="text-lg font-semibold text-foreground">4</span>
-                    </div>
-                    <div>
-                        <h4 class="text-lg font-semibold text-easywills-black text-foreground">Name your Executor & Witnesses
-                        </h4>
-                        <p class="text-secondary text-easywills-dark-grey text-sm">
-                            Designate the individual(s) that will manage and administer your estate according to your wishes
-                        </p>
-                    </div>
-                </div>
+                </ng-container>
             </div>
         </div>
     </main>
-    <div class="fixed bottom-0 right-20 w-dvw px-4 py-4 flex justify-end border-t border-border">
-        <button mat-flat-button color="primary" (click)="onGetStarted()">
+    <div
+        class="fixed bottom-0 right-20 w-dvw px-4 py-4 flex justify-end border-t border-border"
+    >
+        <button
+            mat-flat-button
+            color="primary"
+            *ngIf="!hasStartedWill"
+            (click)="onGetStarted()"
+        >
             Get Started
+        </button>
+        <button
+            mat-flat-button
+            color="primary"
+            *ngIf="hasStartedWill"
+            (click)="onContinueWill()"
+        >
+            Continue Will
         </button>
     </div>
 </div>

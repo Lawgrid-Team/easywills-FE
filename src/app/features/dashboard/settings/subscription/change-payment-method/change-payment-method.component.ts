@@ -31,7 +31,6 @@ export class ChangePaymentMethodComponent {
 
     onSubmit() {
         if (this.paymentForm.valid) {
-            console.log('Form Submitted!', this.paymentForm.value);
             // Show success modal
             this.showSuccessModal = true;
         }
