@@ -7,16 +7,18 @@ import {
     Validators,
 } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-change-payment-method',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, RouterModule],
+    imports: [CommonModule, ReactiveFormsModule, RouterModule, MatIconModule],
     templateUrl: './change-payment-method.component.html',
     styleUrl: './change-payment-method.component.scss',
 })
 export class ChangePaymentMethodComponent {
     paymentForm: FormGroup;
+    showSuccessModal = false;
 
     constructor(private fb: FormBuilder) {
         this.paymentForm = this.fb.group({
@@ -30,7 +32,12 @@ export class ChangePaymentMethodComponent {
     onSubmit() {
         if (this.paymentForm.valid) {
             console.log('Form Submitted!', this.paymentForm.value);
-            // Handle form submission logic here
+            // Show success modal
+            this.showSuccessModal = true;
         }
+    }
+
+    closeSuccessModal() {
+        this.showSuccessModal = false;
     }
 }
