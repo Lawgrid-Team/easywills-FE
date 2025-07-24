@@ -1,5 +1,5 @@
-<div class="bg-white rounded-lg shadow-sm">
-    <div class="flex flex-row">
+<div class="bg-white rounded-lg shadow-sm min-h-[80vh]">
+    <div class="flex flex-row min-h-[80vh]">
         <aside class="w-1/5 p-4">
             <nav>
                 <ul>
@@ -7,7 +7,9 @@
                         <a
                             [routerLink]="item.link"
                             routerLinkActive="bg-gray-100 font-semibold text-gray-900"
-                            [routerLinkActiveOptions]="{ exact: true }"
+                            [routerLinkActiveOptions]="{
+                                exact: item.link !== 'subscription'
+                            }"
                             class="block w-full text-left px-4 py-2.5 rounded-md text-gray-600 hover:bg-gray-100"
                         >
                             {{ item.label }}
@@ -18,7 +20,7 @@
         </aside>
 
         <!-- Vertical separator line -->
-        <div class="w-px" style="background-color: #dedede"></div>
+        <div class="w-px min-h-full" style="background-color: #dedede"></div>
 
         <div class="w-4/5 p-8">
             <router-outlet></router-outlet>

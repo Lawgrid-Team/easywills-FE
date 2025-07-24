@@ -2,7 +2,6 @@ import type { Routes } from '@angular/router';
 import { SettingsComponent } from './settings.component';
 import { ProfileManagementComponent } from './profile-management/profile-management.component';
 import { PasswordManagementComponent } from './password-management/password-management.component';
-import { SubscriptionManagementComponent } from './subscription-management/subscription-management.component';
 
 export const settingsRoutes: Routes = [
     {
@@ -14,7 +13,10 @@ export const settingsRoutes: Routes = [
             { path: 'password', component: PasswordManagementComponent },
             {
                 path: 'subscription',
-                component: SubscriptionManagementComponent,
+                loadChildren: () =>
+                    import('./subscription/subscription.routes').then(
+                        (r) => r.subscriptionRoutes
+                    ),
             },
         ],
     },
