@@ -142,7 +142,8 @@
 <!-- Upgrade Plan Modal -->
 <div
     *ngIf="showUpgradeModal"
-    class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
+    class="fixed inset-0 flex items-center justify-center z-50"
+    style="background-color: rgba(0, 0, 0, 0.85)"
 >
     <div class="bg-white rounded-2xl p-8 max-w-md w-full relative">
         <button
@@ -161,7 +162,10 @@
                 />
             </div>
             <h2 class="text-2xl font-semibold mb-2">Subscription plans</h2>
-            <a href="#" class="text-sm text-gray-500 underline mb-6"
+            <a
+                href="/pricing"
+                target="_blank"
+                class="text-sm text-gray-500 underline mb-6"
                 >click to compare pricing plan</a
             >
         </div>
@@ -179,9 +183,8 @@
                         class="w-full appearance-none bg-white border border-gray-300 rounded-md py-3 px-4 pr-10 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-800 focus:border-gray-800"
                     >
                         <option selected disabled>Select plan</option>
-                        <option>Basic Plan</option>
-                        <option>Premium Plan</option>
-                        <option>Legacy Plan</option>
+                        <option>Legacy</option>
+                        <option>Legacy Plus</option>
                     </select>
                     <div
                         class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
@@ -199,7 +202,7 @@
                 </div>
             </div>
             <button
-                class="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold hover:bg-gray-700"
+                class="w-full bg-[#444444] text-white py-3 rounded-lg font-semibold hover:bg-[#333333]"
             >
                 Subscribe now
             </button>
