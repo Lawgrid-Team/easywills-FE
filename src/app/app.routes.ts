@@ -26,6 +26,13 @@ export const routes: Routes = [
             ),
     },
     {
+        path: 'create-codicil',
+        loadComponent: () =>
+            import(
+                './features/dashboard/create-codicil/create-codicil.component'
+            ).then((m) => m.CreateCodicilComponent),
+    },
+    {
         path: '',
         loadChildren: () =>
             import('./features/web/web.routes').then((m) => m.routes),

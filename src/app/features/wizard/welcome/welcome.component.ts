@@ -422,7 +422,7 @@ export class WelcomeComponent implements OnInit {
             case 'personal-details':
                 return '100%';
             case 'assets':
-                return '75%';
+                return '100%';
             case 'distribution':
                 return '10%';
             case 'executor':

@@ -133,7 +133,8 @@ export class ViewWillComponent implements OnInit {
     }
 
     signAndValidate(): void {
-        // Navigate to signing page or open signing modal
+        // Navigate to create codicil page
+        this.router.navigate(['/create-codicil']);
     }
 
     editWill(): void {
