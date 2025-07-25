@@ -21,8 +21,8 @@
     </header>
 
     <main class="container mx-auto px-24 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div class="max-w-xl">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <div class="max-w-xl pt-16">
                 <!-- New user welcome -->
                 <ng-container *ngIf="!hasStartedWill">
                     <h2
@@ -101,7 +101,7 @@
                     >
                         <!-- Accordion Header -->
                         <button
-                            class="w-full px-8 py-7 flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset"
+                            class="w-full px-8 py-8 flex items-center justify-between text-left focus:outline-none"
                             (click)="toggleSection(section.id)"
                             [attr.aria-expanded]="section.expanded"
                             [attr.aria-controls]="'section-' + section.id"
@@ -142,24 +142,544 @@
                         <!-- Accordion Content -->
                         <div
                             *ngIf="section.expanded"
-                            class="px-8 pb-5 border-t border-gray-100"
+                            class="px-8 pb-5"
                             [id]="'section-' + section.id"
                         >
-                            <div class="pt-4">
-                                <p
-                                    class="text-secondary text-easywills-dark-grey text-sm mb-3"
-                                >
-                                    {{ section.description }}
-                                </p>
-                                <div class="bg-gray-50 rounded-md p-3">
-                                    <p
-                                        class="text-sm text-gray-700 font-medium"
+                            <div [ngSwitch]="section.id">
+                                <!-- Personal Details Section -->
+                                <div *ngSwitchCase="'personal-details'">
+                                    <div
+                                        class="pt-4"
+                                        *ngIf="
+                                            section.data as personalDetails;
+                                            else noPersonalData
+                                        "
                                     >
-                                        Progress:
-                                    </p>
-                                    <p class="text-sm text-gray-600">
-                                        {{ getProgressPreview(section.id) }}
-                                    </p>
+                                        <!-- Progress bar -->
+                                        <div
+                                            class="w-full bg-gray-200 rounded-full h-2 mb-4"
+                                        >
+                                            <div
+                                                class="bg-[#444444] h-2 rounded-full w-full"
+                                            ></div>
+                                        </div>
+
+                                        <div
+                                            class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
+                                        >
+                                            <svg
+                                                class="w-4 h-4"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                                    stroke="#444444"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                            <span>100% complete</span>
+                                        </div>
+
+                                        <div class="mt-4 space-y-3 text-sm">
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >First name:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .firstName
+                                                    }}</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >Last name:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .lastName
+                                                    }}</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >Date of birth:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .dateOfBirth
+                                                            | date
+                                                                : "MM/dd/yyyy"
+                                                    }}</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >State of origin:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .stateOfOrigin
+                                                    }}</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >Gender:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .gender
+                                                    }}</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >Address:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .streetAddress
+                                                    }}</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >State:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .state
+                                                    }}</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >City:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .city
+                                                    }}</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >Country:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .country
+                                                    }}</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >Married:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >{{
+                                                        $any(personalDetails)
+                                                            .isMarried
+                                                            ? "Yes"
+                                                            : "No"
+                                                    }}</span
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            *ngIf="
+                                                $any(personalDetails)
+                                                    .isMarried &&
+                                                $any(personalDetails).spouses
+                                                    ?.length > 0
+                                            "
+                                            class="mt-6"
+                                        >
+                                            <div
+                                                *ngFor="
+                                                    let spouse of $any(
+                                                        personalDetails
+                                                    ).spouses
+                                                "
+                                                class="bg-[#737373] text-white rounded-lg p-4"
+                                            >
+                                                <h5 class="font-bold text-lg">
+                                                    {{ $any(spouse).firstName }}
+                                                    {{ $any(spouse).lastName }}
+                                                </h5>
+                                                <p
+                                                    class="text-sm text-gray-300"
+                                                >
+                                                    Spouse
+                                                </p>
+                                                <p
+                                                    class="text-sm text-gray-300 mt-2"
+                                                >
+                                                    Born
+                                                    {{
+                                                        $any(spouse).dateOfBirth
+                                                            | date
+                                                                : "MM/dd/yyyy"
+                                                    }}
+                                                </p>
+                                                <p
+                                                    class="text-sm text-gray-300"
+                                                >
+                                                    Married
+                                                    {{
+                                                        $any(spouse)
+                                                            .dateOfMarriage
+                                                            | date
+                                                                : "MM/dd/yyyy"
+                                                    }}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            *ngIf="
+                                                $any(personalDetails)
+                                                    .hasChildren &&
+                                                $any(personalDetails).children
+                                                    ?.length > 0
+                                            "
+                                            class="mt-6"
+                                        >
+                                            <div
+                                                class="flex justify-between text-sm mb-2"
+                                            >
+                                                <span class="text-gray-500"
+                                                    >Children:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >Yes</span
+                                                >
+                                            </div>
+                                            <div
+                                                *ngFor="
+                                                    let child of $any(
+                                                        personalDetails
+                                                    ).children
+                                                "
+                                                class="bg-[#737373] text-white rounded-lg p-4 mt-2"
+                                            >
+                                                <h5 class="font-bold text-lg">
+                                                    {{ $any(child).firstName }}
+                                                    {{ $any(child).lastName }}
+                                                </h5>
+                                                <p
+                                                    class="text-sm text-gray-300"
+                                                >
+                                                    Child
+                                                </p>
+                                                <p
+                                                    class="text-sm text-gray-300 mt-2"
+                                                >
+                                                    Born
+                                                    {{
+                                                        $any(child).dateOfBirth
+                                                            | date
+                                                                : "MM/dd/yyyy"
+                                                    }}
+                                                </p>
+                                                <p
+                                                    class="text-sm text-gray-300"
+                                                >
+                                                    {{ $any(child).email }}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Horizontal border line -->
+                                        <div
+                                            class="w-full flex justify-center mt-6"
+                                        >
+                                            <div
+                                                class="w-1/2 h-px bg-[#efefef]"
+                                            ></div>
+                                        </div>
+
+                                        <div
+                                            class="w-full flex justify-center mt-6"
+                                        >
+                                            <button
+                                                (click)="
+                                                    onUpdateSection(section.id)
+                                                "
+                                                class="flex items-center gap-2 text-gray-600 underline bg-transparent border-none cursor-pointer"
+                                            >
+                                                <mat-icon class="w-4 h-4"
+                                                    >edit</mat-icon
+                                                >
+                                                <span>Update section</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <ng-template #noPersonalData>
+                                        <div class="pt-4">
+                                            <p
+                                                class="text-gray-500 text-sm mb-3"
+                                            >
+                                                No personal details have been
+                                                added yet.
+                                            </p>
+                                            <button
+                                                (click)="
+                                                    onUpdateSection(section.id)
+                                                "
+                                                mat-button
+                                                class="text-blue-600 hover:text-blue-800"
+                                            >
+                                                <mat-icon class="w-4 h-4 mr-1"
+                                                    >add</mat-icon
+                                                >
+                                                Add Personal Details
+                                            </button>
+                                        </div>
+                                    </ng-template>
+                                </div>
+
+                                <!-- Assets Section -->
+                                <div *ngSwitchCase="'assets'">
+                                    <div
+                                        class="pt-4"
+                                        *ngIf="
+                                            section.data as assetData;
+                                            else noAssetData
+                                        "
+                                    >
+                                        <!-- Progress bar -->
+                                        <div
+                                            class="w-full bg-gray-200 rounded-full h-2 mb-4"
+                                        >
+                                            <div
+                                                class="bg-[#444444] h-2 rounded-full w-full"
+                                            ></div>
+                                        </div>
+
+                                        <div
+                                            class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
+                                        >
+                                            <svg
+                                                class="w-4 h-4"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                                    stroke="#444444"
+                                                    stroke-width="2"
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                />
+                                            </svg>
+                                            <span>100% complete</span>
+                                        </div>
+
+                                        <!-- Real Estate Properties -->
+                                        <div
+                                            *ngIf="
+                                                $any(assetData)
+                                                    .realEstateProperties
+                                                    ?.length > 0
+                                            "
+                                            class="mb-6"
+                                        >
+                                            <div
+                                                *ngFor="
+                                                    let property of $any(
+                                                        assetData
+                                                    ).realEstateProperties
+                                                "
+                                                class="bg-white rounded-md border border-[#8e8e8e] p-4 mb-4 relative"
+                                            >
+                                                <div class="mb-4">
+                                                    <h4
+                                                        class="text-lg font-medium"
+                                                    >
+                                                        {{
+                                                            $any(property)
+                                                                .propertyType
+                                                        }}
+                                                    </h4>
+                                                    <p
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{
+                                                            $any(property)
+                                                                .ownershipType
+                                                        }}
+                                                    </p>
+                                                    <p
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{
+                                                            $any(property)
+                                                                .address
+                                                        }},
+                                                        {{
+                                                            $any(property).city
+                                                        }},
+                                                        {{
+                                                            $any(property).state
+                                                        }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Bank Accounts -->
+                                        <div
+                                            *ngIf="
+                                                $any(assetData).bankAccounts
+                                                    ?.length > 0
+                                            "
+                                            class="mb-6"
+                                        >
+                                            <div
+                                                *ngFor="
+                                                    let account of $any(
+                                                        assetData
+                                                    ).bankAccounts
+                                                "
+                                                class="bg-white rounded-md border border-[#8e8e8e] p-4 mb-4 relative"
+                                            >
+                                                <div class="mb-4">
+                                                    <h4
+                                                        class="text-lg font-medium"
+                                                    >
+                                                        Bank Account
+                                                    </h4>
+                                                    <p
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{
+                                                            $any(account)
+                                                                .institution
+                                                        }}
+                                                    </p>
+                                                    <p
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        Account: ****{{
+                                                            $any(
+                                                                account
+                                                            ).accountNumber?.slice(
+                                                                -4
+                                                            )
+                                                        }}
+                                                    </p>
+                                                    <p
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{
+                                                            $any(account)
+                                                                .accountType
+                                                        }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Horizontal border line -->
+                                        <div
+                                            class="w-full flex justify-center mt-6"
+                                        >
+                                            <div
+                                                class="w-1/2 h-px bg-[#efefef]"
+                                            ></div>
+                                        </div>
+
+                                        <div
+                                            class="w-full flex justify-center mt-6"
+                                        >
+                                            <button
+                                                (click)="
+                                                    onUpdateSection(section.id)
+                                                "
+                                                class="flex items-center gap-2 text-gray-600 underline bg-transparent border-none cursor-pointer"
+                                            >
+                                                <mat-icon class="w-4 h-4"
+                                                    >edit</mat-icon
+                                                >
+                                                <span>Update section</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <ng-template #noAssetData>
+                                        <div class="pt-4">
+                                            <p
+                                                class="text-gray-500 text-sm mb-3"
+                                            >
+                                                No assets have been added yet.
+                                            </p>
+                                            <button
+                                                (click)="
+                                                    onUpdateSection(section.id)
+                                                "
+                                                class="text-blue-600 hover:text-blue-800"
+                                            >
+                                                <mat-icon class="w-4 h-4 mr-1"
+                                                    >add</mat-icon
+                                                >
+                                                Add Assets
+                                            </button>
+                                        </div>
+                                    </ng-template>
+                                </div>
+
+                                <!-- Placeholder for other sections -->
+                                <div *ngSwitchDefault>
+                                    <div class="pt-4">
+                                        <p
+                                            class="text-secondary text-easywills-dark-grey text-sm mb-3"
+                                        >
+                                            {{ section.description }}
+                                        </p>
+                                        <div class="bg-gray-50 rounded-md p-3">
+                                            <p
+                                                class="text-sm text-gray-700 font-medium"
+                                            >
+                                                Progress:
+                                            </p>
+                                            <p class="text-sm text-gray-600">
+                                                {{
+                                                    getProgressPreview(
+                                                        section.id
+                                                    )
+                                                }}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

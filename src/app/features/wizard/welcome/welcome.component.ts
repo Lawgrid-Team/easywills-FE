@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, type OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
-import type { WillData } from '../../../core/models/interfaces/will-data.interface';
+import { WillData } from '../../../core/models/interfaces/will-data.interface';
+import { MatDividerModule } from '@angular/material/divider';
 
 interface WillSection {
     id: string;
@@ -21,7 +22,14 @@ interface WillSection {
 
 @Component({
     selector: 'app-welcome',
-    imports: [CommonModule, MatButtonModule, MatIconModule, RouterModule],
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatIconModule,
+        RouterModule,
+        MatDividerModule,
+    ],
+    providers: [DatePipe],
     templateUrl: './welcome.component.html',
     styleUrl: './welcome.component.scss',
 })
@@ -87,46 +95,100 @@ export class WelcomeComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.checkWillStatus();
         this.route.queryParams.subscribe((params) => {
             if (params['continue'] === 'true') {
                 this.hasStartedWill = true;
+                this.checkWillStatus();
+            } else {
+                this.hasStartedWill = false;
             }
         });
     }
 
     checkWillStatus(): void {
-        // Check if user has started a will by looking at will data
-        const willData = this.willDataService.getWillData();
+        // Use dummy data for now
+        const dummyWillData = {
+            personalDetails: {
+                title: 'Mr.',
+                firstName: 'John',
+                lastName: 'Doe',
+                otherNames: '',
+                hasUsedOtherNames: false,
+                otherFullName: '',
+                dateOfBirth: '1985-03-15',
+                stateOfOrigin: 'Lagos',
+                gender: 'Male',
+                streetAddress: '123 Victoria Island',
+                state: 'Lagos',
+                city: 'Lagos',
+                country: 'Nigeria',
+                isMarried: true,
+                hasChildren: true,
+                spouses: [
+                    {
+                        id: '1',
+                        firstName: 'Jane',
+                        lastName: 'Doe',
+                        dateOfBirth: '1987-08-22',
+                        dateOfMarriage: '2010-06-15',
+                    },
+                ],
+                children: [
+                    {
+                        id: '1',
+                        firstName: 'Sarah',
+                        lastName: 'Doe',
+                        dateOfBirth: '2012-04-10',
+                        email: 'sarah.doe@email.com',
+                    },
+                    {
+                        id: '2',
+                        firstName: 'Michael',
+                        lastName: 'Doe',
+                        dateOfBirth: '2015-11-03',
+                        email: 'michael.doe@email.com',
+                    },
+                ],
+                beneficiaries: [],
+            },
+            assetInventory: {
+                realEstateProperties: [
+                    {
+                        id: 'prop-1',
+                        propertyType: 'Residential',
+                        propertyTitle: 'Certificate of Occupancy',
+                        address: '123 Oak Street, Springfield',
+                        city: 'Springfield',
+                        state: 'Illinois',
+                        country: 'United States',
+                        ownershipType: 'Sole owner',
+                    },
+                ],
+                bankAccounts: [
+                    {
+                        id: 'bank-1',
+                        accountType: 'Checking Account',
+                        institution: 'Chase Bank',
+                        accountNumber: '1234567890',
+                    },
+                ],
+                completedAssetTypes: ['real-estate', 'bank-account'],
+            },
+            estateDistribution: {
+                sharingAsAWhole: false,
+                exclusions: [],
+            },
+            executorAndWitness: {
+                executors: [],
+                witnesses: [],
+                hasExecutor: false,
+                hasWitnesses: false,
+            },
+        };
 
-        const hasPersonalDetails =
-            willData.personalDetails &&
-            (willData.personalDetails.firstName ||
-                willData.personalDetails.lastName);
-        const hasAssets =
-            willData.assetInventory &&
-            (willData.assetInventory.realEstateProperties.length > 0 ||
-                willData.assetInventory.bankAccounts.length > 0);
-        const hasDistribution =
-            willData.estateDistribution &&
-            !!(
-                willData.estateDistribution.beneficiaryShares ||
-                willData.estateDistribution.individualAssetAssignments
-            );
-        const hasExecutor =
-            willData.executorAndWitness &&
-            (willData.executorAndWitness.executors.length > 0 ||
-                willData.executorAndWitness.witnesses.length > 0);
-
-        this.hasStartedWill = !!(
-            hasPersonalDetails ||
-            hasAssets ||
-            hasDistribution ||
-            hasExecutor
-        );
-
+        // Only update sections if user has started will (don't override hasStartedWill)
         if (this.hasStartedWill) {
-            this.updateSectionStatus(willData);
+            this.updateSectionStatus(dummyWillData);
             this.calculateCompletionPercentage();
         }
     }
@@ -293,6 +355,26 @@ export class WelcomeComponent implements OnInit {
             }
             default:
                 return 'Information available';
+        }
+    }
+
+    onUpdateSection(sectionId: string): void {
+        switch (sectionId) {
+            case 'personal-details':
+                this.router.navigate(['/wiz/will/personal-details']);
+                break;
+            case 'assets':
+                this.router.navigate(['/wiz/will/asset-inventory']);
+                break;
+            case 'distribution':
+                this.router.navigate(['/wiz/will/estate-distribution']);
+                break;
+            case 'executor':
+                this.router.navigate(['/wiz/will/executor-and-witnesses']);
+                break;
+            default:
+                // Optional: navigate to a default or show an error
+                break;
         }
     }
 
