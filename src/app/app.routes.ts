@@ -19,6 +19,13 @@ export const routes: Routes = [
             ),
     },
     {
+        path: 'view-will',
+        loadComponent: () =>
+            import('./features/dashboard/view-will/view-will.component').then(
+                (m) => m.ViewWillComponent
+            ),
+    },
+    {
         path: '',
         loadChildren: () =>
             import('./features/web/web.routes').then((m) => m.routes),

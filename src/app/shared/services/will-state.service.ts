@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
     providedIn: 'root',
 })
 export class WillStateService {
-    private isWillCompletedSubject = new BehaviorSubject<boolean>(false);
+    private isWillCompletedSubject = new BehaviorSubject<boolean>(true);
     public isWillCompleted$ = this.isWillCompletedSubject.asObservable();
 
     private currentPlanSubject = new BehaviorSubject<string>('Free');

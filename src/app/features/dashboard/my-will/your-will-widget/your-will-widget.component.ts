@@ -28,11 +28,8 @@ export class YourWillWidgetComponent {
                 queryParams: { continue: 'true' },
             });
         } else {
-            // Navigate to completed will view or preview
-            // You can change this to the appropriate route for viewing completed wills
-            this.router.navigate(['/wiz/welcome'], {
-                queryParams: { continue: 'true' },
-            });
+            // Navigate to completed will view
+            this.router.navigate(['/view-will']);
         }
     }
 }

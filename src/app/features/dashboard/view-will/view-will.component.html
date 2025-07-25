@@ -1,0 +1,257 @@
+<div class="min-h-screen">
+    <header class="container mx-auto px-4 py-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <a
+                    routerLink="/dashboard"
+                    class="text-3xl font-bold text-foreground"
+                >
+                    <img
+                        src="svg/easywill_logo.svg"
+                        alt="EasyWill Logo"
+                        class="w-32"
+                    />
+                </a>
+                <div
+                    class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
+                >
+                    <img src="icons/icon_unverify.svg" alt="" srcset="" />
+                    <span>Unverified</span>
+                </div>
+            </div>
+
+            <!-- User Profile Section -->
+            <div class="flex items-center gap-3">
+                <img
+                    [src]="userAvatarUrl"
+                    alt="User Avatar"
+                    class="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                    <p class="font-semibold text-gray-800">{{ userName }}</p>
+                    <p class="text-sm text-gray-500">{{ userEmail }}</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="review-container">
+        <!-- Left Column: Congratulations -->
+        <div class="congratulations-column">
+            <h1 class="heading">Your Will Document</h1>
+            <p class="description">
+                This is your completed will. If you need to make updates, you
+                can create a codicil to amend specific details while keeping
+                your original will intact.
+            </p>
+            <div class="actions">
+                <button
+                    mat-flat-button
+                    class="sign-button"
+                    (click)="signAndValidate()"
+                >
+                    Create Codicil
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Column: PDF Preview -->
+        <div class="pdf-preview-column">
+            <div class="pdf-container">
+                <!-- Expand Button -->
+                <button
+                    mat-icon-button
+                    class="expand-button"
+                    (click)="openModal()"
+                    [disabled]="!pdfSrc"
+                >
+                    <mat-icon class="expand-icon">fullscreen</mat-icon>
+                </button>
+
+                <!-- Loading State -->
+                <div *ngIf="isLoading" class="loading-container">
+                    <mat-spinner diameter="40"></mat-spinner>
+                    <p>Loading your will...</p>
+                </div>
+
+                <!-- PDF Error State -->
+                <div *ngIf="pdfError && !isLoading" class="loading-container">
+                    <mat-icon style="font-size: 48px; color: #ccc"
+                        >error</mat-icon
+                    >
+                    <p>Failed to load PDF. Please try again.</p>
+                </div>
+
+                <!-- PDF Viewer - Only in Browser -->
+                <div
+                    *ngIf="
+                        !isLoading &&
+                        !pdfError &&
+                        pdfSrc &&
+                        isBrowser &&
+                        pdfViewerModule
+                    "
+                >
+                    <pdf-viewer
+                        [src]="pdfSrc"
+                        [zoom]="zoom"
+                        [page]="currentPage"
+                        [show-all]="false"
+                        [fit-to-page]="true"
+                        [original-size]="false"
+                        [stick-to-page]="true"
+                        [autoresize]="true"
+                        [render-text]="true"
+                        [rotation]="0"
+                        [external-link-target]="'blank'"
+                        (after-load-complete)="onPdfLoaded($event, 'main')"
+                        (error)="onPdfError($event, 'main')"
+                    ></pdf-viewer>
+                </div>
+
+                <!-- Fallback for SSR or when PDF viewer is not loaded -->
+                <div
+                    *ngIf="
+                        !isLoading &&
+                        !pdfError &&
+                        pdfSrc &&
+                        (!isBrowser || !pdfViewerModule)
+                    "
+                    class="loading-container"
+                >
+                    <mat-icon style="font-size: 48px; color: #6982b5"
+                        >description</mat-icon
+                    >
+                    <p>Your will document is ready</p>
+                    <p style="font-size: 14px; color: #666">
+                        PDF viewer will load in the browser
+                    </p>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div
+                *ngIf="!isLoading && !pdfError && totalPages > 1 && isBrowser"
+                class="pdf-navigation"
+            >
+                <button
+                    mat-icon-button
+                    class="prev"
+                    (click)="previousPage()"
+                    [disabled]="currentPage <= 1"
+                >
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <span class="page-indicator"
+                    >{{ currentPage }} / {{ totalPages }}</span
+                >
+                <button
+                    mat-icon-button
+                    class="next"
+                    (click)="nextPage()"
+                    [disabled]="currentPage >= totalPages"
+                >
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay - Only show in browser -->
+    <div
+        *ngIf="isModalOpen && isBrowser"
+        class="modal-overlay"
+        (click)="closeModal()"
+        (keydown)="onOverlayKeydown($event)"
+        tabindex="0"
+    >
+        <div
+            class="modal-container"
+            (click)="$event.stopPropagation()"
+            (keydown.enter)="$event.stopPropagation()"
+            (keydown.space)="$event.stopPropagation()"
+            tabindex="0"
+        >
+            <!-- Close Button (Top Right) -->
+            <button
+                mat-icon-button
+                class="modal-close-button-overlay"
+                (click)="closeModal()"
+            >
+                <mat-icon>close</mat-icon>
+            </button>
+
+            <!-- Previous Page Button (Left Side) -->
+            <button
+                *ngIf="totalPagesModal > 1"
+                mat-icon-button
+                class="modal-nav-button-side prev"
+                (click)="previousPage()"
+                [disabled]="currentPage <= 1"
+            >
+                <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+
+            <!-- Next Page Button (Right Side) -->
+            <button
+                *ngIf="totalPagesModal > 1"
+                mat-icon-button
+                class="modal-nav-button-side next"
+                (click)="nextPage()"
+                [disabled]="currentPage >= totalPagesModal"
+            >
+                <mat-icon>keyboard_arrow_right</mat-icon>
+            </button>
+
+            <!-- Page Indicator (Bottom Center) -->
+            <div
+                *ngIf="totalPagesModal > 1"
+                class="modal-page-indicator-bottom"
+            >
+                {{ currentPage }} / {{ totalPagesModal }}
+            </div>
+
+            <div
+                class="modal-pdf-container"
+                (keydown)="onModalKeydown($event)"
+                tabindex="0"
+            >
+                <!-- Loading State -->
+                <div
+                    *ngIf="!modalPdfSrc && !modalPdfError"
+                    class="loading-container"
+                >
+                    <mat-spinner diameter="40"></mat-spinner>
+                    <p>Loading...</p>
+                </div>
+
+                <!-- Error State -->
+                <div *ngIf="modalPdfError" class="loading-container">
+                    <mat-icon style="font-size: 48px; color: #ccc"
+                        >error</mat-icon
+                    >
+                    <p>Failed to load PDF in modal.</p>
+                </div>
+
+                <!-- PDF Viewer -->
+                <div *ngIf="modalPdfSrc && !modalPdfError && pdfViewerModule">
+                    <pdf-viewer
+                        [src]="modalPdfSrc"
+                        [zoom]="modalZoom"
+                        [page]="currentPage"
+                        [show-all]="false"
+                        [fit-to-page]="true"
+                        [original-size]="false"
+                        [stick-to-page]="true"
+                        [autoresize]="true"
+                        [render-text]="true"
+                        [rotation]="0"
+                        [external-link-target]="'blank'"
+                        (after-load-complete)="onPdfLoaded($event, 'modal')"
+                        (error)="onPdfError($event, 'modal')"
+                    ></pdf-viewer>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
