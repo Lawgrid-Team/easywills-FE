@@ -1,21 +1,36 @@
 <div class="min-h-screen">
     <header class="container mx-auto px-4 py-6">
-        <div class="flex items-center">
-            <a
-                routerLink="/wiz/welcome"
-                class="text-3xl font-bold text-foreground"
-            >
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <a
+                    routerLink="/wiz/welcome"
+                    class="text-3xl font-bold text-foreground"
+                >
+                    <img
+                        src="svg/easywill_logo.svg"
+                        alt="EasyWill Logo"
+                        class="w-32"
+                    />
+                </a>
+                <div
+                    class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
+                >
+                    <img src="icons/icon_unverify.svg" alt="" srcset="" />
+                    <span>Unverified</span>
+                </div>
+            </div>
+
+            <!-- User Profile Section for returning users -->
+            <div *ngIf="hasStartedWill" class="flex items-center gap-3">
                 <img
-                    src="svg/easywill_logo.svg"
-                    alt="EasyWill Logo"
-                    class="w-32"
+                    [src]="userAvatarUrl"
+                    alt="User Avatar"
+                    class="w-12 h-12 rounded-full object-cover"
                 />
-            </a>
-            <div
-                class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
-            >
-                <img src="icons/icon_unverify.svg" alt="" srcset="" />
-                <span>Unverified</span>
+                <div>
+                    <p class="font-semibold text-gray-800">{{ userName }}</p>
+                    <p class="text-sm text-gray-500">{{ userEmail }}</p>
+                </div>
             </div>
         </div>
     </header>
@@ -138,6 +153,16 @@
                                 section.expanded ? "expand_less" : "expand_more"
                             }}</mat-icon>
                         </button>
+
+                        <!-- Progress bar for collapsed cards -->
+                        <div *ngIf="!section.expanded" class="px-8 pb-5">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div
+                                    class="bg-[#444444] h-2 rounded-full"
+                                    [style.width]="getProgressWidth(section.id)"
+                                ></div>
+                            </div>
+                        </div>
 
                         <!-- Accordion Content -->
                         <div
@@ -724,6 +749,52 @@
                                     </div>
                                 </div>
 
+                                <!-- Executor & Witnesses Section -->
+                                <div *ngSwitchCase="'executor'">
+                                    <div class="pt-4">
+                                        <!-- Progress bar -->
+                                        <div
+                                            class="w-full bg-gray-200 rounded-full h-2 mb-4"
+                                        >
+                                            <div
+                                                class="bg-[#444444] h-2 rounded-full"
+                                                style="width: 0%"
+                                            ></div>
+                                        </div>
+
+                                        <div
+                                            class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
+                                        >
+                                            <span>0% complete</span>
+                                        </div>
+
+                                        <!-- Horizontal border line -->
+                                        <div
+                                            class="w-full flex justify-center mt-6"
+                                        >
+                                            <div
+                                                class="w-1/2 h-px bg-[#efefef]"
+                                            ></div>
+                                        </div>
+
+                                        <div
+                                            class="w-full flex justify-center mt-6"
+                                        >
+                                            <button
+                                                class="bg-[#444444] text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors flex items-center gap-2"
+                                                (click)="
+                                                    onUpdateSection(section.id)
+                                                "
+                                            >
+                                                Continue writing my will
+                                                <mat-icon class="text-white"
+                                                    >arrow_forward</mat-icon
+                                                >
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Placeholder for other sections -->
                                 <div *ngSwitchDefault>
                                     <div class="pt-4">
@@ -755,24 +826,34 @@
             </div>
         </div>
     </main>
-    <div
-        class="fixed bottom-0 right-20 w-dvw px-4 py-4 flex justify-end border-t border-border"
+    <!-- Footer -->
+    <footer
+        class="fixed bottom-0 left-0 right-0 bg-[#EFEFEF] border-t border-border py-4 px-4"
     >
-        <button
-            mat-flat-button
-            color="primary"
-            *ngIf="!hasStartedWill"
-            (click)="onGetStarted()"
-        >
-            Get Started
-        </button>
-        <button
-            mat-flat-button
-            color="primary"
-            *ngIf="hasStartedWill"
-            (click)="onContinueWill()"
-        >
-            Continue Will
-        </button>
-    </div>
+        <div class="container mx-auto max-w-7xl flex justify-between">
+            <!-- Go back button for returning users -->
+            <button
+                *ngIf="hasStartedWill"
+                mat-stroked-button
+                color="primary"
+                (click)="goBack()"
+            >
+                <mat-icon>chevron_left</mat-icon>
+                Go back
+            </button>
+
+            <!-- Placeholder for new users to maintain layout -->
+            <div *ngIf="!hasStartedWill"></div>
+
+            <!-- Get Started button for new users -->
+            <button
+                mat-flat-button
+                color="primary"
+                *ngIf="!hasStartedWill"
+                (click)="onGetStarted()"
+            >
+                Get Started
+            </button>
+        </div>
+    </footer>
 </div>

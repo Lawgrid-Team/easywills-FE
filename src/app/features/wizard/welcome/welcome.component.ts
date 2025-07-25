@@ -37,6 +37,11 @@ export class WelcomeComponent implements OnInit {
     hasStartedWill = false;
     completionPercentage = 0;
 
+    // User data for header display
+    userName = 'John Doe';
+    userEmail = 'johndoe@gmail.com';
+    userAvatarUrl = '/svg/display-pic.svg';
+
     willSections: WillSection[] = [
         {
             id: 'personal-details',
@@ -410,5 +415,25 @@ export class WelcomeComponent implements OnInit {
             // All sections complete, go to review or first step if no review exists
             this.router.navigate(['/wiz/will/personal-details']);
         }
+    }
+
+    getProgressWidth(sectionId: string): string {
+        switch (sectionId) {
+            case 'personal-details':
+                return '100%';
+            case 'assets':
+                return '75%';
+            case 'distribution':
+                return '10%';
+            case 'executor':
+                return '0%';
+            default:
+                return '0%';
+        }
+    }
+
+    goBack(): void {
+        // Navigate back to dashboard or previous page
+        this.router.navigate(['/dashboard']);
     }
 }
