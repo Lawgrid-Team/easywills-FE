@@ -193,7 +193,17 @@ export class WelcomeComponent implements OnInit {
     toggleSection(sectionId: string): void {
         const section = this.willSections.find((s) => s.id === sectionId);
         if (section) {
-            section.expanded = !section.expanded;
+            const wasExpanded = section.expanded;
+
+            // First, collapse all sections
+            this.willSections.forEach((s) => {
+                s.expanded = false;
+            });
+
+            // Then expand the clicked section only if it wasn't already expanded
+            if (!wasExpanded) {
+                section.expanded = true;
+            }
         }
     }
 
