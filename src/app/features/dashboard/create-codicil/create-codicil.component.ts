@@ -120,7 +120,7 @@ export class CreateCodicilComponent implements OnInit {
                 'Your estate shared with your loved ones as you wish',
             stepNumber: 4,
             expanded: false,
-            completed: false,
+            completed: true,
         },
     ];
 
@@ -210,13 +210,30 @@ export class CreateCodicilComponent implements OnInit {
             assetsSection.completed = true;
         }
 
+        const distributionSection = this.willSections.find(
+            (s) => s.id === 'distribution'
+        );
+        if (distributionSection) {
+            distributionSection.completed = true;
+        }
+
         this.calculateCompletionPercentage();
     }
 
     toggleSection(sectionId: string): void {
         const section = this.willSections.find((s) => s.id === sectionId);
         if (section) {
-            section.expanded = !section.expanded;
+            const wasExpanded = section.expanded;
+
+            // Close all sections first
+            this.willSections.forEach((s) => {
+                s.expanded = false;
+            });
+
+            // If the section wasn't expanded before, expand it now
+            if (!wasExpanded) {
+                section.expanded = true;
+            }
         }
     }
 

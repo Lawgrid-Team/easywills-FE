@@ -41,19 +41,26 @@
                 <h2
                     class="text-6xl font-semibold text-foreground font-DM_Serif text-easywills-black mb-4"
                 >
-                    Continue from where you last stopped.
+                    Create a Codicil.
                 </h2>
                 <h3
                     class="text-2xl text-foreground font-DM_Serif text-easywills-black mb-2"
                 >
-                    The Last Will and Testament of
+                    Codicil to the Last Will and Testament of
                     <span class="font-bold">{{ userName }}.</span>
                 </h3>
                 <p
-                    class="text-foreground text-easywills-dark-grey text-lg mb-4"
+                    class="text-foreground text-easywills-dark-grey text-lg mb-6"
                 >
                     Last updated: <span class="font-bold">25/07/2025</span>
                 </p>
+                <div class="text-foreground text-easywills-dark-grey text-lg">
+                    <p class="font-normal mb-6">Amendments:</p>
+                    <ul class="list-disc space-y-1 pl-6">
+                        <li>Add new Beneficiary.</li>
+                        <li>Add new Assets</li>
+                    </ul>
+                </div>
             </div>
 
             <div class="space-y-4">
@@ -601,15 +608,28 @@
                                         class="w-full bg-gray-200 rounded-full h-2 mb-4"
                                     >
                                         <div
-                                            class="bg-[#444444] h-2 rounded-full"
-                                            style="width: 10%"
+                                            class="bg-[#444444] h-2 rounded-full w-full"
                                         ></div>
                                     </div>
 
                                     <div
                                         class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
                                     >
-                                        <span>10% complete</span>
+                                        <svg
+                                            class="w-4 h-4"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                                stroke="#444444"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                        <span>100% complete</span>
                                     </div>
 
                                     <div class="mt-4 space-y-3 text-sm">
@@ -619,17 +639,107 @@
                                             >
                                             <span
                                                 class="font-medium text-gray-800"
-                                                >No</span
+                                                >Yes</span
                                             >
                                         </div>
+
+                                        <!-- Beneficiary cards -->
+                                        <div class="mt-4 space-y-4">
+                                            <!-- First child beneficiary card -->
+                                            <div
+                                                class="bg-[#737373] rounded-md p-4 text-white"
+                                            >
+                                                <div
+                                                    class="flex justify-between items-center"
+                                                >
+                                                    <div>
+                                                        <p
+                                                            class="text-sm opacity-80"
+                                                        >
+                                                            Dependant's name
+                                                        </p>
+                                                        <p class="font-medium">
+                                                            Child
+                                                        </p>
+                                                        <p class="text-sm mt-1">
+                                                            Born 10/04/2012
+                                                        </p>
+                                                    </div>
+                                                    <div
+                                                        class="bg-white px-3 py-2 rounded text-center min-w-[60px]"
+                                                    >
+                                                        <span
+                                                            class="text-gray-800 font-medium"
+                                                            >50%</span
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Second child beneficiary card -->
+                                            <div
+                                                class="bg-[#737373] rounded-md p-4 text-white"
+                                            >
+                                                <div
+                                                    class="flex justify-between items-center"
+                                                >
+                                                    <div>
+                                                        <p
+                                                            class="text-sm opacity-80"
+                                                        >
+                                                            Dependant's name
+                                                        </p>
+                                                        <p class="font-medium">
+                                                            Child 2
+                                                        </p>
+                                                        <p class="text-sm mt-1">
+                                                            Born 15/08/2014
+                                                        </p>
+                                                    </div>
+                                                    <div
+                                                        class="bg-white px-3 py-2 rounded text-center min-w-[60px]"
+                                                    >
+                                                        <span
+                                                            class="text-gray-800 font-medium"
+                                                            >50%</span
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="flex justify-between">
                                             <span class="text-gray-500"
                                                 >Exclusion:</span
                                             >
                                             <span
                                                 class="font-medium text-gray-800"
-                                                >No</span
+                                                >Yes</span
                                             >
+                                        </div>
+
+                                        <!-- Exclusion card -->
+                                        <div class="mt-4">
+                                            <div
+                                                class="bg-[#efefef] rounded-md p-4 text-gray-800"
+                                            >
+                                                <h5 class="font-medium text-lg">
+                                                    Jane Doe
+                                                </h5>
+                                                <p
+                                                    class="text-sm text-gray-600"
+                                                >
+                                                    Former spouse
+                                                </p>
+                                                <p
+                                                    class="text-sm text-gray-600 mt-2"
+                                                >
+                                                    They are not entitled to any
+                                                    of my belongings, I have
+                                                    nothing to do with this
+                                                    person.
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -646,15 +756,15 @@
                                         class="w-full flex justify-center mt-6"
                                     >
                                         <button
-                                            class="bg-[#444444] text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors flex items-center gap-2"
                                             (click)="
                                                 navigateToSection(section.id)
                                             "
+                                            class="flex items-center gap-2 text-gray-600 underline bg-transparent border-none cursor-pointer"
                                         >
-                                            Continue writing my will
-                                            <mat-icon class="text-white"
-                                                >arrow_forward</mat-icon
+                                            <mat-icon class="w-4 h-4"
+                                                >edit</mat-icon
                                             >
+                                            <span>Update section</span>
                                         </button>
                                     </div>
                                 </div>
@@ -668,39 +778,98 @@
                                         class="w-full bg-gray-200 rounded-full h-2 mb-4"
                                     >
                                         <div
-                                            class="bg-[#444444] h-2 rounded-full"
-                                            style="width: 0%"
+                                            class="bg-[#444444] h-2 rounded-full w-full"
                                         ></div>
                                     </div>
 
                                     <div
                                         class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
                                     >
-                                        <span>0% complete</span>
+                                        <svg
+                                            class="w-4 h-4"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                                stroke="#444444"
+                                                stroke-width="2"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                            />
+                                        </svg>
+                                        <span>100% complete</span>
                                     </div>
 
-                                    <!-- Horizontal border line -->
-                                    <div
-                                        class="w-full flex justify-center mt-6"
-                                    >
-                                        <div
-                                            class="w-1/2 h-px bg-[#efefef]"
-                                        ></div>
+                                    <!-- Executor & Witnesses Content -->
+                                    <div class="p-4">
+                                        <!-- Executor card -->
+                                        <div class="mt-4">
+                                            <div
+                                                class="bg-[#efefef] rounded-md p-4 text-gray-800"
+                                            >
+                                                <h5 class="font-medium text-lg">
+                                                    Michael Johnson
+                                                </h5>
+                                                <p
+                                                    class="text-sm text-gray-600"
+                                                >
+                                                    Attorney
+                                                </p>
+                                                <p
+                                                    class="text-sm text-gray-600"
+                                                >
+                                                    michael.johnson&#64;lawfirm.com
+                                                </p>
+                                                <p
+                                                    class="text-sm text-gray-600"
+                                                >
+                                                    +1 (555) 123-4567
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Witness card -->
+                                        <div class="mt-4">
+                                            <div
+                                                class="bg-[#efefef] rounded-md p-4 text-gray-800"
+                                            >
+                                                <h5 class="font-medium text-lg">
+                                                    Sarah Williams
+                                                </h5>
+                                                <p
+                                                    class="text-sm text-gray-600"
+                                                >
+                                                    Notary Public
+                                                </p>
+                                                <p
+                                                    class="text-sm text-gray-600"
+                                                >
+                                                    sarah.williams&#64;notary.com
+                                                </p>
+                                                <p
+                                                    class="text-sm text-gray-600"
+                                                >
+                                                    +1 (555) 987-6543
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div
-                                        class="w-full flex justify-center mt-6"
+                                        class="flex justify-center items-center"
                                     >
                                         <button
-                                            class="bg-[#444444] text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors flex items-center gap-2"
                                             (click)="
                                                 navigateToSection(section.id)
                                             "
+                                            class="flex items-center gap-2 text-gray-600 underline bg-transparent border-none cursor-pointer"
                                         >
-                                            Continue writing my will
-                                            <mat-icon class="text-white"
-                                                >arrow_forward</mat-icon
+                                            <mat-icon class="w-4 h-4"
+                                                >edit</mat-icon
                                             >
+                                            <span>Update section</span>
                                         </button>
                                     </div>
                                 </div>
