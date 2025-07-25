@@ -2,7 +2,7 @@
     <app-sidebar></app-sidebar>
     <main class="flex-1 overflow-y-auto">
         <div class="p-8">
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6" *ngIf="!hideHeader">
                 <app-header-widget
                     [title]="headerTitle"
                     [subtitle]="headerSubtitle"

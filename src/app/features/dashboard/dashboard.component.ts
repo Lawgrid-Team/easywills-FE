@@ -42,6 +42,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     headerSubtitle = '';
     isUploadingInChild = false;
     isViewingAllInChild = false;
+    hideHeader = false;
 
     constructor(
         private willStateService: WillStateService,
@@ -116,24 +117,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (this.isViewingAllInChild && url.includes('/my-documents')) {
             this.headerTitle = 'Documents';
             this.headerSubtitle = '';
+            this.hideHeader = false;
         } else if (this.isUploadingInChild && url.includes('/my-documents')) {
             this.headerTitle = 'Upload document';
             this.headerSubtitle = '';
+            this.hideHeader = false;
         } else if (url.includes('/my-will')) {
             this.headerTitle = 'Welcome back, John Doe!';
             this.headerSubtitle =
                 "Here's an overview of your Will planning progress.";
+            this.hideHeader = false;
         } else if (url.includes('/my-documents')) {
             this.headerTitle = 'Documents';
             this.headerSubtitle = 'Manage your Will documents and legal files';
+            this.hideHeader = false;
         } else if (url.includes('/settings')) {
             this.headerTitle = 'Settings';
             this.headerSubtitle = 'Manage your account and preferences';
+            this.hideHeader = true;
         } else {
             // Default for /dashboard root
             this.headerTitle = 'Welcome back, John Doe!';
             this.headerSubtitle =
                 "Here's an overview of your Will planning progress.";
+            this.hideHeader = false;
         }
     }
 }
