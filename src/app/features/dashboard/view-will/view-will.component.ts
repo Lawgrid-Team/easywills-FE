@@ -13,8 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
 import { WillData } from '../../../core/models/interfaces/will-data.interface';
-import { HttpClient } from '@angular/common/http';
-import { catchError, of } from 'rxjs';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @Component({
     selector: 'app-view-will',
@@ -25,6 +24,7 @@ import { catchError, of } from 'rxjs';
         MatIconModule,
         MatProgressSpinnerModule,
         RouterModule,
+        PdfViewerModule,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     templateUrl: './view-will.component.html',
@@ -33,17 +33,14 @@ import { catchError, of } from 'rxjs';
 export class ViewWillComponent implements OnInit {
     willData!: WillData;
     isLoading = true;
-    pdfViewerModule: unknown = null;
 
     // User profile data (matching wizard welcome page)
     userName = 'John Doe';
     userEmail = 'johndoe@gmail.com';
     userAvatarUrl = '/svg/display-pic.svg';
 
-    originalPdfData: Uint8Array | null = null;
-
-    pdfSrc: Uint8Array | null = null;
-    modalPdfSrc: Uint8Array | null = null;
+    pdfSrc = '/doc/sample-will.pdf';
+    modalPdfSrc = '/doc/sample-will.pdf';
 
     isBrowser: boolean;
     pdfError = false;
@@ -61,7 +58,6 @@ export class ViewWillComponent implements OnInit {
     constructor(
         private router: Router,
         private willDataService: WillDataService,
-        private http: HttpClient,
         @Inject(PLATFORM_ID) platformId: object,
         @Inject(APP_ID) appId: string
     ) {
@@ -72,52 +68,12 @@ export class ViewWillComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         this.willData = this.willDataService.getWillData();
-        if (this.isBrowser) {
-            try {
-                // Dynamically import PDF viewer module only in browser
-                const { PdfViewerModule } = await import('ng2-pdf-viewer');
-                this.pdfViewerModule = PdfViewerModule;
-                this.loadPdfAsBlob();
-            } catch (error) {
-                console.error('Failed to load PDF viewer:', error);
-                this.pdfError = true;
-                this.isLoading = false;
-            }
-        } else {
-            this.isLoading = false;
-        }
-    }
-
-    loadPdfAsBlob(): void {
-        this.isLoading = true;
-        this.pdfError = false;
-        this.originalPdfData = null;
-        this.pdfSrc = null;
-        this.http
-            .get('/doc/sample-will.pdf', { responseType: 'arraybuffer' })
-            .pipe(
-                catchError((error) => {
-                    console.error('Failed to load PDF:', error.message);
-                    this.pdfError = true;
-                    this.isLoading = false;
-                    return of(null);
-                })
-            )
-            .subscribe((response) => {
-                if (response) {
-                    this.originalPdfData = new Uint8Array(response);
-                    this.pdfSrc = this.originalPdfData.slice();
-                    this.pdfError = false;
-                } else {
-                    this.pdfError = true;
-                }
-                this.isLoading = false;
-            });
+        this.isBrowser = isPlatformBrowser(this.platformId);
+        this.isLoading = false;
     }
 
     openModal(): void {
-        if (!this.originalPdfData) return;
-        this.modalPdfSrc = this.originalPdfData.slice();
+        this.modalPdfSrc = '/doc/sample-will.pdf';
         this.modalPdfError = false;
         this.isModalOpen = true;
         if (this.isBrowser && typeof document !== 'undefined') {
@@ -127,16 +83,9 @@ export class ViewWillComponent implements OnInit {
 
     closeModal(): void {
         this.isModalOpen = false;
-        this.modalPdfSrc = null;
+        this.modalPdfSrc = '/doc/sample-will.pdf';
         if (this.isBrowser && typeof document !== 'undefined') {
             document.body.style.overflow = 'auto';
-        }
-        if (this.originalPdfData) {
-            this.pdfSrc = this.originalPdfData.slice();
-            this.pdfError = false;
-        } else {
-            this.pdfSrc = null;
-            this.pdfError = true;
         }
     }
 
