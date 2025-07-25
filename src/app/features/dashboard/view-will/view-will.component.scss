@@ -370,3 +370,45 @@
         bottom: 15px;
     }
 }
+
+// Sample will fallback content
+.sample-will {
+    height: 100%;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+.sample-will-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.sample-will-title {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 4px;
+    color: #272727;
+}
+
+.sample-will-name {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 24px;
+    color: #272727;
+}
+
+.sample-will-text {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    color: #444444;
+    text-align: center;
+}
+
+// Modal sample will
+.modal-sample-will {
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+}

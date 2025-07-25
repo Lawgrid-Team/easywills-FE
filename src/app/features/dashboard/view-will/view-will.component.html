@@ -63,9 +63,13 @@
                     mat-icon-button
                     class="expand-button"
                     (click)="openModal()"
-                    [disabled]="!pdfSrc"
+                    [disabled]="isLoading || !originalPdfData || pdfError"
                 >
-                    <mat-icon class="expand-icon">fullscreen</mat-icon>
+                    <img
+                        src="svg/expandPdfIcon.svg"
+                        alt="Expand PDF"
+                        class="expand-icon"
+                    />
                 </button>
 
                 <!-- Loading State -->
@@ -82,49 +86,49 @@
                     <p>Failed to load PDF. Please try again.</p>
                 </div>
 
-                <!-- PDF Viewer - Only in Browser -->
-                <div
+                <!-- PDF Viewer - Main -->
+                <ng-container
                     *ngIf="
-                        !isLoading &&
-                        !pdfError &&
+                        isBrowser &&
                         pdfSrc &&
-                        isBrowser
+                        !pdfError &&
+                        !isLoading &&
+                        !isModalOpen
                     "
                 >
                     <pdf-viewer
                         [src]="pdfSrc"
-                        [zoom]="zoom"
-                        [page]="currentPage"
-                        [show-all]="false"
-                        [fit-to-page]="true"
-                        [original-size]="false"
-                        [stick-to-page]="true"
-                        [autoresize]="true"
                         [render-text]="true"
-                        [rotation]="0"
-                        [external-link-target]="'blank'"
+                        [original-size]="false"
+                        [show-all]="false"
+                        [page]="currentPage"
+                        [zoom]="zoom"
+                        [fit-to-page]="true"
                         (after-load-complete)="onPdfLoaded($event, 'main')"
                         (error)="onPdfError($event, 'main')"
+                        style="display: block; height: 100%"
                     ></pdf-viewer>
-                </div>
+                </ng-container>
 
-                <!-- Fallback for SSR or when PDF viewer is not loaded -->
+                <!-- Fallback content for SSR or errors - Main -->
                 <div
+                    class="sample-will"
                     *ngIf="
+                        (!isBrowser || pdfError || !pdfSrc) &&
                         !isLoading &&
-                        !pdfError &&
-                        pdfSrc &&
-                        !isBrowser
+                        !isModalOpen
                     "
-                    class="loading-container"
                 >
-                    <mat-icon style="font-size: 48px; color: #6982b5"
-                        >description</mat-icon
-                    >
-                    <p>Your will document is ready</p>
-                    <p style="font-size: 14px; color: #666">
-                        PDF viewer will load in the browser
-                    </p>
+                    <div class="sample-will-content">
+                        <h2 class="sample-will-title">
+                            LAST WILL AND TESTAMENT OF
+                        </h2>
+                        <h3 class="sample-will-name">Jane Doe</h3>
+                        <p class="sample-will-text">
+                            Could not load PDF preview. Please try again or
+                            check your connection.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -139,7 +143,7 @@
                     (click)="previousPage()"
                     [disabled]="currentPage <= 1"
                 >
-                    <mat-icon>keyboard_arrow_left</mat-icon>
+                    <mat-icon>arrow_back_ios</mat-icon>
                 </button>
                 <span class="page-indicator"
                     >{{ currentPage }} / {{ totalPages }}</span
@@ -150,7 +154,7 @@
                     (click)="nextPage()"
                     [disabled]="currentPage >= totalPages"
                 >
-                    <mat-icon>keyboard_arrow_right</mat-icon>
+                    <mat-icon>arrow_forward_ios</mat-icon>
                 </button>
             </div>
         </div>
@@ -158,99 +162,92 @@
 
     <!-- Modal Overlay - Only show in browser -->
     <div
-        *ngIf="isModalOpen && isBrowser"
         class="modal-overlay"
+        *ngIf="isModalOpen"
         (click)="closeModal()"
         (keydown)="onOverlayKeydown($event)"
         tabindex="0"
+        role="button"
+        aria-label="Close modal"
     >
+        <!-- Close Button (Top Right) -->
+        <button
+            class="modal-close-button-overlay"
+            mat-icon-button
+            (click)="closeModal()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+
+        <!-- Side Navigation Arrows -->
+        <button
+            class="modal-nav-button-side prev"
+            mat-icon-button
+            [disabled]="currentPage <= 1"
+            (click)="previousPage(); $event.stopPropagation()"
+        >
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+        <button
+            class="modal-nav-button-side next"
+            mat-icon-button
+            [disabled]="currentPage >= (totalPagesModal || 1)"
+            (click)="nextPage(); $event.stopPropagation()"
+        >
+            <mat-icon>arrow_forward_ios</mat-icon>
+        </button>
+
+        <!-- Main Modal Content -->
         <div
             class="modal-container"
             (click)="$event.stopPropagation()"
-            (keydown.enter)="$event.stopPropagation()"
-            (keydown.space)="$event.stopPropagation()"
+            (keydown)="onModalKeydown($event)"
             tabindex="0"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
         >
-            <!-- Close Button (Top Right) -->
-            <button
-                mat-icon-button
-                class="modal-close-button-overlay"
-                (click)="closeModal()"
-            >
-                <mat-icon>close</mat-icon>
-            </button>
-
-            <!-- Previous Page Button (Left Side) -->
-            <button
-                *ngIf="totalPagesModal > 1"
-                mat-icon-button
-                class="modal-nav-button-side prev"
-                (click)="previousPage()"
-                [disabled]="currentPage <= 1"
-            >
-                <mat-icon>keyboard_arrow_left</mat-icon>
-            </button>
-
-            <!-- Next Page Button (Right Side) -->
-            <button
-                *ngIf="totalPagesModal > 1"
-                mat-icon-button
-                class="modal-nav-button-side next"
-                (click)="nextPage()"
-                [disabled]="currentPage >= totalPagesModal"
-            >
-                <mat-icon>keyboard_arrow_right</mat-icon>
-            </button>
-
-            <!-- Page Indicator (Bottom Center) -->
-            <div
-                *ngIf="totalPagesModal > 1"
-                class="modal-page-indicator-bottom"
-            >
-                {{ currentPage }} / {{ totalPagesModal }}
-            </div>
-
-            <div
-                class="modal-pdf-container"
-                (keydown)="onModalKeydown($event)"
-                tabindex="0"
-            >
-                <!-- Loading State -->
-                <div
-                    *ngIf="!modalPdfSrc && !modalPdfError"
-                    class="loading-container"
+            <div class="modal-pdf-container">
+                <ng-container
+                    *ngIf="isBrowser && modalPdfSrc && !modalPdfError"
                 >
-                    <mat-spinner diameter="40"></mat-spinner>
-                    <p>Loading...</p>
-                </div>
-
-                <!-- Error State -->
-                <div *ngIf="modalPdfError" class="loading-container">
-                    <mat-icon style="font-size: 48px; color: #ccc"
-                        >error</mat-icon
-                    >
-                    <p>Failed to load PDF in modal.</p>
-                </div>
-
-                <!-- PDF Viewer -->
-                <div *ngIf="modalPdfSrc && !modalPdfError && isBrowser">
                     <pdf-viewer
                         [src]="modalPdfSrc"
-                        [zoom]="modalZoom"
-                        [page]="currentPage"
-                        [show-all]="false"
-                        [fit-to-page]="true"
-                        [original-size]="false"
-                        [stick-to-page]="true"
-                        [autoresize]="true"
                         [render-text]="true"
-                        [rotation]="0"
-                        [external-link-target]="'blank'"
+                        [original-size]="false"
+                        [show-all]="true"
+                        [page]="currentPage"
+                        [zoom]="modalZoom"
                         (after-load-complete)="onPdfLoaded($event, 'modal')"
                         (error)="onPdfError($event, 'modal')"
+                        style="display: block; width: 100%; height: 100%"
+                        aria-label="PDF document viewer"
                     ></pdf-viewer>
+                </ng-container>
+                <div
+                    class="modal-sample-will"
+                    *ngIf="!isBrowser || modalPdfError || !modalPdfSrc"
+                >
+                    <div class="sample-will-content">
+                        <h2 class="sample-will-title" id="modal-title">
+                            LAST WILL AND TESTAMENT OF
+                        </h2>
+                        <h3 class="sample-will-name">Jane Doe</h3>
+                        <p class="sample-will-text" id="modal-description">
+                            Could not load PDF in expanded view.
+                        </p>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Bottom Page Indicator -->
+        <div
+            class="modal-page-indicator-bottom"
+            *ngIf="modalPdfSrc && !modalPdfError"
+        >
+            Page {{ currentPage }} of {{ totalPagesModal || "..." }}.
         </div>
     </div>
 </div>

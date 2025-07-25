@@ -7,6 +7,7 @@ import {
     CUSTOM_ELEMENTS_SCHEMA,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -14,6 +15,7 @@ import { Router, RouterModule } from '@angular/router';
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
 import { WillData } from '../../../core/models/interfaces/will-data.interface';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { catchError, of } from 'rxjs';
 
 @Component({
     selector: 'app-view-will',
@@ -39,8 +41,10 @@ export class ViewWillComponent implements OnInit {
     userEmail = 'johndoe@gmail.com';
     userAvatarUrl = '/svg/display-pic.svg';
 
-    pdfSrc = '/doc/sample-will.pdf';
-    modalPdfSrc = '/doc/sample-will.pdf';
+    // PDF data
+    pdfSrc: Uint8Array | null = null;
+    modalPdfSrc: Uint8Array | null = null;
+    originalPdfData: Uint8Array | null = null;
 
     isBrowser: boolean;
     pdfError = false;
@@ -55,9 +59,11 @@ export class ViewWillComponent implements OnInit {
 
     platformId: object;
     appId: string;
+
     constructor(
         private router: Router,
         private willDataService: WillDataService,
+        private http: HttpClient,
         @Inject(PLATFORM_ID) platformId: object,
         @Inject(APP_ID) appId: string
     ) {
@@ -69,11 +75,41 @@ export class ViewWillComponent implements OnInit {
     async ngOnInit(): Promise<void> {
         this.willData = this.willDataService.getWillData();
         this.isBrowser = isPlatformBrowser(this.platformId);
-        this.isLoading = false;
+
+        if (this.isBrowser) {
+            this.loadPdfAsBlob();
+        } else {
+            this.isLoading = false;
+        }
+    }
+
+    private loadPdfAsBlob(): void {
+        this.isLoading = true;
+        this.http
+            .get('/doc/sample-will.pdf', { responseType: 'arraybuffer' })
+            .pipe(
+                catchError((error) => {
+                    console.error('Error loading PDF:', error);
+                    this.pdfError = true;
+                    this.isLoading = false;
+                    return of(null);
+                })
+            )
+            .subscribe((response) => {
+                if (response) {
+                    this.originalPdfData = new Uint8Array(response);
+                    this.pdfSrc = this.originalPdfData.slice();
+                    this.pdfError = false;
+                } else {
+                    this.pdfError = true;
+                }
+                this.isLoading = false;
+            });
     }
 
     openModal(): void {
-        this.modalPdfSrc = '/doc/sample-will.pdf';
+        if (!this.originalPdfData) return;
+        this.modalPdfSrc = this.originalPdfData.slice();
         this.modalPdfError = false;
         this.isModalOpen = true;
         if (this.isBrowser && typeof document !== 'undefined') {
@@ -83,9 +119,16 @@ export class ViewWillComponent implements OnInit {
 
     closeModal(): void {
         this.isModalOpen = false;
-        this.modalPdfSrc = '/doc/sample-will.pdf';
+        this.modalPdfSrc = null;
         if (this.isBrowser && typeof document !== 'undefined') {
             document.body.style.overflow = 'auto';
+        }
+        if (this.originalPdfData) {
+            this.pdfSrc = this.originalPdfData.slice();
+            this.pdfError = false;
+        } else {
+            this.pdfSrc = null;
+            this.pdfError = true;
         }
     }
 
@@ -112,8 +155,7 @@ export class ViewWillComponent implements OnInit {
         }
     }
 
-    onPdfLoaded(event: unknown, viewerType: 'main' | 'modal'): void {
-        const pdf = event as { numPages: number };
+    onPdfLoaded(pdf: { numPages: number }, viewerType: 'main' | 'modal'): void {
         if (viewerType === 'main') {
             this.totalPages = pdf.numPages;
         } else if (viewerType === 'modal') {
