@@ -657,6 +657,73 @@
                                     </ng-template>
                                 </div>
 
+                                <!-- Estate Distribution Section -->
+                                <div *ngSwitchCase="'distribution'">
+                                    <div class="pt-4">
+                                        <!-- Progress bar -->
+                                        <div
+                                            class="w-full bg-gray-200 rounded-full h-2 mb-4"
+                                        >
+                                            <div
+                                                class="bg-[#444444] h-2 rounded-full"
+                                                style="width: 10%"
+                                            ></div>
+                                        </div>
+
+                                        <div
+                                            class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
+                                        >
+                                            <span>10% complete</span>
+                                        </div>
+
+                                        <div class="mt-4 space-y-3 text-sm">
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >Dependents:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >No</span
+                                                >
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-gray-500"
+                                                    >Exclusion:</span
+                                                >
+                                                <span
+                                                    class="font-medium text-gray-800"
+                                                    >No</span
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <!-- Horizontal border line -->
+                                        <div
+                                            class="w-full flex justify-center mt-6"
+                                        >
+                                            <div
+                                                class="w-1/2 h-px bg-[#efefef]"
+                                            ></div>
+                                        </div>
+
+                                        <div
+                                            class="w-full flex justify-center mt-6"
+                                        >
+                                            <button
+                                                class="bg-[#444444] text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors flex items-center gap-2"
+                                                (click)="
+                                                    onUpdateSection(section.id)
+                                                "
+                                            >
+                                                Continue writing my will
+                                                <mat-icon class="text-white"
+                                                    >arrow_forward</mat-icon
+                                                >
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Placeholder for other sections -->
                                 <div *ngSwitchDefault>
                                     <div class="pt-4">
