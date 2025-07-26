@@ -1,0 +1,49 @@
+<div class="bg-white rounded-xl shadow-sm overflow-hidden">
+    <div class="p-0">
+        <div class="pt-6"></div>
+        <div
+            class="grid grid-cols-[1.5fr_2.5fr_1fr_2fr] gap-4 mb-3 px-4 py-6 bg-gray-100 rounded-md mx-6"
+        >
+            <div class="text-sm font-medium text-gray-600">Account type</div>
+            <div class="text-sm font-medium text-gray-600">Details</div>
+            <div class="text-sm font-medium text-gray-600">Users</div>
+            <div class="text-sm font-medium text-gray-600 text-center">
+                Actions
+            </div>
+        </div>
+        <div class="space-y-4 px-6">
+            <div
+                *ngFor="let activity of activities"
+                class="grid grid-cols-[1.5fr_2.5fr_1fr_2fr] gap-4 items-center text-sm px-4"
+            >
+                <div class="text-gray-800 font-medium">{{ activity.type }}</div>
+                <div>
+                    <p class="text-gray-800 font-medium">
+                        {{ activity.title }}
+                    </p>
+                    <p *ngIf="activity.details" class="text-gray-500">
+                        {{ activity.details }}
+                    </p>
+                </div>
+                <div class="text-gray-600">{{ activity.user }}</div>
+                <div class="text-center">
+                    <a
+                        [href]="activity.actionLink"
+                        class="font-medium underline hover:no-underline"
+                        style="color: #444444"
+                        >{{ activity.action }}</a
+                    >
+                </div>
+            </div>
+        </div>
+        <div class="p-6 pb-14 bg-white rounded-b-xl">
+            <button
+                class="px-4 py-2 text-white rounded-md text-sm font-medium hover:opacity-90 flex items-center"
+                style="background-color: #6982b5"
+            >
+                <mat-icon class="!text-base mr-2">rotate_right</mat-icon>
+                Retry
+            </button>
+        </div>
+    </div>
+</div>

@@ -43,6 +43,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     isUploadingInChild = false;
     isViewingAllInChild = false;
     hideHeader = false;
+    showUpgradePlan = true;
+    showUpgradeButton = true;
+    badgeText = '';
 
     constructor(
         private willStateService: WillStateService,
@@ -118,29 +121,54 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.headerTitle = 'Documents';
             this.headerSubtitle = '';
             this.hideHeader = false;
+            this.showUpgradePlan = true;
+            this.showUpgradeButton = true;
+            this.badgeText = '';
         } else if (this.isUploadingInChild && url.includes('/my-documents')) {
             this.headerTitle = 'Upload document';
             this.headerSubtitle = '';
             this.hideHeader = false;
+            this.showUpgradePlan = true;
+            this.showUpgradeButton = true;
+            this.badgeText = '';
         } else if (url.includes('/my-will')) {
             this.headerTitle = 'Welcome back, John Doe!';
             this.headerSubtitle =
                 "Here's an overview of your Will planning progress.";
             this.hideHeader = false;
+            this.showUpgradePlan = true;
+            this.showUpgradeButton = true;
+            this.badgeText = '';
         } else if (url.includes('/my-documents')) {
             this.headerTitle = 'Documents';
             this.headerSubtitle = 'Manage your Will documents and legal files';
             this.hideHeader = false;
+            this.showUpgradePlan = true;
+            this.showUpgradeButton = true;
+            this.badgeText = '';
+        } else if (url.includes('/digital-vault')) {
+            this.headerTitle = 'Digital Vault';
+            this.headerSubtitle = 'Track and manage all action of your Will';
+            this.hideHeader = false;
+            this.showUpgradePlan = true;
+            this.showUpgradeButton = false;
+            this.badgeText = 'Upload';
         } else if (url.includes('/settings')) {
             this.headerTitle = 'Settings';
             this.headerSubtitle = 'Manage your account and preferences';
             this.hideHeader = true;
+            this.showUpgradePlan = true;
+            this.showUpgradeButton = true;
+            this.badgeText = '';
         } else {
             // Default for /dashboard root
             this.headerTitle = 'Welcome back, John Doe!';
             this.headerSubtitle =
                 "Here's an overview of your Will planning progress.";
             this.hideHeader = false;
+            this.showUpgradePlan = true;
+            this.showUpgradeButton = true;
+            this.badgeText = '';
         }
     }
 }

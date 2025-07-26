@@ -1,22 +1,30 @@
 <header class="flex justify-between items-center w-full">
     <div class="flex items-center gap-6">
-        <button *ngIf="showGoBackButton" (click)="goBack.emit()" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+        <button
+            *ngIf="showGoBackButton"
+            (click)="goBack.emit()"
+            class="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+        >
             <img src="/svg/go-back.svg" alt="Go back" class="h-5 w-5" />
             <span class="font-medium text-lg">Go back</span>
         </button>
         <div>
             <h1 class="text-2xl font-bold text-gray-800">{{ title }}</h1>
-            <p *ngIf="!showGoBackButton" class="text-gray-500">{{ subtitle }}</p>
+            <p *ngIf="!showGoBackButton" class="text-gray-500">
+                {{ subtitle }}
+            </p>
         </div>
     </div>
     <div class="flex items-center gap-6">
         <!-- Upgrade Plan Section -->
-        <div class="text-center">
+        <div class="text-center" *ngIf="showUpgradePlan">
             <span class="bg-[#6982b5] text-white text-s px-10 py-1 rounded-lg">
-                <span *ngIf="!isWillCompleted">Free</span>
-                <span *ngIf="isWillCompleted">Legacy+</span>
+                <span *ngIf="badgeText">{{ badgeText }}</span>
+                <span *ngIf="!badgeText && !isWillCompleted">Free</span>
+                <span *ngIf="!badgeText && isWillCompleted">Legacy+</span>
             </span>
             <a
+                *ngIf="showUpgradeButton"
                 href="#"
                 class="block text-xs text-gray-600 underline mt-1 font-bold"
                 >Upgrade Plan</a
@@ -39,9 +47,10 @@
                     class="h-6 w-6"
                 />
             </button>
-            <app-notification-dropdown *ngIf="showNotifications"></app-notification-dropdown>
+            <app-notification-dropdown
+                *ngIf="showNotifications"
+            ></app-notification-dropdown>
         </div>
-
 
         <!-- User Profile Section -->
         <div class="flex items-center gap-3">

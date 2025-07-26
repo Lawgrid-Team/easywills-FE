@@ -1,0 +1,25 @@
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div
+        *ngFor="let stat of stats"
+        class="bg-white p-6 rounded-lg shadow-sm flex justify-between items-center"
+      >
+        <div>
+          <p class="text-sm text-gray-500">{{ stat.title }}</p>
+          <p class="text-3xl font-bold text-gray-800">{{ stat.value }}</p>
+        </div>
+        <div class="w-24 h-12">
+          <svg
+            viewBox="0 0 90 30"
+            class="w-full h-full"
+            preserveAspectRatio="none"
+          >
+            <path
+              [attr.d]="stat.chartPath"
+              fill="none"
+              stroke="#6982b5"
+              stroke-width="2"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>

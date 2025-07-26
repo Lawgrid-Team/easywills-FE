@@ -25,6 +25,9 @@ export class HeaderWidgetComponent {
     @Input() isWillCompleted!: boolean;
     @Input() hasUnreadNotifications = true;
     @Input() showGoBackButton = false;
+    @Input() showUpgradePlan = true;
+    @Input() showUpgradeButton = true;
+    @Input() badgeText = ''; // New property to control badge text
 
     @Output() goBack = new EventEmitter<void>();
 

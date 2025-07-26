@@ -24,7 +24,7 @@ export class SidebarComponent {
         {
             label: 'Digital Vault',
             icon: '/svg/digital-vault.svg',
-            link: '/dashboard/vault',
+            link: '/dashboard/digital-vault',
         },
     ];
 
