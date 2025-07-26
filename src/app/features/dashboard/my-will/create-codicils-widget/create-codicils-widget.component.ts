@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 interface CodicilAction {
     text: string;
@@ -10,7 +11,7 @@ interface CodicilAction {
 @Component({
     selector: 'app-create-codicils-widget',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, RouterModule],
     templateUrl: './create-codicils-widget.component.html',
     styleUrls: ['./create-codicils-widget.component.scss'],
 })
@@ -19,14 +20,22 @@ export class CreateCodicilsWidgetComponent {
         {
             text: 'Personal information',
             icon: '/svg/icon-edit-user.svg',
-            link: '#',
+            link: '/create-codicil',
         },
-        { text: 'Beneficiaries', icon: '/svg/icon-users.svg', link: '#' },
-        { text: 'Estate Distribution', icon: '/svg/icon-home.svg', link: '#' },
+        {
+            text: 'Beneficiaries',
+            icon: '/svg/icon-users.svg',
+            link: '/create-codicil',
+        },
+        {
+            text: 'Estate Distribution',
+            icon: '/svg/icon-home.svg',
+            link: '/create-codicil',
+        },
         {
             text: 'Executors & Witnesses',
             icon: '/svg/icon-list-doc.svg',
-            link: '#',
+            link: '/create-codicil',
         },
     ];
 

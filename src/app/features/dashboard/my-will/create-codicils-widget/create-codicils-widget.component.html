@@ -13,8 +13,8 @@
     <div class="space-y-3 flex-grow flex flex-col justify-around">
         <a
             *ngFor="let action of codicilActions"
-            [href]="action.link"
-            class="flex items-center bg-white text-gray-800 p-4 rounded-3xl hover:bg-gray-50 transition duration-150 ease-in-out shadow"
+            [routerLink]="action.link"
+            class="flex items-center bg-white text-gray-800 p-4 rounded-3xl hover:bg-gray-50 transition duration-150 ease-in-out shadow cursor-pointer"
         >
             <img
                 [src]="action.icon"

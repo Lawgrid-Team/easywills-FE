@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    Router,
+} from '@angular/router';
 
 @Component({
     selector: 'app-settings',
@@ -15,4 +20,14 @@ export class SettingsComponent {
         { label: 'Password', link: 'password' },
         { label: 'Subscription', link: 'subscription' },
     ];
+
+    constructor(private router: Router) {}
+
+    isActiveLink(link: string): boolean {
+        const currentUrl = this.router.url;
+        if (link === 'subscription') {
+            return currentUrl.includes('/settings/subscription');
+        }
+        return currentUrl.endsWith(`/settings/${link}`);
+    }
 }

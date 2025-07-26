@@ -6,11 +6,14 @@
                     <li *ngFor="let item of navItems" class="mb-1">
                         <a
                             [routerLink]="item.link"
-                            routerLinkActive="bg-gray-100 font-semibold text-gray-900"
+                            routerLinkActive="font-semibold text-gray-900"
                             [routerLinkActiveOptions]="{
                                 exact: item.link !== 'subscription'
                             }"
                             class="block w-full text-left px-4 py-2.5 rounded-md text-gray-600 hover:bg-gray-100"
+                            [style.background-color]="
+                                isActiveLink(item.link) ? '#e5e5e5' : ''
+                            "
                         >
                             {{ item.label }}
                         </a>
