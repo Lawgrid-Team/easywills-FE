@@ -1,0 +1,122 @@
+<div>
+    <h2 class="text-xl font-semibold text-gray-800 mb-6">Profile management</h2>
+    <hr class="mt-6 mb-8" style="border-color: #dedede" />
+    <!-- Profile Info -->
+    <div class="flex items-center mb-8">
+        <div
+            class="w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold mr-6"
+            style="background-color: #444444"
+        >
+            {{ user.initials }}
+        </div>
+        <div>
+            <button
+                class="flex items-center text-gray-700 font-medium hover:text-gray-900"
+            >
+                <img src="/svg/edit-icon.svg" alt="Edit" class="w-5 h-5 mr-2" />
+                Edit profile
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-14">
+        <div>
+            <label class="text-sm text-gray-500">Name:</label>
+            <p class="text-base font-medium text-gray-800">{{ user.name }}</p>
+        </div>
+        <div>
+            <label class="text-sm text-gray-500">Email address:</label>
+            <p class="text-base font-medium text-gray-800">{{ user.email }}</p>
+        </div>
+        <div>
+            <label class="text-sm text-gray-500">Phone number:</label>
+            <p class="text-base font-medium text-gray-800">{{ user.phone }}</p>
+        </div>
+    </div>
+
+    <!-- Preferences -->
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">Preferences</h3>
+    <hr class="mt-6 mb-8" style="border-color: #dedede" />
+    <div class="space-y-6">
+        <!-- Communication Preferences -->
+        <div class="rounded-lg p-6" style="background-color: #efefef">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h4 class="font-semibold text-gray-800">
+                        Email preference
+                    </h4>
+                    <p class="text-sm text-gray-500">
+                        Allow Email preference for sending and receiving updates
+                    </p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" [(ngModel)]="preferences.email" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="flex justify-between items-center">
+                <div>
+                    <h4 class="font-semibold text-gray-800">SMS preference</h4>
+                    <p class="text-sm text-gray-500">
+                        Allow SMS preference for sending and receiving updates
+                    </p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" [(ngModel)]="preferences.sms" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Notification Preferences -->
+        <div class="rounded-lg p-6" style="background-color: #efefef">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h4 class="font-semibold text-gray-800">
+                        Allow in app notification
+                    </h4>
+                    <p class="text-sm text-gray-500">
+                        These are notification that are delivered within
+                    </p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" [(ngModel)]="preferences.inApp" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h4 class="font-semibold text-gray-800">
+                        Allow push notification
+                    </h4>
+                    <p class="text-sm text-gray-500">
+                        These are notifications that are pushed to your device
+                        immediately
+                    </p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" [(ngModel)]="preferences.push" />
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="flex justify-between items-center">
+                <div>
+                    <h4 class="font-semibold text-gray-800">
+                        Allow Email notification
+                    </h4>
+                    <p class="text-sm text-gray-500">
+                        These are notification that are sent primarily to your
+                        Email
+                    </p>
+                </div>
+                <label class="toggle-switch">
+                    <input
+                        type="checkbox"
+                        [(ngModel)]="preferences.emailNotifications"
+                    />
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

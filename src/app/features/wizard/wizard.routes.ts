@@ -35,27 +35,28 @@ export const routes: Routes = [
                             ).then((m) => m.PersonalDetailsComponent),
                     },
                     {
-                        path: "asset-inventory",
+                        path: 'asset-inventory',
                         loadComponent: () =>
                             import(
                                 './asset-inventory/asset-inventory.component'
                             ).then((m) => m.AssetInventoryComponent),
                     },
                     {
-                        path: "estate-distribution",
+                        path: 'estate-distribution',
                         loadComponent: () =>
                             import(
                                 './estate-distribution/estate-distribution.component'
                             ).then((m) => m.EstateDistributionComponent),
                     },
                     {
-                        path: "executor-and-witnesses",
+                        path: 'executor-and-witnesses',
                         loadComponent: () =>
                             import(
                                 './executor-and-witnesses/executor-and-witnesses.component'
                             ).then((m) => m.ExecutorAndWitnessesComponent),
                     },
                     {
+
                         path: "schedule",
                         loadComponent: () =>
                             import(
@@ -75,7 +76,14 @@ export const routes: Routes = [
                             import(
                                 './upgrade/upgrade.component'
                             ).then((m) => m.UpgradeComponent),
-                    }
+                    },
+                     {
+                        path: 'review-and-download',
+                        loadComponent: () =>
+                            import(
+                                './review-and-download/review-and-download.component'
+                            ).then((m) => m.ReviewAndDownloadComponent),
+                    },
                 ],
             },
             {

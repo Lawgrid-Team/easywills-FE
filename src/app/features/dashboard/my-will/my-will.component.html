@@ -1,0 +1,18 @@
+<app-your-will-widget [status]="willStatus" lastUpdated="2 years ago">
+</app-your-will-widget>
+
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+    <div class="lg:col-span-1">
+        <app-quick-actions-widget
+            *ngIf="willStatus === 'inProgress'"
+        ></app-quick-actions-widget>
+        <app-create-codicils-widget
+            *ngIf="willStatus === 'completed'"
+        ></app-create-codicils-widget>
+    </div>
+    <div class="lg:col-span-2">
+        <app-recent-activity-widget
+            [activities]="recentActivities"
+        ></app-recent-activity-widget>
+    </div>
+</div>

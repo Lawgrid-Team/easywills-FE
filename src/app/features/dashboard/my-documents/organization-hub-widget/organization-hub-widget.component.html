@@ -1,0 +1,31 @@
+<div
+    class="bg-white rounded-xl shadow-sm p-8 flex items-center justify-between"
+>
+    <div class="max-w-2xl">
+        <h2 class="text-3xl font-bold text-gray-800 mb-10">
+            Your Hub for Organization
+        </h2>
+        <p class="text-gray-600">
+            It's important to ensure that your family and friends are well
+            looked after once you're no longer here.
+        </p>
+        <button
+            (click)="onUploadDocument()"
+            class="mt-10 bg-[#444444] text-white font-semibold py-3 px-6 rounded-lg flex items-center space-x-2 hover:bg-opacity-90 transition-colors"
+        >
+            <span>Upload document</span>
+            <img
+                src="/svg/your-will-arrow-right.svg"
+                alt="arrow right"
+                class="h-5 w-5"
+            />
+        </button>
+    </div>
+    <div>
+        <img
+            src="/svg/document-table.svg"
+            alt="Documents on a table illustration"
+            class="max-w-xs md:max-w-sm lg:max-w-md h-auto"
+        />
+    </div>
+</div>

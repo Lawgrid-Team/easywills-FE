@@ -1,0 +1,171 @@
+<app-notification
+    *ngIf="showDeletionNotification"
+    [title]="'Deletion Successful'"
+    [message]="'Your document was deleted successfully'"
+    [type]="'success'"
+    (closeNotification)="showDeletionNotification = false"
+>
+</app-notification>
+
+<div class="bg-white rounded-xl shadow-sm">
+    <div class="p-6 flex items-center justify-between">
+        <div>
+            <h3 class="text-xl font-semibold text-gray-800">Documents</h3>
+        </div>
+        <div class="flex items-center space-x-6">
+            <div class="relative">
+                <button
+                    (click)="toggleFilterDropdown()"
+                    class="flex items-center justify-between border border-gray-300 rounded-md py-2 px-6 text-gray-700 hover:bg-gray-50 min-w-[180px]"
+                >
+                    <span>{{ selectedFilter }}</span>
+                    <img
+                        src="/svg/chevron-down-icon.svg"
+                        alt="chevron down"
+                        class="h-4 w-4 transition-transform duration-200"
+                        [class.rotate-180]="isFilterDropdownOpen"
+                    />
+                </button>
+                <div
+                    *ngIf="isFilterDropdownOpen"
+                    class="absolute z-10 mt-1 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                    <div
+                        class="p-1"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="options-menu"
+                    >
+                        <a
+                            *ngFor="let option of filterOptions"
+                            href="#"
+                            (click)="
+                                onFilterChange(option); $event.preventDefault()
+                            "
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                            [class.bg-[#444444]]="option === selectedFilter"
+                            [class.text-white]="option === selectedFilter"
+                            [class.hover:bg-[#444444]]="
+                                option === selectedFilter
+                            "
+                            [class.hover:text-white]="option === selectedFilter"
+                            role="menuitem"
+                        >
+                            {{ option }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="relative">
+                <img
+                    src="/svg/search-icon.svg"
+                    alt="search"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+                />
+                <input
+                    type="text"
+                    placeholder="Search"
+                    #searchInput
+                    (input)="onSearch(searchInput.value)"
+                    class="border border-gray-300 rounded-md py-2 pl-10 pr-4 w-80 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                />
+            </div>
+            <button
+                (click)="onViewAll()"
+                class="flex items-center space-x-2 border border-gray-300 rounded-md py-2 px-6 text-gray-700 hover:bg-gray-50 min-w-[120px]"
+            >
+                <img
+                    src="/svg/view-all-icon.svg"
+                    alt="view all"
+                    class="h-5 w-5"
+                />
+                <span>View all</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <!-- Header Row -->
+        <div
+            class="grid grid-cols-[2fr_2.5fr_1.5fr] gap-4 mb-3 px-4 py-6 bg-gray-100 rounded-md mx-6"
+        >
+            <div class="text-sm font-medium text-gray-600">Date uploaded</div>
+            <div class="text-sm font-medium text-gray-600">File name</div>
+            <div class="text-sm font-medium text-gray-600 text-center">
+                Actions
+            </div>
+        </div>
+        <!-- Documents List -->
+        <div class="space-y-9 px-6 pb-6">
+            <div
+                *ngFor="let doc of documents"
+                class="grid grid-cols-[2fr_2.5fr_1.5fr] gap-4 items-start px-4"
+            >
+                <div>
+                    <p class="text-sm text-gray-500">
+                        <span class="mr-2">📅</span>{{ doc.date }},
+                        {{ doc.time }}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-700 font-normal">
+                        {{ doc.name }}
+                    </p>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-4 justify-center">
+                        <button
+                            (click)="onViewDocument(doc)"
+                            class="text-gray-500 hover:text-gray-800"
+                        >
+                            <img
+                                src="/svg/view-all-icon.svg"
+                                alt="view"
+                                class="h-5 w-5"
+                            />
+                        </button>
+                        <button
+                            (click)="onDeleteDocument(doc)"
+                            class="text-gray-500 hover:text-red-600"
+                        >
+                            <img
+                                src="/svg/trash-icon.svg"
+                                alt="delete"
+                                class="h-5 w-5"
+                            />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Inline Delete Confirmation Modal -->
+<div *ngIf="isDeleteModalOpen" class="fixed bottom-4 right-4 z-50">
+    <div
+        class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full text-left border border-gray-200"
+    >
+        <h2 class="text-lg font-semibold text-[#424343] mb-2">
+            Are you sure you want to delete this Document?
+        </h2>
+        <p class="text-[#908d8d] mb-6 text-sm">
+            This action cannot be reversed
+        </p>
+        <div class="flex justify-end space-x-3">
+            <button
+                (click)="closeDeleteModal()"
+                class="text-sm text-gray-600 px-4 py-2 rounded-md hover:bg-gray-100 border border-gray-300"
+            >
+                Cancel
+            </button>
+            <button
+                (click)="confirmDelete()"
+                class="text-sm text-white bg-[#da001a] px-6 py-2 rounded-md hover:bg-[#ac0000]"
+            >
+                Delete
+            </button>
+        </div>
+    </div>
+</div>

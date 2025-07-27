@@ -1,0 +1,24 @@
+<!-- Organization Hub or Upload Widget -->
+<app-organization-hub-widget
+    *ngIf="!isUploading && !isViewingAll"
+    (uploadDocument)="toggleUploadState(true)"
+>
+</app-organization-hub-widget>
+
+<app-upload-document-widget
+    *ngIf="isUploading && !isViewingAll"
+></app-upload-document-widget>
+
+<!-- Documents List Widget - Normal view with other widgets -->
+<div class="mt-8" *ngIf="!isViewingAll">
+    <app-documents-list-widget
+        [documents]="documents"
+        (viewAllClicked)="onViewAll()"
+    ></app-documents-list-widget>
+</div>
+
+<!-- Documents List Widget - Full view without organization hub -->
+<app-documents-list-widget
+    *ngIf="isViewingAll"
+    [documents]="documents"
+></app-documents-list-widget>
