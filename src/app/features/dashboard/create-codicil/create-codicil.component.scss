@@ -1,0 +1,56 @@
+:host {
+    display: block;
+    background-color: #efefef;
+    min-height: 100vh;
+}
+
+// Section card styles
+.bg-easywills-white {
+    background-color: #ffffff;
+}
+
+.text-easywills-black {
+    color: #272727;
+}
+
+.text-easywills-dark-grey {
+    color: #444444;
+}
+
+.bg-easywills-black-11\% {
+    background-color: rgba(39, 39, 39, 0.11);
+}
+
+// Progress bar styles
+.bg-gray-200 {
+    background-color: #e5e7eb;
+}
+
+// Button styles
+.action-button {
+    background-color: #444444 !important;
+    color: white !important;
+    width: 100%;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.continue-button {
+    background-color: #444444 !important;
+    color: white !important;
+    width: 100%;
+    padding: 16px 32px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+// Material button overrides
+.mat-mdc-button,
+.mat-mdc-outlined-button,
+.mat-mdc-raised-button {
+    border-radius: 6px;
+    font-weight: 500;
+    text-transform: none;
+}

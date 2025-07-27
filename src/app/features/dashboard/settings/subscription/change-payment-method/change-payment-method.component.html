@@ -1,0 +1,134 @@
+<div class="bg-white rounded-lg">
+    <div class="mb-8">
+        <p class="text-sm text-gray-500">
+            <a
+                routerLink="/dashboard/settings/subscription"
+                class="hover:underline"
+                >Subscription management</a
+            >
+            <span class="mx-2 text-gray-400">></span>
+            <span class="text-gray-700">Change payment method</span>
+        </p>
+        <hr class="mt-6 mb-8" style="border-color: #dedede" />
+    </div>
+
+    <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-medium text-center mb-8 text-gray-800">
+            Change payment method
+        </h1>
+        <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+            <div class="mb-6">
+                <label
+                    for="cardHolderName"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Card holder name</label
+                >
+                <input
+                    type="text"
+                    id="cardHolderName"
+                    formControlName="cardHolderName"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500"
+                />
+            </div>
+
+            <div class="mb-6">
+                <label
+                    for="cardNumber"
+                    class="block text-sm font-medium text-gray-700 mb-2"
+                    >Card Number</label
+                >
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="cardNumber"
+                        formControlName="cardNumber"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500"
+                    />
+                    <img
+                        src="svg/mastercard.svg"
+                        alt="Mastercard"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8"
+                    />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 mb-8">
+                <div>
+                    <label
+                        for="expiryDate"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Expiry date</label
+                    >
+                    <input
+                        type="text"
+                        id="expiryDate"
+                        formControlName="expiryDate"
+                        placeholder="MM/YY"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500"
+                    />
+                </div>
+                <div>
+                    <label
+                        for="cvv"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >CVV</label
+                    >
+                    <input
+                        type="text"
+                        id="cvv"
+                        formControlName="cvv"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500"
+                    />
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                class="w-full bg-[#444444] text-white font-semibold py-4 px-6 rounded-lg hover:bg-[#333333] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+                Add card
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div
+    *ngIf="showSuccessModal"
+    class="fixed inset-0 flex items-center justify-center z-50"
+    style="background-color: rgba(0, 0, 0, 0.85)"
+>
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full relative">
+        <div class="flex flex-col items-center text-center">
+            <!-- Check mark icon -->
+            <div
+                class="flex items-center justify-center w-16 h-16 bg-white border-4 border-[#444444] rounded-full mb-6"
+            >
+                <mat-icon
+                    class="text-[#444444]"
+                    style="font-size: 32px; width: 32px; height: 32px"
+                    >check</mat-icon
+                >
+            </div>
+
+            <!-- Payment successful header -->
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">
+                Payment successful
+            </h2>
+
+            <!-- Success message -->
+            <p class="text-gray-600 mb-8 leading-relaxed">
+                Your transaction was processed successfully, ₦49 has been
+                debited from your account.
+            </p>
+
+            <!-- OK button -->
+            <button
+                (click)="closeSuccessModal()"
+                class="w-full bg-[#444444] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#333333] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+                Ok
+            </button>
+        </div>
+    </div>
+</div>

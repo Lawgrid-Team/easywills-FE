@@ -1,0 +1,253 @@
+<div class="min-h-screen">
+    <header class="container mx-auto px-4 py-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <a
+                    routerLink="/dashboard"
+                    class="text-3xl font-bold text-foreground"
+                >
+                    <img
+                        src="svg/easywill_logo.svg"
+                        alt="EasyWill Logo"
+                        class="w-32"
+                    />
+                </a>
+                <div
+                    class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
+                >
+                    <img src="icons/icon_unverify.svg" alt="" srcset="" />
+                    <span>Unverified</span>
+                </div>
+            </div>
+
+            <!-- User Profile Section -->
+            <div class="flex items-center gap-3">
+                <img
+                    [src]="userAvatarUrl"
+                    alt="User Avatar"
+                    class="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                    <p class="font-semibold text-gray-800">{{ userName }}</p>
+                    <p class="text-sm text-gray-500">{{ userEmail }}</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="review-container">
+        <!-- Left Column: Congratulations -->
+        <div class="congratulations-column">
+            <h1 class="heading">Your Will Document</h1>
+            <p class="description">
+                This is your completed will. If you need to make updates, you
+                can create a codicil to amend specific details while keeping
+                your original will intact.
+            </p>
+            <div class="actions">
+                <button
+                    mat-flat-button
+                    class="sign-button"
+                    (click)="signAndValidate()"
+                >
+                    Create Codicil
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Column: PDF Preview -->
+        <div class="pdf-preview-column">
+            <div class="pdf-container">
+                <!-- Expand Button -->
+                <button
+                    mat-icon-button
+                    class="expand-button"
+                    (click)="openModal()"
+                    [disabled]="isLoading || !originalPdfData || pdfError"
+                >
+                    <img
+                        src="svg/expandPdfIcon.svg"
+                        alt="Expand PDF"
+                        class="expand-icon"
+                    />
+                </button>
+
+                <!-- Loading State -->
+                <div *ngIf="isLoading" class="loading-container">
+                    <mat-spinner diameter="40"></mat-spinner>
+                    <p>Loading your will...</p>
+                </div>
+
+                <!-- PDF Error State -->
+                <div *ngIf="pdfError && !isLoading" class="loading-container">
+                    <mat-icon style="font-size: 48px; color: #ccc"
+                        >error</mat-icon
+                    >
+                    <p>Failed to load PDF. Please try again.</p>
+                </div>
+
+                <!-- PDF Viewer - Main -->
+                <ng-container
+                    *ngIf="
+                        isBrowser &&
+                        pdfSrc &&
+                        !pdfError &&
+                        !isLoading &&
+                        !isModalOpen
+                    "
+                >
+                    <pdf-viewer
+                        [src]="pdfSrc"
+                        [render-text]="true"
+                        [original-size]="false"
+                        [show-all]="false"
+                        [page]="currentPage"
+                        [zoom]="zoom"
+                        [fit-to-page]="true"
+                        (after-load-complete)="onPdfLoaded($event, 'main')"
+                        (error)="onPdfError($event, 'main')"
+                        style="display: block; height: 100%"
+                    ></pdf-viewer>
+                </ng-container>
+
+                <!-- Fallback content for SSR or errors - Main -->
+                <div
+                    class="sample-will"
+                    *ngIf="
+                        (!isBrowser || pdfError || !pdfSrc) &&
+                        !isLoading &&
+                        !isModalOpen
+                    "
+                >
+                    <div class="sample-will-content">
+                        <h2 class="sample-will-title">
+                            LAST WILL AND TESTAMENT OF
+                        </h2>
+                        <h3 class="sample-will-name">Jane Doe</h3>
+                        <p class="sample-will-text">
+                            Could not load PDF preview. Please try again or
+                            check your connection.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div
+                *ngIf="!isLoading && !pdfError && totalPages > 1 && isBrowser"
+                class="pdf-navigation"
+            >
+                <button
+                    mat-icon-button
+                    class="prev"
+                    (click)="previousPage()"
+                    [disabled]="currentPage <= 1"
+                >
+                    <mat-icon>arrow_back_ios</mat-icon>
+                </button>
+                <span class="page-indicator"
+                    >{{ currentPage }} / {{ totalPages }}</span
+                >
+                <button
+                    mat-icon-button
+                    class="next"
+                    (click)="nextPage()"
+                    [disabled]="currentPage >= totalPages"
+                >
+                    <mat-icon>arrow_forward_ios</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay - Only show in browser -->
+    <div
+        class="modal-overlay"
+        *ngIf="isModalOpen"
+        (click)="closeModal()"
+        (keydown)="onOverlayKeydown($event)"
+        tabindex="0"
+        role="button"
+        aria-label="Close modal"
+    >
+        <!-- Close Button (Top Right) -->
+        <button
+            class="modal-close-button-overlay"
+            mat-icon-button
+            (click)="closeModal()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+
+        <!-- Side Navigation Arrows -->
+        <button
+            class="modal-nav-button-side prev"
+            mat-icon-button
+            [disabled]="currentPage <= 1"
+            (click)="previousPage(); $event.stopPropagation()"
+        >
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+        <button
+            class="modal-nav-button-side next"
+            mat-icon-button
+            [disabled]="currentPage >= (totalPagesModal || 1)"
+            (click)="nextPage(); $event.stopPropagation()"
+        >
+            <mat-icon>arrow_forward_ios</mat-icon>
+        </button>
+
+        <!-- Main Modal Content -->
+        <div
+            class="modal-container"
+            (click)="$event.stopPropagation()"
+            (keydown)="onModalKeydown($event)"
+            tabindex="0"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+        >
+            <div class="modal-pdf-container">
+                <ng-container
+                    *ngIf="isBrowser && modalPdfSrc && !modalPdfError"
+                >
+                    <pdf-viewer
+                        [src]="modalPdfSrc"
+                        [render-text]="true"
+                        [original-size]="false"
+                        [show-all]="true"
+                        [page]="currentPage"
+                        [zoom]="modalZoom"
+                        (after-load-complete)="onPdfLoaded($event, 'modal')"
+                        (error)="onPdfError($event, 'modal')"
+                        style="display: block; width: 100%; height: 100%"
+                        aria-label="PDF document viewer"
+                    ></pdf-viewer>
+                </ng-container>
+                <div
+                    class="modal-sample-will"
+                    *ngIf="!isBrowser || modalPdfError || !modalPdfSrc"
+                >
+                    <div class="sample-will-content">
+                        <h2 class="sample-will-title" id="modal-title">
+                            LAST WILL AND TESTAMENT OF
+                        </h2>
+                        <h3 class="sample-will-name">Jane Doe</h3>
+                        <p class="sample-will-text" id="modal-description">
+                            Could not load PDF in expanded view.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Page Indicator -->
+        <div
+            class="modal-page-indicator-bottom"
+            *ngIf="modalPdfSrc && !modalPdfError"
+        >
+            Page {{ currentPage }} of {{ totalPagesModal || "..." }}.
+        </div>
+    </div>
+</div>
