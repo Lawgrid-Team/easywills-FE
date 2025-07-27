@@ -20,7 +20,7 @@ import { WillDataService } from '../../../core/services/Wizard/will-data.service
     ScheduleIntroComponent,
     ScheduleFormComponent,
     MatIconModule,
-    MatDialogModule 
+    MatDialogModule
   ],
   templateUrl: './schedule.component.html',
   styleUrl: './schedule.component.scss'
@@ -89,7 +89,7 @@ export class ScheduleComponent {
 
     // After closing the dialog
     dialogRef.afterClosed().subscribe(() => {
-       this.router.navigate(['/wiz/will/welcome']); // or this.step = 0; 
+       this.router.navigate(['/dashboard']); // or this.step = 0;
       // or);
     });
   }

@@ -56,7 +56,7 @@ export class UpgradeComponent {
 
   proceedToPayment() {
     // Example: pass selected plan via route state or query params
-    this.router.navigate(['/wiz/will/checkout'], {
+    this.router.navigate(['/wiz/will/verify-account'], {
       state: { plan: this.selectedPlan }
     });
   }

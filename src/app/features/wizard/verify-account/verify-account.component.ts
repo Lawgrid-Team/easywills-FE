@@ -17,11 +17,11 @@ import { WillDataService } from '../../../core/services/Wizard/will-data.service
   selector: 'app-verify-account',
   standalone: true,
   imports: [
-    ValidationStepsComponent, 
-    CommonModule, 
-    HeaderComponent, 
-    FooterComponent, 
-    VerifyInfoComponent, 
+    ValidationStepsComponent,
+    CommonModule,
+    HeaderComponent,
+    FooterComponent,
+    VerifyInfoComponent,
     VerifyIntroComponent
   ],
   templateUrl: './verify-account.component.html',
@@ -44,7 +44,7 @@ export class VerifyAccountComponent {
   this.router.navigate(['/wiz/will/schedule']);
 }
 
-  
+
   ngOnInit(): void {
     this.isFormValid = true;
   }
