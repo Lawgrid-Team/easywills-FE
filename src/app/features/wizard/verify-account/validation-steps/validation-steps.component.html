@@ -1,0 +1,69 @@
+<div class="min-h-screen">
+    <header class="container mx-auto px-4 py-6">
+        <div class="flex items-center">
+            <a routerLink="/wiz/welcome" class="text-3xl font-bold text-foreground">
+                <img src="svg/easywill_logo.svg" alt="EasyWill Logo" class="w-32">
+            </a>
+            <div class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center">
+                <img src="icons/icon_unverify.svg" alt="" srcset="">
+                <span>Unverified</span>
+            </div>
+        </div>
+    </header>
+
+   <main class="container mx-auto px-8 py-12">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+    
+    <!-- Left Section: Text -->
+    <div>
+      <h2 class="text-4xl font-bold font-DM_Serif text-easywills-black mb-4">Welcome!</h2>
+      <h3 class="text-4xl font-bold font-DM_Serif text-easywills-black mb-6">Let’s Validate Your Identity.</h3>
+      <p class="text-easywills-dark-grey text-lg leading-relaxed">
+        We understand that planning for the future can be a daunting task, but we’re here to guide you through this process with ease and clarity.
+      </p>
+    </div>
+
+    <!-- Right Section: Steps -->
+    <div class="space-y-6">
+      <!-- Step 1 -->
+      <div class="bg-easywills-white border border-border rounded-lg px-8 py-5 shadow-sm flex gap-4 items-start">
+        <div class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center flex-shrink-0">
+          <span class="text-lg font-semibold text-foreground">1</span>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-easywills-black">Verify your Identity</h4>
+          <p class="text-sm text-easywills-dark-grey">Upload necessary documents to verify identity.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="bg-easywills-white border border-border rounded-lg px-8 py-5 shadow-sm flex gap-4 items-start">
+        <div class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center flex-shrink-0">
+          <span class="text-lg font-semibold text-foreground">2</span>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-easywills-black">Schedule your signing</h4>
+          <p class="text-sm text-easywills-dark-grey">Choose a date and time for signing your will.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="bg-easywills-white border border-border rounded-lg px-8 py-5 shadow-sm flex gap-4 items-start">
+        <div class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center flex-shrink-0">
+          <span class="text-lg font-semibold text-foreground">3</span>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold text-easywills-black">Sign and validate your Will</h4>
+          <p class="text-sm text-easywills-dark-grey">Finalize it securely with your digital signature.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+    <div class="fixed bottom-0 right-20 w-dvw px-4 py-4 flex justify-end border-t border-border">
+        <button mat-flat-button color="primary" (click)="onGetStarted()">
+            Get Started
+        </button>
+    </div>
+</div>

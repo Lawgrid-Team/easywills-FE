@@ -6,6 +6,7 @@ import type {
     AssetInventoryData,
     EstateDistributionData,
     ExecutorAndWitnessData,
+    IdentityVerificationData,
 } from '../../models/interfaces/will-data.interface';
 
 @Injectable({
@@ -48,6 +49,8 @@ export class WillDataService {
         witnesses: [],
         hasWitnesses: false,
     };
+
+    private identityVerificationData!: IdentityVerificationData; 
 
     private initialEstateDistribution: EstateDistributionData = {
         sharingAsAWhole: true,
@@ -132,4 +135,26 @@ export class WillDataService {
         console.log('Saving will data:', this.willDataSubject.value);
         alert('Your will has been saved successfully!');
     }
+
+
+    // added this to save schedule
+    private scheduleInfo: { date: string; time: string } | null = null;
+
+    saveScheduleInfo(data: { date: string; time: string }): void {
+        this.scheduleInfo = data;
+    }
+
+    getScheduleInfo(): { date: string; time: string } | null {
+        return this.scheduleInfo;
+    }
+
+      saveIdentityVerification(data: IdentityVerificationData): void {
+    this.identityVerificationData = data;
+  }
+
+  getIdentityVerification(): IdentityVerificationData | null {
+    return this.identityVerificationData || null;
+  }
+
+
 }
