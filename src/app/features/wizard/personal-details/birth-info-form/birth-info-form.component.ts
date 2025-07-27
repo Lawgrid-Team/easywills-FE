@@ -48,6 +48,46 @@ export class BirthInfoFormComponent {
     form!: FormGroup;
     maxDate = new Date();
 
+    states = [
+        { value: 'abia', viewValue: 'Abia' },
+        { value: 'adamawa', viewValue: 'Adamawa' },
+        { value: 'akwa-ibom', viewValue: 'Akwa Ibom' },
+        { value: 'anambra', viewValue: 'Anambra' },
+        { value: 'bauchi', viewValue: 'Bauchi' },
+        { value: 'bayelsa', viewValue: 'Bayelsa' },
+        { value: 'benue', viewValue: 'Benue' },
+        { value: 'borno', viewValue: 'Borno' },
+        { value: 'cross-river', viewValue: 'Cross River' },
+        { value: 'delta', viewValue: 'Delta' },
+        { value: 'ebonyi', viewValue: 'Ebonyi' },
+        { value: 'edo', viewValue: 'Edo' },
+        { value: 'ekiti', viewValue: 'Ekiti' },
+        { value: 'enugu', viewValue: 'Enugu' },
+        { value: 'gombe', viewValue: 'Gombe' },
+        { value: 'imo', viewValue: 'Imo' },
+        { value: 'jigawa', viewValue: 'Jigawa' },
+        { value: 'kaduna', viewValue: 'Kaduna' },
+        { value: 'kano', viewValue: 'Kano' },
+        { value: 'katsina', viewValue: 'Katsina' },
+        { value: 'kebbi', viewValue: 'Kebbi' },
+        { value: 'kogi', viewValue: 'Kogi' },
+        { value: 'kwara', viewValue: 'Kwara' },
+        { value: 'lagos', viewValue: 'Lagos' },
+        { value: 'nasarawa', viewValue: 'Nasarawa' },
+        { value: 'niger', viewValue: 'Niger' },
+        { value: 'ogun', viewValue: 'Ogun' },
+        { value: 'ondo', viewValue: 'Ondo' },
+        { value: 'osun', viewValue: 'Osun' },
+        { value: 'oyo', viewValue: 'Oyo' },
+        { value: 'plateau', viewValue: 'Plateau' },
+        { value: 'rivers', viewValue: 'Rivers' },
+        { value: 'sokoto', viewValue: 'Sokoto' },
+        { value: 'taraba', viewValue: 'Taraba' },
+        { value: 'yobe', viewValue: 'Yobe' },
+        { value: 'zamfara', viewValue: 'Zamfara' },
+        { value: 'fct', viewValue: 'FCT' },
+    ];
+
     constructor(private fb: FormBuilder) {}
 
     ngOnInit(): void {
