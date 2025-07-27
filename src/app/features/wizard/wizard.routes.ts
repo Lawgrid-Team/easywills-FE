@@ -56,6 +56,28 @@ export const routes: Routes = [
                             ).then((m) => m.ExecutorAndWitnessesComponent),
                     },
                     {
+
+                        path: "schedule",
+                        loadComponent: () =>
+                            import(
+                                './schedule/schedule.component'
+                            ).then((m) => m.ScheduleComponent),
+                    },
+                    {
+                        path: "verify-account",
+                        loadComponent: () =>
+                            import(
+                                './verify-account/verify-account.component'
+                            ).then((m) => m.VerifyAccountComponent),
+                    },
+                     {
+                        path: "upgrade",
+                        loadComponent: () =>
+                            import(
+                                './upgrade/upgrade.component'
+                            ).then((m) => m.UpgradeComponent),
+                    },
+                     {
                         path: 'review-and-download',
                         loadComponent: () =>
                             import(

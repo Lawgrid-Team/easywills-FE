@@ -1,0 +1,50 @@
+<app-header></app-header>
+
+<div class="max-w-2xl mx-auto p-6">
+  <h2 class="text-3xl font-bold mb-2">Upgrade your Free Plan</h2>
+  <p class="text-gray-600 mb-6">
+    Select one of the paid packages to finalize your Will.
+  </p>
+
+  <div class="space-y-4">
+    <div
+      *ngFor="let plan of plans"
+      (click)="selectPlan(plan)"
+      class="border rounded-xl p-5 cursor-pointer shadow-sm transition-all"
+      [ngClass]="{
+        'border-primary ring-2 ring-primary bg-white': selectedPlan.name === plan.name,
+        'bg-gray-50 hover:bg-white': selectedPlan.name !== plan.name
+      }"
+    >
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-xl font-semibold">{{ plan.name }}</h3>
+        <span
+          *ngIf="plan.isCurrent"
+          class="text-xs font-semibold px-3 py-1 bg-gray-300 text-gray-800 rounded"
+        >
+          Current plan
+        </span>
+        <span *ngIf="!plan.isCurrent" class="text-lg font-bold">{{ plan.price }}</span>
+      </div>
+      <p class="text-sm text-gray-700">
+        {{ plan.description }}
+      </p>
+    </div>
+  </div>
+  <div class="mt-8 flex justify-end">
+  <button
+    class="bg-easywills-black text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition"
+    (click)="proceedToPayment()"
+  >
+    Continue
+  </button>
+</div>
+</div>
+
+<app-footer
+  [step]="0"
+  [isNextDisabled]="false"
+  (next)="proceedToPayment()"
+  
+></app-footer>
+
