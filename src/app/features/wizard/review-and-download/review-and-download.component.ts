@@ -144,6 +144,7 @@ export class ReviewAndDownloadComponent implements OnInit {
     }
 
     signAndValidate(): void {
+        this.router.navigate(['/wiz/will/upgrade']);
         /* ... */
     }
     downloadWatermarked(): void {

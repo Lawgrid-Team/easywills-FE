@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, OnInit, signal, inject } from '@angular/core';
 import {
     FormBuilder,
@@ -27,7 +28,7 @@ import { Router } from '@angular/router';
         MatIconModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule
+        RouterModule,
     ],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss',
@@ -41,9 +42,9 @@ export class LoginComponent implements OnInit {
         event.stopPropagation();
     }
 
-     public authService = inject(AuthService);
-     public notification = inject(NotificationService);
-     public router = inject(Router);
+    public authService = inject(AuthService);
+    public notification = inject(NotificationService);
+    public router = inject(Router);
 
     constructor(private fb: FormBuilder) {}
 
@@ -55,29 +56,20 @@ export class LoginComponent implements OnInit {
     }
 
     onSubmit() {
-
         if (this.form.valid) {
             this.authService.login(this.form.value).subscribe({
                 next: (res: any) => {
-
-                this.router.navigate(['/wiz'], { replaceUrl: true });
-                    // if (res.status === 200) {
-                    //     this.notification.showSuccess(
-                    //         res.message
-                    //     );
-                    //     this.router.navigate(['/wiz'], { replaceUrl: true });
-                    // } else {
-                    //     this.notification.showError(res.message);
-                    //     this.notification.showError(res.msg);
-                    // }
-
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const userRole = res.roles[0].authority;
+                    //console.log(res, 'res');
+                    this.router.navigate(['/wiz'], { replaceUrl: true });
                 },
                 error: (err: any) => {
                     this.notification.showError(err.error.message);
                 },
-                // complete: () => {
-                //     console.log('complete');
-                // },
+                complete: () => {
+                    this.notification.showSuccess('Login successful');
+                },
             });
         }
     }

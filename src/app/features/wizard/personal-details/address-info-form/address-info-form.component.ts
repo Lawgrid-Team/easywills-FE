@@ -3,11 +3,11 @@ import {
     Input,
     Output,
     EventEmitter,
-    type OnInit,
+    OnInit,
 } from '@angular/core';
 import {
     FormBuilder,
-    type FormGroup,
+    FormGroup,
     FormsModule,
     ReactiveFormsModule,
     Validators,
@@ -24,6 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 @Component({
     selector: 'app-address-info-form',
+    standalone: true,
     imports: [
         MatFormFieldModule,
         MatInputModule,
@@ -38,7 +39,7 @@ import { MatSelectModule } from '@angular/material/select';
     templateUrl: './address-info-form.component.html',
     styleUrl: './address-info-form.component.scss',
 })
-export class AddressInfoFormComponent {
+export class AddressInfoFormComponent implements OnInit {
     @Input() data!: PersonalDetailsData;
     @Output() updateData = new EventEmitter<Partial<PersonalDetailsData>>();
     @Output() next = new EventEmitter<void>();
@@ -46,39 +47,82 @@ export class AddressInfoFormComponent {
 
     form!: FormGroup;
 
-    cities = [
-        { value: 'new-york', viewValue: 'New York' },
-        { value: 'los-angeles', viewValue: 'Los Angeles' },
-        { value: 'chicago', viewValue: 'Chicago' },
-        { value: 'houston', viewValue: 'Houston' },
-        { value: 'phoenix', viewValue: 'Phoenix' },
-        { value: 'lagos', viewValue: 'Lagos' },
-        { value: 'abuja', viewValue: 'Abuja' },
-        { value: 'port-harcourt', viewValue: 'Port Harcourt' },
-        { value: 'kano', viewValue: 'Kano' },
-        { value: 'ibadan', viewValue: 'Ibadan' },
-    ];
+    cities: { value: string; viewValue: string }[] = [];
+
+    stateCityMap: Record<string, { value: string; viewValue: string }[]> = {
+        lagos: [
+            { value: 'ikeja', viewValue: 'Ikeja' },
+            { value: 'lekki', viewValue: 'Lekki' },
+            { value: 'ikorodu', viewValue: 'Ikorodu' },
+        ],
+        fct: [
+            { value: 'garki', viewValue: 'Garki' },
+            { value: 'maitama', viewValue: 'Maitama' },
+        ],
+        rivers: [
+            { value: 'port-harcourt', viewValue: 'Port Harcourt' },
+            { value: 'obio-akpor', viewValue: 'Obio-Akpor' },
+        ],
+        kano: [
+            { value: 'nassarawa', viewValue: 'Nassarawa' },
+            { value: 'tarauni', viewValue: 'Tarauni' },
+        ],
+        oyo: [
+            { value: 'ibadan', viewValue: 'Ibadan' },
+            { value: 'oyo-town', viewValue: 'Oyo Town' },
+        ],
+        edo: [{ value: 'benin-city', viewValue: 'Benin City' }],
+        enugu: [
+            { value: 'enugu-north', viewValue: 'Enugu North' },
+            { value: 'enugu-south', viewValue: 'Enugu South' },
+        ],
+        kaduna: [
+            { value: 'kaduna-north', viewValue: 'Kaduna North' },
+            { value: 'kaduna-south', viewValue: 'Kaduna South' },
+        ],
+    };
 
     states = [
-        { value: 'new-york', viewValue: 'New York' },
-        { value: 'california', viewValue: 'California' },
-        { value: 'texas', viewValue: 'Texas' },
-        { value: 'florida', viewValue: 'Florida' },
-        { value: 'illinois', viewValue: 'Illinois' },
-        { value: 'lagos', viewValue: 'Lagos' },
-        { value: 'fct', viewValue: 'FCT' },
-        { value: 'rivers', viewValue: 'Rivers' },
+        { value: 'abia', viewValue: 'Abia' },
+        { value: 'adamawa', viewValue: 'Adamawa' },
+        { value: 'akwa-ibom', viewValue: 'Akwa Ibom' },
+        { value: 'anambra', viewValue: 'Anambra' },
+        { value: 'bauchi', viewValue: 'Bauchi' },
+        { value: 'bayelsa', viewValue: 'Bayelsa' },
+        { value: 'benue', viewValue: 'Benue' },
+        { value: 'borno', viewValue: 'Borno' },
+        { value: 'cross-river', viewValue: 'Cross River' },
+        { value: 'delta', viewValue: 'Delta' },
+        { value: 'ebonyi', viewValue: 'Ebonyi' },
+        { value: 'edo', viewValue: 'Edo' },
+        { value: 'ekiti', viewValue: 'Ekiti' },
+        { value: 'enugu', viewValue: 'Enugu' },
+        { value: 'gombe', viewValue: 'Gombe' },
+        { value: 'imo', viewValue: 'Imo' },
+        { value: 'jigawa', viewValue: 'Jigawa' },
+        { value: 'kaduna', viewValue: 'Kaduna' },
         { value: 'kano', viewValue: 'Kano' },
+        { value: 'katsina', viewValue: 'Katsina' },
+        { value: 'kebbi', viewValue: 'Kebbi' },
+        { value: 'kogi', viewValue: 'Kogi' },
+        { value: 'kwara', viewValue: 'Kwara' },
+        { value: 'lagos', viewValue: 'Lagos' },
+        { value: 'nasarawa', viewValue: 'Nasarawa' },
+        { value: 'niger', viewValue: 'Niger' },
+        { value: 'ogun', viewValue: 'Ogun' },
+        { value: 'ondo', viewValue: 'Ondo' },
+        { value: 'osun', viewValue: 'Osun' },
         { value: 'oyo', viewValue: 'Oyo' },
+        { value: 'plateau', viewValue: 'Plateau' },
+        { value: 'rivers', viewValue: 'Rivers' },
+        { value: 'sokoto', viewValue: 'Sokoto' },
+        { value: 'taraba', viewValue: 'Taraba' },
+        { value: 'yobe', viewValue: 'Yobe' },
+        { value: 'zamfara', viewValue: 'Zamfara' },
+        { value: 'fct', viewValue: 'FCT' },
     ];
 
-    countries = [
-        { value: 'united-states', viewValue: 'United States' },
-        { value: 'canada', viewValue: 'Canada' },
-        { value: 'united-kingdom', viewValue: 'United Kingdom' },
-        { value: 'australia', viewValue: 'Australia' },
-        { value: 'nigeria', viewValue: 'Nigeria' },
-    ];
+    countries = [{ value: 'nigeria', viewValue: 'Nigeria' }];
 
     constructor(private fb: FormBuilder) {}
 
@@ -93,12 +137,21 @@ export class AddressInfoFormComponent {
             country: [this.data.country || 'nigeria', Validators.required],
         });
 
-        // Update form validity whenever the form value changes
+        // Populate cities if a state is already selected
+        if (this.data.state) {
+            this.cities = this.stateCityMap[this.data.state] || [];
+        }
+
+        // React to state changes
+        this.form.get('state')?.valueChanges.subscribe((selectedState) => {
+            this.cities = this.stateCityMap[selectedState] || [];
+            this.form.get('city')?.setValue(''); // Reset city selection
+        });
+
         this.form.statusChanges.subscribe(() => {
             this.setFormValidity.emit(this.form.valid);
         });
 
-        // Initial form validity
         this.setFormValidity.emit(this.form.valid);
     }
 

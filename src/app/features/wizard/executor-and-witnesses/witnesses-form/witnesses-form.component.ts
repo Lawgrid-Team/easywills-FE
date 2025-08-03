@@ -15,110 +15,109 @@ import { ExecutorAndWitnessData, Witness } from '../../../../core/models/interfa
 
 @Component({
   selector: 'app-witnesses-form',
-   imports: [
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MatSelectModule,
-        MatCheckboxModule,
-        MatDatepickerModule,
-        MatRadioModule,
-        MatCardModule,
-        CommonModule,
-    ],
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatRadioModule,
+    MatCardModule,
+    CommonModule,
+  ],
   templateUrl: './witnesses-form.component.html',
   styleUrl: './witnesses-form.component.scss',
 })
 export class WitnessesFormComponent {
-    @Input() data!: ExecutorAndWitnessData;
-    @Output() updateData = new EventEmitter<Partial<ExecutorAndWitnessData>>();
-    @Output() next = new EventEmitter<void>();
-    @Output() setFormValidity = new EventEmitter<boolean>();
+  @Input() data!: ExecutorAndWitnessData;
+  @Output() updateData = new EventEmitter<Partial<ExecutorAndWitnessData>>();
+  @Output() next = new EventEmitter<void>();
+  @Output() setFormValidity = new EventEmitter<boolean>();
 
-    witnesses: Witness[] = [];
-    isAddingWitness = false;
-    editingWitnessId: string | null = null;
+  witnesses: Witness[] = [];
+  isAddingWitness = false;
+  editingWitnessId: string | null = null;
 
-    witnessForm!: FormGroup;
+  witnessForm!: FormGroup;
 
-    relationshipOptions = [
-        { value: 'friend', viewValue: 'Friend' },
-        { value: 'relative', viewValue: 'Relative' },
-        { value: 'colleague', viewValue: 'Colleague' },
-        { value: 'neighbor', viewValue: 'Neighbor' },
-        { value: 'other', viewValue: 'Other' },
-    ];
+  relationshipOptions = [
+    { value: 'friend', viewValue: 'Friend' },
+    { value: 'relative', viewValue: 'Relative' },
+    { value: 'colleague', viewValue: 'Colleague' },
+    { value: 'neighbor', viewValue: 'Neighbor' },
+    { value: 'other', viewValue: 'Other' },
+  ];
 
-    constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {}
 
-    ngOnInit(): void {
-        this.witnesses = this.data.witnesses || [];
+  ngOnInit(): void {
+    this.witnesses = this.data?.witnesses || [];
 
-        this.witnessForm = this.fb.group({
-            type: ['individual', Validators.required],
-            firstName: ['', [Validators.required, Validators.minLength(2)]],
-            lastName: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
-            phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-            relationship: ['', Validators.required],
-        });
+    this.witnessForm = this.fb.group({
+      type: ['individual', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      relationship: ['', Validators.required],
+    });
 
+    // Initial form validity
+    this.setFormValidity.emit(true);
+  }
 
-        // Initial form validity
-        this.setFormValidity.emit(true);
+  handleSaveWitness(): void {
+    if (this.witnessForm.valid) {
+      const witnessData = {
+        ...this.witnessForm.value,
+        id: this.editingWitnessId ?? uuidv4(),
+      } as Witness;
+
+      if (this.editingWitnessId) {
+        // Update existing witness
+        this.witnesses = this.witnesses.map((w) =>
+          w.id === this.editingWitnessId ? witnessData : w
+        );
+      } else {
+        // Add new witness
+        this.witnesses = [...this.witnesses, witnessData];
+      }
+
+      this.updateData.emit({ witnesses: this.witnesses });
+      this.witnessForm.reset({ type: 'individual' });
+      this.isAddingWitness = false;
+      this.editingWitnessId = null;
+    } else {
+      this.witnessForm.markAllAsTouched();
     }
+  }
 
-    handleSaveWitness(): void {
-        if (this.witnessForm.valid) {
-            if (this.editingWitnessId) {
-                // Update existing witness
-                this.witnesses = this.witnesses.map((witness) =>
-                    witness.id === this.editingWitnessId
-                        ? {
-                              ...this.witnessForm.value,
-                              id: this.editingWitnessId,
-                          }
-                        : witness
-                );
-            } else {
-                // Add new witness
-                const newWitness = {
-                    ...this.witnessForm.value,
-                    id: uuidv4(),
-                } as Witness;
-                this.witnesses = [...this.witnesses, newWitness];
-            }
+  handleEditWitness(witness: Witness): void {
+    this.witnessForm.patchValue({
+      type: 'individual',
+      firstName: witness.firstName,
+      lastName: witness.lastName,
+      email: witness.email,
+      phoneNumber: witness.phoneNumber,
+      relationship: witness.relationship,
+    });
+    this.editingWitnessId = witness.id;
+    this.isAddingWitness = true;
+  }
 
-            this.updateData.emit({ witnesses: this.witnesses });
-            this.witnessForm.reset({ type: 'individual' });
-            this.isAddingWitness = false;
-            this.editingWitnessId = null;
-        }
-    }
+  handleAddWitness(): void {
+    this.isAddingWitness = true;
+    this.editingWitnessId = null;
+    this.witnessForm.reset({ type: 'individual' });
+  }
 
-    handleEditWitness(witness: Witness): void {
-        this.witnessForm.patchValue({
-            firstName: witness.firstName,
-            lastName: witness.lastName,
-            email: witness.email,
-            phone: witness.phoneNumber,
-            relationship: witness.relationship,
-        });
-        this.editingWitnessId = witness.id;
-        this.isAddingWitness = true;
-    }
-
-    handleAddWitness(): void {
-        this.isAddingWitness = true;
-        this.editingWitnessId = null;
-        this.witnessForm.reset();
-    }
-
-    onSubmit(): void {
-        this.updateData.emit({ witnesses: this.witnesses });
-        this.next.emit();
-    }
+  onSubmit(): void {
+    this.updateData.emit({ witnesses: this.witnesses });
+    this.next.emit();
+  }
 }

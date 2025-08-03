@@ -1,12 +1,14 @@
-import { HttpClient } from '@angular/common/http';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../utils/api.service';
-import { map, catchError, throwError } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { AppResponseModel } from '../models'
-
-
+import { AppResponseModel } from '../models';
+import { CookiesStorageService } from '../utils/cookies-storage.service';
+import { NotificationService } from '../utils/notification.service';
+import { AuthUser } from '../models/interfaces/user.interface';
+import { Router } from '@angular/router';
 
 // declare const process: {
 //     env: {
@@ -24,7 +26,7 @@ const routes = {
     resetPassword: 'api/v1/auth/reset-password',
     verifyEmail: 'api/v1/auth/verify-email?token=',
     changePassword: 'user/api/v1/change-password',
-    profile: 'user/api/v1/profile',
+    profile: 'user/api/v1/me',
     register: 'api/v1/auth/register',
 };
 
@@ -34,9 +36,25 @@ const routes = {
 export class AuthService {
     private baseURL = environment.API_URL;
     // public apiUrl = process.env.API_URL;
-    //constructor(private http: HttpClient, private apiService: ApiService) {}
+
+    private userSubject: BehaviorSubject<any>;
+    public user: Observable<AuthUser>;
+
+    public get userValue(): AuthUser {
+        return this.userSubject.value;
+    }
 
     private apiService = inject(ApiService);
+    private cookiesStorageService = inject(CookiesStorageService);
+    private notify = inject(NotificationService);
+    private router = inject(Router);
+
+    constructor() {
+        this.userSubject = new BehaviorSubject<AuthUser>(
+            this.cookiesStorageService.getUser()!
+        );
+        this.user = this.userSubject.asObservable();
+    }
 
     register(data: any) {
         const { name, email, password, passwordValid } = data;
@@ -61,26 +79,27 @@ export class AuthService {
             .post<any>(this.baseURL + routes.login, userDetails)
             .pipe(
                 tap((user) => {
-                    //   this.userSubject.next(user);
-                    //   this.cookiesStorageService.clearStorage();
-                    //   this.cookiesStorageService.saveRefreshToken(user.refreshToken);
-                    //   this.cookiesStorageService.saveToken(user.token);
-                    //   this.cookiesStorageService.saveUser(user);
-                    // //console.log('hi')
-                    // this.saveUserProfile();
+                    this.userSubject.next(user);
+                    this.cookiesStorageService.clearStorage();
+                    this.cookiesStorageService.saveRefreshToken(
+                        user.refreshToken
+                    );
+                    this.cookiesStorageService.saveToken(user.token);
+                    this.cookiesStorageService.saveUser(user);
+                    //this.saveUserProfile();
                 })
             );
     }
 
-    saveUserProfile() {
-        return this.apiService
-            .get<any>(this.baseURL + `${routes.profile}`)
-            .subscribe({
-                next: (res) => {
-                    // this.cookiesStorageService.saveUserProfile(res)
-                },
-            });
-    }
+    // saveUserProfile() {
+    //     return this.apiService
+    //         .get<any>(this.baseURL + `${routes.profile}`)
+    //         .subscribe({
+    //             next: (res) => {
+    //                 this.cookiesStorageService.saveUserProfile(res);
+    //             },
+    //         });
+    // }
 
     verifyToken(token: string) {
         return this.apiService.get(
@@ -88,15 +107,51 @@ export class AuthService {
         );
     }
 
+    refreshToken() {
+        return this.apiService
+            .post<AuthUser>(
+                this.baseURL +
+                    `${
+                        routes.refreshToken
+                    }${this.cookiesStorageService.getRefreshToken()}`,
+                null
+            )
+            .pipe(
+                tap((user) => {
+                    const { token } = user;
+                    this.userSubject.next({ ...this.userValue, token: token });
+                })
+            );
+    }
+
     forgotPassword(email: string) {
         return this.apiService.get<AppResponseModel<any>>(
-          this.baseURL + `${routes.forgotPassword}${email}`
+            this.baseURL + `${routes.forgotPassword}${email}`
         );
-      }
-      resetPassword(payload: any) {
+    }
+    resetPassword(payload: any) {
         return this.apiService.put<AppResponseModel<any>>(
-          this.baseURL + routes.resetPassword,
-          payload
+            this.baseURL + routes.resetPassword,
+            payload
         );
-      }
+    }
+
+    logout() {
+        return this.apiService
+            .post<AppResponseModel<any>>(
+                this.baseURL + `${routes.logout}`,
+                null
+            )
+            .subscribe({
+                next: (res) => {
+                    this.notify.showSuccess(res.message);
+                    this.onLogout();
+                },
+            });
+    }
+    onLogout() {
+        this.cookiesStorageService.clearStorage();
+        this.userSubject.next(null);
+        this.router.navigate(['/login'], { replaceUrl: true });
+    }
 }

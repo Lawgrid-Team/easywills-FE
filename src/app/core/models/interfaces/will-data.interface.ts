@@ -130,3 +130,9 @@ export interface WillData {
     estateDistribution: EstateDistributionData;
     executorAndWitness: ExecutorAndWitnessData;
 }
+
+export interface IdentityVerificationData {
+    documentType: string;
+    idNumber: string;
+    expiryDate: Date | string;
+}

@@ -1,0 +1,32 @@
+<div class="bg-white rounded-xl p-6 shadow h-full">
+    <h2 class="text-xl font-semibold text-gray-800 mb-1">Recent Activity</h2>
+    <p class="text-sm text-gray-500 mb-2">
+        Timeline of your latest actions and updates
+    </p>
+
+    <!-- Header Row -->
+    <div class="grid grid-cols-2 gap-4 mb-3 px-4 py-6 bg-gray-100 rounded-md">
+        <div class="text-xs font-medium text-gray-600">Date & Time</div>
+        <div class="text-xs font-medium text-gray-600">Activity</div>
+    </div>
+    <!-- Activity List -->
+    <div class="space-y-9">
+        <!-- Changed space-y-4 to space-y-9 -->
+        <div
+            *ngFor="let activity of activities"
+            class="grid grid-cols-2 gap-4 items-start px-4"
+        >
+            <div>
+                <p class="text-sm text-gray-500">
+                    <span class="mr-2">📅</span>{{ activity.date }},
+                    {{ activity.time }}
+                </p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-700 font-medium">
+                    {{ activity.description }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

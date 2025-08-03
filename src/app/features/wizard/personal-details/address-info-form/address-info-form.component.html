@@ -1,5 +1,7 @@
 <div>
-    <h2 class="text-3xl font-bold  text-easywills-black font-DM_Serif mb-8">Where do you live?</h2>
+    <h2 class="text-3xl font-bold text-easywills-black font-DM_Serif mb-8">
+        Where do you live?
+    </h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
         <div>
@@ -8,8 +10,11 @@
                 <mat-icon class="ml-2 text-sm">help</mat-icon>
             </label>
             <mat-form-field appearance="outline" class="w-full">
-                <!-- <mat-label>Street address</mat-label> -->
-                <input matInput formControlName="streetAddress" placeholder="street number, unit number, street name">
+                <input
+                    matInput
+                    formControlName="streetAddress"
+                    placeholder="street number, unit number, street name"
+                />
                 <mat-error *ngIf="form.get('streetAddress')?.hasError('required')">
                     Street address is required
                 </mat-error>
@@ -20,13 +25,27 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+             <div>
+                <label class="block mb-2">State/Province</label>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-select formControlName="state">
+                        <mat-option *ngFor="let state of states" [value]="state.value">
+                            {{ state.viewValue }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="form.get('state')?.hasError('required')">
+                        State/Province is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
             <div>
                 <label class="block mb-2">City</label>
                 <mat-form-field appearance="outline" class="w-full">
-                    <!-- <mat-label>Please select</mat-label> -->
                     <mat-select formControlName="city">
                         <mat-option *ngFor="let city of cities" [value]="city.value">
-                            {{city.viewValue}}
+                            {{ city.viewValue }}
                         </mat-option>
                     </mat-select>
                     <mat-error *ngIf="form.get('city')?.hasError('required')">
@@ -35,29 +54,14 @@
                 </mat-form-field>
             </div>
 
-            <div>
-                <label class="block mb-2">State/Province</label>
-                <mat-form-field appearance="outline" class="w-full">
-                    <!-- <mat-label>Please select</mat-label> -->
-                    <mat-select formControlName="state">
-                        <mat-option *ngFor="let state of states" [value]="state.value">
-                            {{state.viewValue}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="form.get('state')?.hasError('required')">
-                        State/Province is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
         </div>
 
         <div>
             <label class="block mb-2">Country of resident</label>
             <mat-form-field appearance="outline" class="w-full">
-                <!-- <mat-label>Country</mat-label> -->
                 <mat-select formControlName="country">
                     <mat-option *ngFor="let country of countries" [value]="country.value">
-                        {{country.viewValue}}
+                        {{ country.viewValue }}
                     </mat-option>
                 </mat-select>
                 <mat-error *ngIf="form.get('country')?.hasError('required')">

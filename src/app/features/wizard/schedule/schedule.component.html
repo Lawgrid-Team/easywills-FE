@@ -1,0 +1,31 @@
+<div class="min-h-screen relative">
+  <app-header></app-header>
+
+  <main class="container mx-auto px-4 py-8 pt-16">
+    <div class="max-w-3xl mx-auto">
+      <ng-container [ngSwitch]="step">
+        <app-schedule-intro *ngSwitchCase="0" (next)="handleNext()"></app-schedule-intro>
+
+        <!-- ✅ This stays visible under the popup -->
+        <app-schedule-form
+          *ngSwitchCase="1"
+          [data]="personalDetails"
+          [witnesses]="executorAndWitnessData.witnesses"
+          (submitted)="handleFormSubmit($event)"
+          (setFormValidity)="setFormValidity($event)"
+        ></app-schedule-form>
+      </ng-container>
+    </div>
+
+    <!-- ✅ Confirmation popup overlays -->
+    
+
+  </main>
+
+  <app-footer
+    [step]="step"
+    [isNextDisabled]="!isFormValid"
+    (back)="handleBack()"
+    (next)="handleNext()"
+  ></app-footer>
+</div>

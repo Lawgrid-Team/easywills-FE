@@ -1,4 +1,7 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import {
+    type ApplicationConfig,
+    provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -22,6 +25,6 @@ export const appConfig: ApplicationConfig = {
             provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
             useValue: { appearance: 'outline', subscriptSizing: 'dynamic' },
         },
-        provideNativeDateAdapter()
+        provideNativeDateAdapter(),
     ],
 };
