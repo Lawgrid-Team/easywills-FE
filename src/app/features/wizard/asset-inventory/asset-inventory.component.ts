@@ -66,7 +66,7 @@ export class AssetInventoryComponent {
     handleNext(): void {
         if (this.step === 1) {
             this.willDataService.submitAssetInventory(this.data);
-            // this.router.navigate(['/wiz/will/estate-distribution']);
+            this.router.navigate(['/wiz/will/estate-distribution']);
         } else {
             this.step++;
             window.scrollTo(0, 0);
@@ -95,7 +95,6 @@ export class AssetInventoryComponent {
     }
 
     handleAssetSaved(assetType: string): void {
-        console.log('Asset saved:', assetType);
         if (!this.data.completedAssetTypes.includes(assetType)) {
             this.updateData({
                 completedAssetTypes: [
