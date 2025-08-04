@@ -299,7 +299,7 @@ export class WillDataService {
                 return {
                     ...data,
                     ...address,
-                    hasUsedOtherNames: data.preferredName != "" || false,
+                    hasUsedOtherNames: (data.preferredName != null && data.preferredName != "") || false,
                     otherFullName: data.preferredName || '',
                 };
             }));
