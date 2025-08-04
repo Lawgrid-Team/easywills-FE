@@ -58,7 +58,7 @@ export class BeneficiariesFormComponent {
         this.beneficiaries = this.data.beneficiaries || [];
 
         this.beneficiaryForm = this.fb.group({
-            type: ['individual', Validators.required],
+            type: ['INDIVIDUAL', Validators.required],
             firstName: ['', [Validators.required, Validators.minLength(2)]],
             lastName: ['', Validators.required],
             relationship: ['', Validators.required],
@@ -70,7 +70,7 @@ export class BeneficiariesFormComponent {
             const lastNameControl = this.beneficiaryForm.get('lastName');
             const dateOfBirthControl = this.beneficiaryForm.get('dateOfBirth');
 
-            if (type === 'individual') {
+            if (type === 'INDIVIDUAL') {
                 lastNameControl?.setValidators([Validators.required]);
                 dateOfBirthControl?.setValidators([Validators.required]);
             } else {
@@ -102,13 +102,13 @@ export class BeneficiariesFormComponent {
                 // Add new beneficiary
                 const newBeneficiary = {
                     ...this.beneficiaryForm.value,
-                    id: uuidv4(),
+                    // id: uuidv4(),
                 } as Beneficiary;
                 this.beneficiaries = [...this.beneficiaries, newBeneficiary];
             }
 
             this.updateData.emit({ beneficiaries: this.beneficiaries });
-            this.beneficiaryForm.reset({ type: 'individual' });
+            this.beneficiaryForm.reset({ type: 'INDIVIDUAL' });
             this.isAddingBeneficiary = false;
             this.editingBeneficiaryId = null;
         }
@@ -129,7 +129,7 @@ export class BeneficiariesFormComponent {
     handleAddBeneficiary(): void {
         this.isAddingBeneficiary = true;
         this.editingBeneficiaryId = null;
-        this.beneficiaryForm.reset({ type: 'individual' });
+        this.beneficiaryForm.reset({ type: 'INDIVIDUAL' });
     }
 
     onSubmit(): void {

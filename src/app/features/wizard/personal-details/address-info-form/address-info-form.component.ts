@@ -150,6 +150,9 @@ export class AddressInfoFormComponent implements OnInit {
 
         this.form.statusChanges.subscribe(() => {
             this.setFormValidity.emit(this.form.valid);
+            if (this.form.valid) {
+                this.updateData.emit(this.form.value);
+            }
         });
 
         this.setFormValidity.emit(this.form.valid);

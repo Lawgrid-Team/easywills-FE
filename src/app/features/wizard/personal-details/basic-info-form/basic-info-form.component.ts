@@ -78,6 +78,9 @@ export class BasicInfoFormComponent {
         // Update form validity whenever the form value changes
         this.form.statusChanges.subscribe(() => {
             this.setFormValidity.emit(this.form.valid);
+            if (this.form.valid) {
+                this.updateData.emit(this.form.value);
+            }
         });
 
         // Initial form validity
