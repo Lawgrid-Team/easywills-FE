@@ -37,13 +37,13 @@
                     <mat-form-field appearance="outline" class="w-full">
                         <!-- <mat-label>Select type</mat-label> -->
                         <mat-select formControlName="type">
-                            <mat-option value="individual">Individual</mat-option>
-                            <mat-option value="organization">Charity Organization</mat-option>
+                            <mat-option value="INDIVIDUAL">Individual</mat-option>
+                            <mat-option value="ORGANIZATION">Charity Organization</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </div>
 
-                <ng-container *ngIf="beneficiaryForm.get('type')?.value === 'individual'">
+                <ng-container *ngIf="beneficiaryForm.get('type')?.value === 'INDIVIDUAL'">
                     <div>
                         <label class="block mb-2">What is the name of the individual?</label>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -100,7 +100,7 @@
                     </div>
                 </ng-container>
 
-                <ng-container class="mb-2" *ngIf="beneficiaryForm.get('type')?.value === 'organization'">
+                <ng-container class="mb-2" *ngIf="beneficiaryForm.get('type')?.value === 'ORGANIZATION'">
                     <div>
                         <label class="block mb-2">What is the name of the organization?</label>
                         <mat-form-field appearance="outline" class="w-full">

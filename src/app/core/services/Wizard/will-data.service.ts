@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, type Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { ApiService } from '../../utils/api.service';
+import { tap } from 'rxjs/operators';
+import { BehaviorSubject, type Observable, forkJoin, map } from 'rxjs';
 import type {
     WillData,
     PersonalDetailsData,
@@ -7,12 +9,26 @@ import type {
     EstateDistributionData,
     ExecutorAndWitnessData,
     IdentityVerificationData,
+    RealEstateProperty,
+    BankAccount,
 } from '../../models/interfaces/will-data.interface';
+import { environment } from '../../../../environments/environment';
+
+const routes = {
+    testator: 'api/v1/testators',
+    updateTestator: 'api/v1/testators',
+    beneficiaries: 'api/v1/beneficiaries',
+    updateBeneficiaries: 'api/v1/beneficiaries',
+    assets: 'api/v1/assets',
+    updateAssets: 'api/v1/assets',
+}
 
 @Injectable({
     providedIn: 'root',
 })
 export class WillDataService {
+         private baseURL = environment.API_URL;
+      private apiService = inject(ApiService);
     constructor() {}
 
     private initialPersonalDetails: PersonalDetailsData = {
@@ -50,7 +66,7 @@ export class WillDataService {
         hasWitnesses: false,
     };
 
-    private identityVerificationData!: IdentityVerificationData; 
+    private identityVerificationData!: IdentityVerificationData;
 
     private initialEstateDistribution: EstateDistributionData = {
         sharingAsAWhole: true,
@@ -156,5 +172,263 @@ export class WillDataService {
     return this.identityVerificationData || null;
   }
 
+    submitPersonalDetails(data: Partial<PersonalDetailsData>) {
+        const currentData = this.willDataSubject.value;
+        this.willDataSubject.next({
+            ...currentData,
+            personalDetails: {
+                ...currentData.personalDetails,
+                ...data,
+            },
+        });
+
+        const updatedPersonalDetails = this.createPersonalDetailsPayload(data)
+            this.apiService
+            .post<any>(this.baseURL + routes.updateTestator, updatedPersonalDetails)
+            .pipe()
+            .subscribe();
+
+        const updatedBeneficiaries = this.createBeneficiariesPayload(data);
+        this.apiService
+            .post<any>(this.baseURL + routes.updateBeneficiaries, updatedBeneficiaries)
+            .pipe(
+                tap((beneficiaries: any[]) => {
+                    console.log('Beneficiaries updated successfully:', beneficiaries);
+
+                    beneficiaries.forEach(beneficiary => {
+                        if (beneficiary.relationship === 'OTHER') {
+                            beneficiary.relationship = beneficiary.otherRelationship;
+                            }
+                        });
+                    const b = this.extractBeneficiaries(beneficiaries)
+                    this.updatePersonalDetails({
+                        beneficiaries: b.beneficiaries,
+                        children: b.children,
+                        spouses: b.spouses,
+                        hasChildren: b.children.length > 0,
+                        isMarried: b.spouses.length > 0,
+                    });
+                })
+            ).subscribe();
+
+    }
+
+    submitAssetInventory(data: Partial<AssetInventoryData>): void {
+        const currentData = this.willDataSubject.value;
+        this.willDataSubject.next({
+            ...currentData,
+            assetInventory: {
+                ...currentData.assetInventory,
+                ...data,
+            },
+        });
+
+        const updatedAssets = this.createAssetPayload(data);
+        this.apiService.post<any>(this.baseURL + routes.updateAssets, updatedAssets)
+            .pipe(
+                tap((assets) => {
+                const { realEstateProperties, bankAccounts } = this.extractAssets(assets);
+
+                this.updateAssetInventory({
+                    realEstateProperties,
+                    bankAccounts
+                });
+
+                })
+            ).subscribe();
+
+    }
+
+    getPersonalDetailsFromBE(): Observable<PersonalDetailsData> {
+        return forkJoin({
+            beneficiaries: this.getBeneficiaries(),
+            testator: this.getTestator()
+        }).pipe(
+            tap(({ beneficiaries, testator }: any) => {
+                this.updatePersonalDetails({
+                    hasChildren: beneficiaries.children.length > 0,
+                    isMarried: beneficiaries.spouses.length > 0,
+                    spouses: beneficiaries.spouses,
+                    children: beneficiaries.children,
+                    beneficiaries: beneficiaries.beneficiaries,
+                    ...testator
+                });
+            }),
+            map(() => this.willDataSubject.value.personalDetails)
+        );
+    }
+
+    getAssetInventoryFromBE(): Observable<AssetInventoryData> {
+        return this.apiService.get<any>(this.baseURL + routes.assets)
+        .pipe(
+            tap((data: any[]) => {
+                const { realEstateProperties, bankAccounts } = this.extractAssets(data);
+
+                this.updateAssetInventory({
+                    realEstateProperties,
+                    bankAccounts
+                });
+            }),
+            map(() => this.willDataSubject.value.assetInventory)
+        );
+    }
+
+    getBeneficiaries(): any {
+        return this.apiService.get<any>(this.baseURL + routes.beneficiaries)
+        .pipe(
+            map((data: any[]) => {
+                return this.extractBeneficiaries(data);
+            })
+        );
+    }
+
+    getTestator(): any {
+        return this.apiService.get<any>(this.baseURL + routes.testator)
+        .pipe(
+            map((data: any) => {
+                let address = {};
+                if(data.address) {
+                    address = {
+                        streetAddress: data.address.primaryHomeAddress || '',
+                        city: data.address.city || '',
+                        state: data.address.state || '',
+                        country: data.address.country || 'nigeria',
+                    }
+                }
+
+                return {
+                    ...data,
+                    ...address,
+                    hasUsedOtherNames: data.preferredName != "" || false,
+                    otherFullName: data.preferredName || '',
+                };
+            }));
+    }
+
+    extractBeneficiaries(data: any[]) {
+        const children = data.filter(b => b.relationship === 'CHILD');
+        const spouses = data.filter(b => b.relationship === 'SPOUSE');
+        const beneficiaries = data.filter(
+            b => b.relationship !== 'CHILD' && b.relationship !== 'SPOUSE'
+        );
+        return { children, spouses, beneficiaries };
+    }
+
+    extractAssets(data: any[]) {
+        let realEstateProperties: RealEstateProperty[];
+        let bankAccounts: BankAccount[];
+        if (data.length > 0) {
+            realEstateProperties = data.filter(asset => asset.assetType === 'REAL_ESTATE')
+                .map(asset => ({
+                    id: asset.id,
+                    propertyType: asset.propertyType,
+                    propertyTitle: asset.propertyTitle,
+                    address: asset.address,
+                    city: asset.city,
+                    state: asset.state,
+                    country: asset.country,
+                    ownershipType: asset.ownershipType
+                }));
+            bankAccounts = data.filter(asset => asset.assetType === 'BANK_ACCOUNT')
+                .map(asset => ({
+                    id: asset.id,
+                    accountType: asset.accountType,
+                    institution: asset.bankName,
+                    accountNumber: asset.accountNumber
+                }));
+        } else {
+            realEstateProperties = [];
+            bankAccounts = [];
+        }
+        return { realEstateProperties, bankAccounts };
+    }
+
+    // create BE request payload from the
+    createPersonalDetailsPayload(data: Partial<PersonalDetailsData>) {
+        return {
+            title: data.title,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            otherNames: data.otherNames,
+            displayName: data.firstName + " " + data.lastName,
+            preferredName: data.otherFullName,
+            dateOfBirth: data.dateOfBirth,
+            stateOfOrigin: data.stateOfOrigin,
+            address: {
+                primaryHomeAddress: data.streetAddress,
+                city: data.city,
+                state: data.state,
+                country: data.country,
+            }
+        };
+    }
+
+    createBeneficiariesPayload(data: Partial<PersonalDetailsData>) {
+        let beneficiaries: any[] = [];
+        if (data.children != null && data.children.length > 0) {
+            beneficiaries = beneficiaries.concat(data.children.map(child => ({
+                ...child,
+                relationship: 'CHILD',
+            })));
+        }
+
+        if (data.spouses != null && data.spouses.length > 0) {
+            beneficiaries = beneficiaries.concat(data.spouses.map(spouse => ({
+                ...spouse,
+                relationship: 'SPOUSE',
+            })));
+        }
+
+        if (data.beneficiaries != null && data.beneficiaries.length > 0) {
+            beneficiaries = beneficiaries.concat(data.beneficiaries.map(beneficiary => ({
+                ...beneficiary,
+                relationship: 'OTHER',
+                otherRelationship: beneficiary.relationship || '',
+
+            })));
+        }
+
+        return {
+            beneficiaries,
+            deletedIds: []
+        } ;
+
+    }
+
+    createAssetPayload(data: Partial<AssetInventoryData>) {
+        let assets: any[] = [];
+        if (data.realEstateProperties && data.realEstateProperties.length > 0) {
+            assets = assets.concat(data.realEstateProperties.map(property => {
+                return {
+                    id: property.id,
+                    assetType: 'REAL_ESTATE',
+                    propertyType: property.propertyType,
+                    propertyTitle: property.propertyTitle,
+                    address: property.address,
+                    city: property.city,
+                    state: property.state,
+                    country: property.country,
+                    ownershipType: property.ownershipType
+                };
+
+            }));
+        }
+        if (data.bankAccounts && data.bankAccounts.length > 0) {
+            assets = assets.concat(data.bankAccounts.map(account => {
+                return {
+                    id: account.id,
+                    assetType: 'BANK_ACCOUNT',
+                    accountType: account.accountType,
+                    bankName: account.institution,
+                    accountNumber: account.accountNumber
+                };
+            }));
+        }
+
+        return {
+            assets,
+            deletedIds: []
+        } ;
+    }
 
 }

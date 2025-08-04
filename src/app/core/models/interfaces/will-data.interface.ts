@@ -35,7 +35,7 @@ export interface Witness {
 
 export interface Beneficiary {
     id: string;
-    type: 'individual' | 'organization';
+    type: 'INDIVIDUAL' | 'ORGANIZATION';
     firstName: string;
     lastName: string;
     relationship: string;
