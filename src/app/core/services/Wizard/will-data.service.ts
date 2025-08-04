@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../../utils/api.service';
 import { tap } from 'rxjs/operators';
-import { BehaviorSubject, type Observable, forkJoin, map } from 'rxjs';
+import { BehaviorSubject, type Observable, firstValueFrom, forkJoin, map } from 'rxjs';
 import type {
     WillData,
     PersonalDetailsData,
@@ -15,6 +15,7 @@ import type {
 import { environment } from '../../../../environments/environment';
 
 const routes = {
+    draftWill: 'api/v1/wills',
     testator: 'api/v1/testators',
     updateTestator: 'api/v1/testators',
     beneficiaries: 'api/v1/beneficiaries',
@@ -172,6 +173,16 @@ export class WillDataService {
     return this.identityVerificationData || null;
   }
 
+    async draftWill(): Promise<any> {
+    return await firstValueFrom(
+        this.apiService.post<any>(this.baseURL + routes.draftWill).pipe(
+            tap((response: any) => {
+                // console.log('Draft will created successfully:', response);
+            })
+        )
+    );
+}
+
     submitPersonalDetails(data: Partial<PersonalDetailsData>) {
         const currentData = this.willDataSubject.value;
         this.willDataSubject.next({
@@ -193,8 +204,6 @@ export class WillDataService {
             .post<any>(this.baseURL + routes.updateBeneficiaries, updatedBeneficiaries)
             .pipe(
                 tap((beneficiaries: any[]) => {
-                    console.log('Beneficiaries updated successfully:', beneficiaries);
-
                     beneficiaries.forEach(beneficiary => {
                         if (beneficiary.relationship === 'OTHER') {
                             beneficiary.relationship = beneficiary.otherRelationship;
