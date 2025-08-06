@@ -13,6 +13,7 @@ import type {
     BankAccount,
 } from '../../models/interfaces/will-data.interface';
 import { environment } from '../../../../environments/environment';
+import { BeneficiaryShare, AssetType, Asset, BeneficiaryAssignment } from '../../models/interfaces/asset.interface';
 
 const routes = {
     draftWill: 'api/v1/wills',
@@ -22,6 +23,8 @@ const routes = {
     updateBeneficiaries: 'api/v1/beneficiaries',
     assets: 'api/v1/assets',
     updateAssets: 'api/v1/assets',
+    assetsDistribution: 'api/v1/distributions',
+    updateAssetsDistribution: 'api/v1/distributions',
 }
 
 @Injectable({
@@ -248,6 +251,39 @@ export class WillDataService {
 
     }
 
+    submitEstateDistribution() {
+        const distribution = this.willDataSubject.value.estateDistribution;
+        const distributionPayload: any = {
+            type: distribution.sharingAsAWhole ? 'WHOLE' : 'INDIVIDUAL',
+            wholeDistributionDetails: [],
+            individualDistributionDetails: []
+        }
+        if(distribution.sharingAsAWhole){
+            const beneficiaries = distribution.beneficiaryShares || {};
+            distributionPayload.wholeDistributionDetails = Object.keys(beneficiaries || {}).map(beneficiaryId => (
+                {
+                    beneficiaryId: beneficiaryId,
+                    percentage: beneficiaries[beneficiaryId]
+                }))
+
+        } else {
+            const beneficiaries = distribution.individualAssetAssignments || {};
+            const assetIdToType: any = this.getAssetIdToTypeMap();
+            distributionPayload.individualDistributionDetails = Object.keys(beneficiaries || {}).map(assetId =>{
+                return {
+                    assetId: assetId,
+                    assetType: assetIdToType[assetId].type,
+                    distributionDetails: beneficiaries[assetId]
+                }
+            })
+        }
+
+        this.apiService.post<any>(this.baseURL + routes.updateAssetsDistribution, distributionPayload)
+        .pipe()
+        .subscribe();
+
+    }
+
     getPersonalDetailsFromBE(): Observable<PersonalDetailsData> {
         return forkJoin({
             beneficiaries: this.getBeneficiaries(),
@@ -279,6 +315,53 @@ export class WillDataService {
                 });
             }),
             map(() => this.willDataSubject.value.assetInventory)
+        );
+    }
+
+    getAssetDistribution(): Observable<EstateDistributionData> {
+        let isSharingAsAWhole = true;
+        const beneficiaryShares: { [key: string]: number } = {};
+        const individualAssetAssignments: { [assetId: string]: BeneficiaryAssignment[] } = {};
+
+        return this.apiService.get<any>(this.baseURL + routes.assetsDistribution)
+            .pipe(
+                tap((data: any[]) => {
+                    if ("WHOLE" == data[0]?.type) {
+                        isSharingAsAWhole = true;
+                        data[0].distributionDetails.forEach((detail: any) => {
+                            beneficiaryShares[detail.beneficiary.id] = detail.percentage;
+                        });
+                    } else if ("INDIVIDUAL" == data[0]?.type) {
+                        isSharingAsAWhole = false;
+                        data.forEach((distribution: any) => {
+                            distribution.individualAssetDistributions.forEach((distribution: any) => {
+                                individualAssetAssignments[distribution.asset.id] =  distribution.distributionDetails.map((b: any) => ({
+                                            beneficiaryId: b.beneficiary.id,
+                                            percentage: b.percentage
+                                        }))
+
+                            })
+                        })
+                    }
+
+                    this.updateEstateDistribution({
+                        sharingAsAWhole: isSharingAsAWhole,
+                        beneficiaryShares: beneficiaryShares,
+                        individualAssetAssignments: individualAssetAssignments
+                    })
+
+                }),
+            map(() => this.willDataSubject.value.estateDistribution)
+            );
+    }
+
+    getAssetInventoryForDistribution(): Observable<any> {
+        return this.apiService.get<any>(this.baseURL + routes.assets)
+        .pipe(
+            tap((data: any[]) => {
+
+            }),
+            // map((data) => this.willDataSubject.value.estateDistribution.assets || [])
         );
     }
 
@@ -350,6 +433,17 @@ export class WillDataService {
             bankAccounts = [];
         }
         return { realEstateProperties, bankAccounts };
+    }
+
+    getAssetIdToTypeMap(): { [assetId: string]: string } {
+    const assetTypes = this.willDataSubject.value.estateDistribution.assets || [];
+        const assetIdToType: any= {};
+        assetTypes.forEach(assetType => {
+            assetType.assets.forEach(asset => {
+                assetIdToType[asset.id] = assetType.id;
+            });
+        });
+        return assetIdToType;
     }
 
     // create BE request payload from the
