@@ -40,6 +40,15 @@ export class PersonalDetailsComponent implements OnInit {
         private willDataService: WillDataService
     ) {
         this.data = this.willDataService.getPersonalDetails();
+        this.willDataService.getPersonalDetailsFromBE()
+        .subscribe({
+            next: (data: PersonalDetailsData) => {
+                this.data = data;
+            },
+            error: (error) => {
+                console.error('Error fetching personal details:', error);
+            }
+        });
     }
 
     ngOnInit(): void {}
@@ -51,6 +60,7 @@ export class PersonalDetailsComponent implements OnInit {
 
     handleNext(): void {
         if (this.step === 6) {
+            this.willDataService.submitPersonalDetails(this.data);
             this.router.navigate(['/wiz/will/asset-inventory']);
 
         } else {

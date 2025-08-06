@@ -4,16 +4,25 @@ import {
     HttpHeaders,
     HttpParams,
 } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
+import { CookiesStorageService } from './cookies-storage.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ApiService {
+    private cookiesStorageService = inject(CookiesStorageService);
+
+    private getToken(): string | null {
+        return this.cookiesStorageService.getToken();
+    }
+
     private get headers() {
+        const token = this.getToken();
         return {
             'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
         };
     }
     private get fileHeaders() {

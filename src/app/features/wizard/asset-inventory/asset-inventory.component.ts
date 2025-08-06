@@ -44,6 +44,16 @@ export class AssetInventoryComponent {
         private willDataService: WillDataService
     ) {
         this.data = this.willDataService.getAssetInventory();
+
+        this.willDataService.getAssetInventoryFromBE()
+        .subscribe({
+            next: (data: AssetInventoryData) => {
+                this.data = data;
+            },
+            error: (error) => {
+                console.error('Error fetching asset inventory:', error);
+            }
+        });
     }
 
     ngOnInit(): void {}
@@ -55,6 +65,7 @@ export class AssetInventoryComponent {
 
     handleNext(): void {
         if (this.step === 1) {
+            this.willDataService.submitAssetInventory(this.data);
             this.router.navigate(['/wiz/will/estate-distribution']);
         } else {
             this.step++;
