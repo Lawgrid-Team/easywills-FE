@@ -1,3 +1,5 @@
+import { AssetType, BeneficiaryAssignment, BeneficiaryShare } from "./asset.interface";
+
 export interface Spouse {
     id: string;
     firstName: string;
@@ -120,8 +122,12 @@ export interface AssetAssignment {
 export interface EstateDistributionData {
     sharingAsAWhole: boolean;
     beneficiaryShares?: { [key: string]: number }; // Maps beneficiary ID to percentage
-    individualAssetAssignments?: { [assetId: string]: string }; // Maps asset ID to beneficiary ID
+    individualAssetAssignments?: { [assetId: string]: BeneficiaryAssignment[] }; // Maps asset ID to beneficiary assignment
     exclusions: Exclusion[]; // List of excluded individuals or entities
+
+    beneficiaries? : BeneficiaryShare[]
+    assets?: AssetType[];
+
 }
 
 export interface WillData {

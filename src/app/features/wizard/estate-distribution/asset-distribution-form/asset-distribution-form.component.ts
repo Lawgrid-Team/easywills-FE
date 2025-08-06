@@ -13,51 +13,8 @@ import {
 import { MatRadioModule } from '@angular/material/radio';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-
-// Interface for the data passed to this component
-interface EstateDistributionData {
-    sharingAsAWhole: boolean;
-    beneficiaryShares?: { [key: string]: number };
-    individualAssetAssignments?: { [assetId: string]: string }; // Maps asset ID to beneficiary ID
-}
-
-// Interface for beneficiary data
-interface BeneficiaryShare {
-    id: string;
-    name: string;
-    type: string;
-    dateInfo: string;
-    percentage: number;
-}
-
-// Interface for asset types
-interface AssetType {
-    id: string;
-    name: string;
-    icon: string;
-    count: number;
-    assets: Asset[];
-    expanded?: boolean; // Track if the asset type is expanded
-}
-
-// Interface for beneficiary assignments
-interface BeneficiaryAssignment {
-    beneficiaryId: string;
-    percentage: number;
-}
-
-// Interface for individual assets
-interface Asset {
-    id: string;
-    name: string;
-    details: string;
-    address?: string;
-    ownershipType?: string;
-    assignedTo?: string; // Beneficiary ID
-    beneficiaries?: BeneficiaryAssignment[]; // Add this line
-    remainingShare?: number; // Add this line
-    showAssignments?: boolean; // Add this property to track if assignments are being shown/edited
-}
+import { BeneficiaryShare, AssetType, Asset, BeneficiaryAssignment } from '../../../../core/models/interfaces/asset.interface';
+import { EstateDistributionData } from '../../../../core/models/interfaces/will-data.interface';
 
 @Component({
     selector: 'app-asset-distribution-form',
@@ -258,11 +215,11 @@ export class AssetDistributionFormComponent implements OnInit {
 
     ngOnInit(): void {
         // Initialize with data from parent component
-        this.sharingAsAWhole = this.data?.sharingAsAWhole ?? true;
+        this.sharingAsAWhole = this.data.sharingAsAWhole;
 
-        // Initialize with dummy data
-        this.beneficiaryList = [...this.dummyBeneficiaries];
-        this.assetTypes = [...this.dummyAssetTypes];
+        this.beneficiaryList = this.data.beneficiaries || [];
+        //TODO:: check here if all asset types are not listed
+        this.assetTypes = this.data.assets || [];
 
         // If we have existing data, apply the percentages
         if (this.data?.beneficiaryShares) {
@@ -284,11 +241,16 @@ export class AssetDistributionFormComponent implements OnInit {
                 if (!asset.beneficiaries) {
                     asset.beneficiaries = [];
                 }
+                //add existing beneficiaries to the asset
+                if (this.data.individualAssetAssignments && this.data.individualAssetAssignments[asset.id]) {
+                    asset.beneficiaries = this.data.individualAssetAssignments[asset.id];
+                }
 
                 // Calculate remaining share
                 asset.remainingShare = this.calculateRemainingShare(asset);
             });
         });
+    // })
 
         // Check initial form validity
         this.checkFormValidity();
@@ -301,6 +263,7 @@ export class AssetDistributionFormComponent implements OnInit {
         // Update data
         const updatedData: EstateDistributionData = {
             sharingAsAWhole: this.sharingAsAWhole,
+            exclusions: this.data.exclusions || [],
         };
 
         // Include appropriate data based on distribution type
@@ -451,16 +414,15 @@ export class AssetDistributionFormComponent implements OnInit {
     }
 
     // Get individual asset assignments as a map
-    getIndividualAssetAssignments(): { [assetId: string]: string } {
-        const assignments: { [assetId: string]: string } = {};
+    getIndividualAssetAssignments(): { [assetId: string]: BeneficiaryAssignment[] } {
+        const assignments: { [assetId: string]: BeneficiaryAssignment[] } = {};
 
         this.assetTypes.forEach((assetType) => {
             assetType.assets.forEach((asset) => {
                 if (asset.beneficiaries && asset.beneficiaries.length > 0) {
-                    // For simplicity, we'll just store the first beneficiary in the assignedTo field
-                    // In a real implementation, you'd want to store the full assignment data
-                    assignments[asset.id] =
-                        asset.beneficiaries[0].beneficiaryId;
+                    const assigned = assignments[asset.id] || []
+                    assigned.push(...asset.beneficiaries)
+                    assignments[asset.id] = assigned
                 }
             });
         });
@@ -474,6 +436,7 @@ export class AssetDistributionFormComponent implements OnInit {
         this.updateData.emit({
             sharingAsAWhole: this.sharingAsAWhole,
             individualAssetAssignments: this.getIndividualAssetAssignments(),
+            exclusions: this.data.exclusions || [],
         });
 
         // Check form validity
@@ -488,6 +451,7 @@ export class AssetDistributionFormComponent implements OnInit {
         this.updateData.emit({
             sharingAsAWhole: this.sharingAsAWhole,
             beneficiaryShares: this.getBeneficiaryShares(),
+            exclusions: this.data.exclusions || [],
         });
 
         // Check form validity
@@ -524,6 +488,7 @@ export class AssetDistributionFormComponent implements OnInit {
             this.updateData.emit({
                 sharingAsAWhole: this.sharingAsAWhole,
                 beneficiaryShares: this.getBeneficiaryShares(),
+                exclusions: this.data.exclusions || [],
             });
 
             // Check form validity
@@ -566,6 +531,7 @@ export class AssetDistributionFormComponent implements OnInit {
     onSubmit(): void {
         const updatedData: EstateDistributionData = {
             sharingAsAWhole: this.sharingAsAWhole,
+            exclusions: this.data.exclusions || [],
         };
 
         if (this.sharingAsAWhole) {
