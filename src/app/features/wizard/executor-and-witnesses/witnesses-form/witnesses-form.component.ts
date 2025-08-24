@@ -46,11 +46,11 @@ export class WitnessesFormComponent {
   witnessForm!: FormGroup;
 
   relationshipOptions = [
-    { value: 'friend', viewValue: 'Friend' },
-    { value: 'relative', viewValue: 'Relative' },
-    { value: 'colleague', viewValue: 'Colleague' },
-    { value: 'neighbor', viewValue: 'Neighbor' },
-    { value: 'other', viewValue: 'Other' },
+    { value: 'FRIEND', viewValue: 'Friend' },
+    { value: 'RELATIVE', viewValue: 'Relative' },
+    { value: 'COLLEAGUE', viewValue: 'Colleague' },
+    { value: 'NEIGHBOR', viewValue: 'Neighbor' },
+    { value: 'OTHER', viewValue: 'Other' },
   ];
 
   constructor(private fb: FormBuilder) {}
@@ -75,7 +75,7 @@ export class WitnessesFormComponent {
     if (this.witnessForm.valid) {
       const witnessData = {
         ...this.witnessForm.value,
-        id: this.editingWitnessId ?? uuidv4(),
+        id: this.editingWitnessId ?? '',
       } as Witness;
 
       if (this.editingWitnessId) {

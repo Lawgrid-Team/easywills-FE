@@ -8,6 +8,7 @@ import { WitnessesFormComponent } from './witnesses-form/witnesses-form.componen
 import { Router } from '@angular/router';
 import { ExecutorAndWitnessData } from '../../../core/models/interfaces/will-data.interface';
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 @Component({
     selector: 'app-executor-and-witnesses',
@@ -26,6 +27,8 @@ export class ExecutorAndWitnessesComponent {
     step = 0;
     data: ExecutorAndWitnessData;
     isFormValid = true;
+    loadingData = true;
+    private originalData: ExecutorAndWitnessData | null = null;
 
     constructor(
         private router: Router,
@@ -34,16 +37,57 @@ export class ExecutorAndWitnessesComponent {
         this.data = this.willDataService.getExecutorAndWitness();
     }
 
-    ngOnInit(): void {}
+    async ngOnInit(): Promise<void> {
+        try {
+
+            const result: any = await firstValueFrom(
+                forkJoin({
+                    executors: this.willDataService.getExecutors(),
+                    witnesses: this.willDataService.getWitnesses(),
+                })
+            );
+
+            this.loadingData = false;
+
+            this.data.executors = result.executors || [];
+            this.data.hasExecutor = this.data.executors.length > 0;
+            this.data.witnesses = result.witnesses || [];
+            this.data.hasWitnesses = this.data.witnesses.length > 0;
+
+            this.originalData = this.willDataService.getExecutorAndWitness();
+        } catch (error) {
+            console.error('Error fetching estate distribution data:', error);
+        }
+    }
 
     updateData(newData: Partial<ExecutorAndWitnessData>): void {
         this.willDataService.updateExecutorAndWitness(newData);
         this.data = this.willDataService.getExecutorAndWitness();
     }
 
-    handleNext(): void {
-        if (this.step === 2) {
+    async handleNext(): Promise<void> {
+        if(this.step == 1){
+            if (this.originalData) {
+                if(JSON.stringify(this.originalData.executors) !== JSON.stringify(this.data.executors)) {
+                    await this.willDataService.submitExecutors().then(() => {
+                        this.data = this.willDataService.getExecutorAndWitness();
+                    });
+                }
+            }
+            this.step++;
+            window.scrollTo(0, 0);
+            return;
+        }
+        else if (this.step === 2) {
+            if (this.originalData) {
+                if(JSON.stringify(this.originalData.witnesses) !== JSON.stringify(this.data.witnesses)) {
+                    await this.willDataService.submitWitnesses().then(() => {
+                        this.data = this.willDataService.getExecutorAndWitness();
+                    });
+                }
+            }
             this.router.navigate(['/wiz/will/review-and-download']);
+            return;
         } else {
             this.step++;
             window.scrollTo(0, 0);
