@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
 import { WillData } from '../../../core/models/interfaces/will-data.interface';
 import { HeaderComponent } from '../widget/header/header.component';
-import { HttpClient } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 
@@ -58,7 +57,6 @@ export class ReviewAndDownloadComponent implements OnInit {
     constructor(
         private router: Router,
         private willDataService: WillDataService,
-        private http: HttpClient,
         @Inject(PLATFORM_ID) platformId: string,
         @Inject(APP_ID) appId: string
     ) {
@@ -81,9 +79,7 @@ export class ReviewAndDownloadComponent implements OnInit {
         this.pdfError = false;
         this.originalPdfData = null;
         this.pdfSrc = null;
-        console.log('Loading PDF from confirmed path: /doc/sample-will.pdf');
-        this.http
-            .get('/doc/sample-will.pdf', { responseType: 'arraybuffer' })
+        this.willDataService.previewWill()
             .pipe(
                 catchError((error) => {
                     console.error('Failed to load PDF:', error.message);
