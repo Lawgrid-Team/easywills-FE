@@ -25,6 +25,7 @@ const routes = {
     updateAssets: 'api/v1/assets',
     assetsDistribution: 'api/v1/distributions',
     updateAssetsDistribution: 'api/v1/distributions',
+    previewWill: 'api/v1/wills/preview-draft',
 }
 
 @Injectable({
@@ -282,6 +283,10 @@ export class WillDataService {
         .pipe()
         .subscribe();
 
+    }
+
+    previewWill() {
+        return this.apiService.getPreview<any>(this.baseURL + routes.previewWill)
     }
 
     getPersonalDetailsFromBE(): Observable<PersonalDetailsData> {
