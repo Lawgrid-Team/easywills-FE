@@ -25,7 +25,9 @@ const routes = {
     updateAssets: 'api/v1/assets',
     assetsDistribution: 'api/v1/distributions',
     updateAssetsDistribution: 'api/v1/distributions',
-    previewWill: 'api/v1/wills/preview-draft',
+    previewDraftWill: 'api/v1/wills/preview-draft',
+    previewActiveWill: 'api/v1/wills/download',
+    createSchedule: 'api/v1/schedules'
 }
 
 @Injectable({
@@ -285,8 +287,17 @@ export class WillDataService {
 
     }
 
-    previewWill() {
-        return this.apiService.getPreview<any>(this.baseURL + routes.previewWill)
+    createSchedule(schedule: any): Observable<any>    {
+        return this.apiService
+        .post<any>(this.baseURL + routes.createSchedule, schedule)
+    }
+
+    previewDraftWill() {
+        return this.apiService.getPreview<any>(this.baseURL + routes.previewDraftWill)
+    }
+
+    previewActiveWill() {
+        return this.apiService.getPreview<any>(this.baseURL + routes.previewActiveWill)
     }
 
     getPersonalDetailsFromBE(): Observable<PersonalDetailsData> {

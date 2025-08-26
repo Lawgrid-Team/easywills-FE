@@ -1,3 +1,4 @@
+import { PaymentCallbackComponent } from './upgrade/payment-callback/payment-callback.component';
 import { Routes } from '@angular/router';
 import { WizardComponent } from './wizard.component';
 
@@ -76,6 +77,13 @@ export const routes: Routes = [
                             import(
                                 './upgrade/upgrade.component'
                             ).then((m) => m.UpgradeComponent),
+                    },
+                     {
+                        path: "upgrade/payment-callback",
+                        loadComponent: () =>
+                            import(
+                                './upgrade/payment-callback/payment-callback.component'
+                            ).then((m) => m.PaymentCallbackComponent),
                     },
                      {
                         path: 'review-and-download',
