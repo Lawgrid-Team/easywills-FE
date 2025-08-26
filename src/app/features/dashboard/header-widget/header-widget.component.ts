@@ -21,7 +21,7 @@ export class HeaderWidgetComponent {
     @Input() showGoBackButton = false;
     @Input() showUpgradePlan = true;
     @Input() showUpgradeButton = true;
-    @Input() badgeText = ''; // New property to control badge text
+    @Input() badgeText = 'Free'; // New property to control badge text
 
     @Output() goBack = new EventEmitter<void>();
 
@@ -40,6 +40,8 @@ export class HeaderWidgetComponent {
                     if (this.badgeText === '') {
                         this.showUpgradePlan = false
                     }
+                    // console.log(this.badgeText);
+
                 },
             })
     }
