@@ -1,14 +1,12 @@
-import { Component, type OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { YourWillWidgetComponent } from './your-will-widget/your-will-widget.component';
-import { QuickActionsWidgetComponent } from './quick-actions-widget/quick-actions-widget.component';
-import {
-    RecentActivityWidgetComponent,
-    type Activity,
-} from './recent-activity-widget/recent-activity-widget.component';
-import { CreateCodicilsWidgetComponent } from './create-codicils-widget/create-codicils-widget.component';
-import { WillStateService } from '../../../shared/services/will-state.service';
+import {Component, OnDestroy, type OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Subscription} from 'rxjs';
+import {YourWillWidgetComponent} from './your-will-widget/your-will-widget.component';
+import {QuickActionsWidgetComponent} from './quick-actions-widget/quick-actions-widget.component';
+import {type Activity, RecentActivityWidgetComponent,} from './recent-activity-widget/recent-activity-widget.component';
+import {CreateCodicilsWidgetComponent} from './create-codicils-widget/create-codicils-widget.component';
+import {WillStateService} from '../../../shared/services/will-state.service';
+import {TimeUtils} from '../../../shared/utils/time-utils';
 
 @Component({
     selector: 'app-my-will',
@@ -29,6 +27,7 @@ export class MyWillComponent implements OnInit, OnDestroy {
     // State managed by WillStateService - initialized by service subscription
     isWillCompleted!: boolean; // Using definite assignment assertion since it's set in ngOnInit
     willStatus: 'inProgress' | 'completed' = 'inProgress';
+    lastUpdated = ''
 
     recentActivities: Activity[] = [
         {
@@ -64,14 +63,11 @@ export class MyWillComponent implements OnInit, OnDestroy {
             })
         );
 
-        this.willStateService.getWillStatusFromBE()
-            .subscribe({
-               next: (value: any) => {
-                    this.isWillCompleted = value.status === "completed";
-                    this.willStatus = value.status
+        this.willStateService.willState$.subscribe((state) => {
+            this.lastUpdated = TimeUtils.timeAgo(state.lastUpdatedDate);
 
-                },
-            })
+        })
+
     }
 
     ngOnDestroy(): void {

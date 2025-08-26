@@ -1,7 +1,7 @@
-import { ApiService } from './../../core/utils/api.service';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import {ApiService} from './../../core/utils/api.service';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, map, Observable, tap} from 'rxjs';
+import {environment} from '../../../environments/environment';
 
 const routes = {
     willStatus: 'api/v1/wills/state',
@@ -11,6 +11,9 @@ const routes = {
 })
 export class WillStateService {
     private baseURL = environment.API_URL;
+    private willStateSubject = new BehaviorSubject<any>(null);
+    public willState$ = this.willStateSubject.asObservable();
+
     private isWillCompletedSubject = new BehaviorSubject<boolean>(false);
     public isWillCompleted$ = this.isWillCompletedSubject.asObservable();
 
@@ -47,10 +50,20 @@ export class WillStateService {
                     this.currentPlanSubject.next(response.account.plan)
                 }),
                 map((response) => {
-                    return {
+                    const willState = {
                         ...response,
-                        status : response.status === 'ACTIVE' ? 'completed' : 'inProgress'
+                        status: response.status === 'ACTIVE' ? 'completed' : 'inProgress',
+                        account: {
+                            ...response.account,
+                            planText: response.account.plan === 'FREE' ? 'Free' : response.account.plan === 'LEGACY' ? 'Legacy'
+                                : response.account.plan === 'LEGACY_PLUS' ? 'Legacy+' : ''
+                        }
+
                     }
+
+                    this.willStateSubject.next(willState)
+
+                    return willState;
                 })
             )
     }

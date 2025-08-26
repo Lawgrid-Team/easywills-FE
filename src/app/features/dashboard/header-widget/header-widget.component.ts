@@ -1,13 +1,7 @@
-import {
-    Component,
-    Input,
-    Output,
-    EventEmitter,
-    HostListener,
-    ElementRef,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NotificationDropdownComponent } from './notification-dropdown/notification-dropdown.component';
+import {Component, ElementRef, EventEmitter, HostListener, Input, Output,} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NotificationDropdownComponent} from './notification-dropdown/notification-dropdown.component';
+import {WillStateService} from '../../../shared/services/will-state.service';
 
 @Component({
     selector: 'app-header-widget',
@@ -33,7 +27,22 @@ export class HeaderWidgetComponent {
 
     showNotifications = false;
 
-    constructor(private elementRef: ElementRef) {}
+    constructor(private elementRef: ElementRef,
+                private willStateService: WillStateService) {
+    }
+
+    ngOnInit(): void {
+        this.willStateService.getWillStatusFromBE()
+            .subscribe({
+                next: (value: any) => {
+                    // this.showUpgradeButton = value.account.plan === "FREE";
+                    this.badgeText = value.account.planText;
+                    if (this.badgeText === '') {
+                        this.showUpgradePlan = false
+                    }
+                },
+            })
+    }
 
     toggleNotifications(): void {
         this.showNotifications = !this.showNotifications;
