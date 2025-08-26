@@ -63,6 +63,15 @@ export class MyWillComponent implements OnInit, OnDestroy {
                 this.willStatus = completed ? 'completed' : 'inProgress';
             })
         );
+
+        this.willStateService.getWillStatusFromBE()
+            .subscribe({
+               next: (value: any) => {
+                    this.isWillCompleted = value.status === "completed";
+                    this.willStatus = value.status
+
+                },
+            })
     }
 
     ngOnDestroy(): void {
