@@ -5,6 +5,7 @@ import {
     Inject,
     APP_ID,
     CUSTOM_ELEMENTS_SCHEMA,
+    inject,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -16,6 +17,7 @@ import { WillDataService } from '../../../core/services/Wizard/will-data.service
 import { WillData } from '../../../core/models/interfaces/will-data.interface';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { catchError, of } from 'rxjs';
+import { NotificationService } from '../../../core/utils/notification.service';
 
 @Component({
     selector: 'app-view-will',
@@ -60,6 +62,8 @@ export class ViewWillComponent implements OnInit {
     platformId: object;
     appId: string;
 
+    private notification = inject(NotificationService);
+
     constructor(
         private router: Router,
         private willDataService: WillDataService,
@@ -85,13 +89,12 @@ export class ViewWillComponent implements OnInit {
 
     private loadPdfAsBlob(): void {
         this.isLoading = true;
-        this.http
-            .get('/doc/sample-will.pdf', { responseType: 'arraybuffer' })
-            .pipe(
+        this.willDataService.previewActiveWill().pipe(
                 catchError((error) => {
-                    console.error('Error loading PDF:', error);
+                    console.log('Error loading PDF:', error);
                     this.pdfError = true;
                     this.isLoading = false;
+                    // this.notification.showError(error.error.message);
                     return of(null);
                 })
             )

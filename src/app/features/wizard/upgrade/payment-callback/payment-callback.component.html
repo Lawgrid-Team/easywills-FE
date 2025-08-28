@@ -1,0 +1,39 @@
+<app-header [showSaveExitButton]="false"></app-header>
+<div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+    <br>
+<br>
+<br>
+<div *ngIf="loadingData" >
+    <mat-progress-spinner mode="indeterminate"  color="primary" [strokeWidth]="10"></mat-progress-spinner>
+    </div>
+<div *ngIf="!loadingData" >
+    <p>Odogu the spender. </p>
+<br>
+<br>
+<br>
+    Thank you for your purchase!
+ <div *ngIf="status === 'success'" class="space-y-4">
+
+ <br>
+    Your payment was successful, and your plan has been upgraded. You can now enjoy the benefits of your new plan.
+ </div>
+    <div *ngIf="status === 'failed'" class="space-y-4">
+    <br>
+    Unfortunately, your payment was not successful. Please try again or contact support if the issue persists.
+    </div>
+<div *ngIf="status === 'pending'" class="space-y-4">
+    <br>
+    Your payment is currently being processed. Please wait a moment and check back later to confirm the status of your upgrade.
+</div>
+<div *ngIf="status === 'error'" class="space-y-4">
+    <br>
+    We are unable to verify your payment at this time. Go on with life, we will update you via email.
+</div>
+</div>
+<br>
+    <br> Don't freak out, this page was designed by a Mechanic, so it's not the prettiest.
+<br>
+    But hey, at least it works!
+</div>
+
+

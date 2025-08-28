@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../widget/footer/footer.component';
 import { HeaderComponent } from '../widget/header/header.component';
@@ -10,87 +10,123 @@ import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { PersonalDetailsData, Witness, ExecutorAndWitnessData } from '../../../core/models/interfaces/will-data.interface';
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
+import { NotificationService } from '../../../core/utils/notification.service';
 
 @Component({
-  selector: 'app-schedule',
-  imports: [
-    CommonModule,
-    HeaderComponent,
-    FooterComponent,
-    ScheduleIntroComponent,
-    ScheduleFormComponent,
-    MatIconModule,
-    MatDialogModule
-  ],
-  templateUrl: './schedule.component.html',
-  styleUrl: './schedule.component.scss'
+    selector: 'app-schedule',
+    imports: [
+        CommonModule,
+        HeaderComponent,
+        FooterComponent,
+        ScheduleIntroComponent,
+        ScheduleFormComponent,
+        MatIconModule,
+        MatDialogModule
+    ],
+    templateUrl: './schedule.component.html',
+    styleUrl: './schedule.component.scss'
 })
 //export class ScheduleComponent {
-  //step = 0;
-    //data: PersonalDetailsData;
-    //isFormValid = true;
+//step = 0;
+//data: PersonalDetailsData;
+//isFormValid = true;
 
-   // personalDetails!: PersonalDetailsData;
-    //executorAndWitnessData!: ExecutorAndWitnessData;
-    //witnessList: Witness[] = [];
+// personalDetails!: PersonalDetailsData;
+//executorAndWitnessData!: ExecutorAndWitnessData;
+//witnessList: Witness[] = [];
 
 
 
 export class ScheduleComponent {
-  step = 0;
-  isFormValid = false;
-  showSuccessPopup = false;
+    step = 0;
+    isFormValid = false;
+    showSuccessPopup = false;
 
-  personalDetails!: PersonalDetailsData;
-  executorAndWitnessData!: ExecutorAndWitnessData;
-  witnessList: Witness[] = [];
+    personalDetails!: PersonalDetailsData;
+    executorAndWitnessData!: ExecutorAndWitnessData;
+    witnessList: Witness[] = [];
 
-  constructor(
-    private router: Router,
-    private willDataService: WillDataService,
-    private dialog: MatDialog // <-- Inject MatDialog here
-  ) {}
+    private notification = inject(NotificationService);
+    constructor(
+        private router: Router,
+        private willDataService: WillDataService,
+        private dialog: MatDialog // <-- Inject MatDialog here
+    ) { }
 
-  ngOnInit(): void {
-    this.personalDetails = this.willDataService.getPersonalDetails();
-    this.executorAndWitnessData = this.willDataService.getExecutorAndWitness();
-    this.witnessList = this.executorAndWitnessData.witnesses || [];
-    this.isFormValid = true;
-  }
-
-  handleNext(): void {
-    if (this.step === 0) {
-      this.isFormValid = false;
+    async ngOnInit(): Promise<void> {
+        this.willDataService.getTestator().subscribe({
+            next: (data: any) =>{
+                this.personalDetails = data;
+            }
+        });
+        this.executorAndWitnessData = this.willDataService.getExecutorAndWitness();
+        this.witnessList = this.executorAndWitnessData.witnesses || [];
+        this.isFormValid = true;
     }
-    this.step++;
-    window.scrollTo(0, 0);
-  }
 
-  handleBack(): void {
-    if (this.step === 0) {
-      this.router.navigate(['/wiz/will/verify-account']);
-    } else {
-      this.step--;
+    handleNext(): void {
+        if (this.step === 0) {
+            this.isFormValid = false;
+        }
+        this.step++;
+        window.scrollTo(0, 0);
     }
+
+    handleBack(): void {
+        if (this.step === 0) {
+            this.router.navigate(['/wiz/will/verify-account']);
+        } else {
+            this.step--;
+        }
+    }
+
+    setFormValidity(isValid: boolean): void {
+        this.isFormValid = isValid;
+    }
+
+    handleFormSubmit(formData: { date: string; time: string }): void {
+        this.willDataService.saveScheduleInfo(formData);
+        formData.time = this.convertTimeFormat(formData.time)
+
+        this.willDataService.createSchedule(formData).subscribe({
+            next: (response) => {
+                //Open the success dialog
+                const dialogRef = this.dialog.open(SuccessDialogComponent, {
+                    width: '400px',
+                    disableClose: true // must click OK
+                });
+
+                // After closing the dialog
+                dialogRef.afterClosed().subscribe(() => {
+                    this.router.navigate(['/dashboard']); // or this.step = 0;
+                    // or);
+                });
+            },
+            error: (err: any) => {
+                this.notification.showError(err.error.message);
+            }
+        });
+
+
+    }
+
+    convertTimeFormat(timeString: string): string {
+  // Create a Date object with a dummy date
+  const [time, period] = timeString.split(' ');
+  const [hours, minutes] = time.split(':');
+
+  // Parse hours as number for 24-hour conversion
+  let hour = parseInt(hours);
+
+  // Convert to 24-hour format
+  if (period === 'PM' && hour < 12) {
+    hour += 12;
+  } else if (period === 'AM' && hour === 12) {
+    hour = 0;
   }
 
-  setFormValidity(isValid: boolean): void {
-    this.isFormValid = isValid;
-  }
+  // Format as HH:mm:ss
+  return `${hour.toString().padStart(2, '0')}:${minutes}:00`;
+}
 
-  handleFormSubmit(formData: { date: string; time: string }): void {
-    this.willDataService.saveScheduleInfo(formData);
-
-    //Open the success dialog
-    const dialogRef = this.dialog.open(SuccessDialogComponent, {
-      width: '400px',
-      disableClose: true // must click OK
-    });
-
-    // After closing the dialog
-    dialogRef.afterClosed().subscribe(() => {
-       this.router.navigate(['/dashboard']); // or this.step = 0;
-      // or);
-    });
-  }
 }

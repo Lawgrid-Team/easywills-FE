@@ -4,6 +4,7 @@ import {
     PLATFORM_ID,
     Inject,
     APP_ID,
+    inject,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +16,8 @@ import { WillData } from '../../../core/models/interfaces/will-data.interface';
 import { HeaderComponent } from '../widget/header/header.component';
 import { catchError, of } from 'rxjs';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { AccountService } from '../../../core/services/Wizard/account.service';
+import { NotificationService } from '../../../core/utils/notification.service';
 
 @Component({
     selector: 'app-review-and-download',
@@ -54,9 +57,11 @@ export class ReviewAndDownloadComponent implements OnInit {
     platformId: string;
     appId: string;
 
+    private notification = inject(NotificationService);
     constructor(
         private router: Router,
         private willDataService: WillDataService,
+        private accountService: AccountService,
         @Inject(PLATFORM_ID) platformId: string,
         @Inject(APP_ID) appId: string
     ) {
@@ -79,7 +84,7 @@ export class ReviewAndDownloadComponent implements OnInit {
         this.pdfError = false;
         this.originalPdfData = null;
         this.pdfSrc = null;
-        this.willDataService.previewWill()
+        this.willDataService.previewDraftWill()
             .pipe(
                 catchError((error) => {
                     console.error('Failed to load PDF:', error.message);
@@ -140,8 +145,27 @@ export class ReviewAndDownloadComponent implements OnInit {
     }
 
     signAndValidate(): void {
-        this.router.navigate(['/wiz/will/upgrade']);
-        /* ... */
+        this.accountService.validateProfile()
+            .subscribe(
+                {
+                    next: (response) => {
+                        if (response.plan == 'FREE') {
+                            this.router.navigate(['/wiz/will/upgrade']);
+                        } else if (response.identityStatus == 'SUCCESSFUL') {
+                            this.router.navigate(['/wiz/will/schedule']);
+                        } else if (response.identityStatus == 'PENDING') {
+                            this.notification.showError("Your identity verification is still processing, please try again later");
+                            //TODO::Remove
+                            this.router.navigate(['/wiz/will/verify-account']);
+                        } else {
+                            this.router.navigate(['/wiz/will/verify-account']);
+                        }
+                    },
+                    error: (err) => {
+                        this.notification.showError(err.error.message);
+                    },
+                }
+            )
     }
     downloadWatermarked(): void {
         /* ... */

@@ -7,6 +7,7 @@ import {
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { CookiesStorageService } from './cookies-storage.service';
+import { log } from 'console';
 
 @Injectable({
     providedIn: 'root',
