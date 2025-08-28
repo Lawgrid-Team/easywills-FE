@@ -32,18 +32,6 @@ export class HeaderWidgetComponent {
     }
 
     ngOnInit(): void {
-        this.willStateService.getWillStatusFromBE()
-            .subscribe({
-                next: (value: any) => {
-                    // this.showUpgradeButton = value.account.plan === "FREE";
-                    this.badgeText = value.account.planText;
-                    if (this.badgeText === '') {
-                        this.showUpgradePlan = false
-                    }
-                    // console.log(this.badgeText);
-
-                },
-            })
     }
 
     toggleNotifications(): void {

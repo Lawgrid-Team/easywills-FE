@@ -2,6 +2,7 @@ import {ApiService} from './../../core/utils/api.service';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
 import {environment} from '../../../environments/environment';
+import {TimeUtils} from '../utils/time-utils';
 
 const routes = {
     willStatus: 'api/v1/wills/state',
@@ -41,23 +42,31 @@ export class WillStateService {
         return this.isWillCompletedSubject.value ? 'completed' : 'inProgress';
     }
 
+    getWillState() {
+        if (this.willStateSubject.value == null) {
+            this.getWillStatusFromBE().subscribe();
+        }
+        return this.willStateSubject.value;
+    }
+
     getWillStatusFromBE(): Observable<any> {
         return this.apiService
             .get<any>(this.baseURL + routes.willStatus)
             .pipe(
                tap((response) => {
-                    this.setWillCompleted(response.status === 'ACTIVE')
+                   this.setWillCompleted(response.status === 'SIGNED')
                     this.currentPlanSubject.next(response.account.plan)
                 }),
                 map((response) => {
                     const willState = {
                         ...response,
-                        status: response.status === 'ACTIVE' ? 'completed' : 'inProgress',
+                        status: response.status === 'SIGNED' ? 'completed' : 'inProgress',
                         account: {
                             ...response.account,
                             planText: response.account.plan === 'FREE' ? 'Free' : response.account.plan === 'LEGACY' ? 'Legacy'
                                 : response.account.plan === 'LEGACY_PLUS' ? 'Legacy+' : ''
-                        }
+                        },
+                        lastUpdatedTimeAgo: TimeUtils.timeAgo(response.lastUpdatedDate)
 
                     }
 

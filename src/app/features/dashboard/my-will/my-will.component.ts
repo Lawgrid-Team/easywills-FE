@@ -6,7 +6,6 @@ import {QuickActionsWidgetComponent} from './quick-actions-widget/quick-actions-
 import {type Activity, RecentActivityWidgetComponent,} from './recent-activity-widget/recent-activity-widget.component';
 import {CreateCodicilsWidgetComponent} from './create-codicils-widget/create-codicils-widget.component';
 import {WillStateService} from '../../../shared/services/will-state.service';
-import {TimeUtils} from '../../../shared/utils/time-utils';
 
 @Component({
     selector: 'app-my-will',
@@ -64,8 +63,7 @@ export class MyWillComponent implements OnInit, OnDestroy {
         );
 
         this.willStateService.willState$.subscribe((state) => {
-            this.lastUpdated = TimeUtils.timeAgo(state.lastUpdatedDate);
-
+            this.lastUpdated = state.lastUpdatedTimeAgo;
         })
 
     }
