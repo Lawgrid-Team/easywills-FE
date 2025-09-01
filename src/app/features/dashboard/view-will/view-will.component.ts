@@ -1,23 +1,16 @@
-import {
-    Component,
-    type OnInit,
-    PLATFORM_ID,
-    Inject,
-    APP_ID,
-    CUSTOM_ELEMENTS_SCHEMA,
-    inject,
-} from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router, RouterModule } from '@angular/router';
-import { WillDataService } from '../../../core/services/Wizard/will-data.service';
-import { WillData } from '../../../core/models/interfaces/will-data.interface';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { catchError, of } from 'rxjs';
-import { NotificationService } from '../../../core/utils/notification.service';
+import {APP_ID, Component, CUSTOM_ELEMENTS_SCHEMA, Inject, inject, type OnInit, PLATFORM_ID,} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {HttpClient} from '@angular/common/http';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {Router, RouterModule} from '@angular/router';
+import {WillDataService} from '../../../core/services/Wizard/will-data.service';
+import {WillData} from '../../../core/models/interfaces/will-data.interface';
+import {PdfViewerModule} from 'ng2-pdf-viewer';
+import {catchError, of} from 'rxjs';
+import {NotificationService} from '../../../core/utils/notification.service';
+import {HeaderComponent} from "../../wizard/widget/header/header.component";
 
 @Component({
     selector: 'app-view-will',
@@ -29,6 +22,7 @@ import { NotificationService } from '../../../core/utils/notification.service';
         MatProgressSpinnerModule,
         RouterModule,
         PdfViewerModule,
+        HeaderComponent,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     templateUrl: './view-will.component.html',
@@ -135,7 +129,8 @@ export class ViewWillComponent implements OnInit {
         }
     }
 
-    signAndValidate(): void {
+    async signAndValidate(): Promise<void> {
+        await this.willDataService.createCodicil();
         // Navigate to create codicil page
         this.router.navigate(['/create-codicil']);
     }

@@ -4,8 +4,17 @@
             <a routerLink="/wiz/welcome" class="text-3xl font-bold text-foreground">
                 <img src="svg/easywill_logo.svg" alt="EasyWill Logo" class="w-32">
             </a>
-            <div class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center">
-                <img src="icons/icon_unverify.svg" alt="" srcset="">
+
+            <div *ngIf="verified"
+                 class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
+            >
+                <img alt="" src="icons/icon_verify.svg" srcset=""/>
+                <span>Verified</span>
+            </div>
+            <div *ngIf="!verified"
+                 class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
+            >
+                <img alt="" src="icons/icon_unverify.svg" srcset=""/>
                 <span>Unverified</span>
             </div>
         </div>
@@ -13,5 +22,19 @@
         <button *ngIf="showSaveExitButton" mat-stroked-button color="primary" (click)="onSaveAndExit()">
             Save and Exit
         </button>
+        <!-- User Profile Section -->
+        <div *ngIf="showUserProfileSection" class="flex items-center gap-3">
+            <img
+                [src]="userAvatarUrl"
+                alt="User Avatar"
+                class="w-12 h-12 rounded-full object-cover"
+            />
+            <div>
+                <p class="font-semibold text-gray-800">{{ userName }}</p>
+                <p class="text-sm text-gray-500">{{ userEmail }}</p>
+            </div>
+        </div>
     </div>
 </header>
+
+

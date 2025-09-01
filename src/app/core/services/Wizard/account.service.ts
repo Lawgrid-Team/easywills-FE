@@ -28,10 +28,7 @@ export class AccountService {
             const currentData = this.accountSubject.value;
             this.accountSubject.next({
                 ...currentData,
-                estateDistribution: {
-                    ...currentData.estateDistribution,
-                    ...data,
-                },
+                ...data,
             });
         }
 

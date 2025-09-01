@@ -1,39 +1,5 @@
 <div class="min-h-screen">
-    <header class="container mx-auto px-4 py-6">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <a
-                    routerLink="/dashboard"
-                    class="text-3xl font-bold text-foreground"
-                >
-                    <img
-                        src="svg/easywill_logo.svg"
-                        alt="EasyWill Logo"
-                        class="w-32"
-                    />
-                </a>
-                <div
-                    class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
-                >
-                    <img src="icons/icon_unverify.svg" alt="" srcset="" />
-                    <span>Unverified</span>
-                </div>
-            </div>
-
-            <!-- User Profile Section -->
-            <div class="flex items-center gap-3">
-                <img
-                    [src]="userAvatarUrl"
-                    alt="User Avatar"
-                    class="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                    <p class="font-semibold text-gray-800">{{ userName }}</p>
-                    <p class="text-sm text-gray-500">{{ userEmail }}</p>
-                </div>
-            </div>
-        </div>
-    </header>
+    <app-header [showSaveExitButton]="false" [showUserProfileSection]="true"></app-header>
 
     <div class="review-container">
         <!-- Left Column: Congratulations -->

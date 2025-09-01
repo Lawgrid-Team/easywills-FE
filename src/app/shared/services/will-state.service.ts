@@ -60,7 +60,8 @@ export class WillStateService {
                 map((response) => {
                     const willState = {
                         ...response,
-                        status: response.status === 'SIGNED' ? 'completed' : 'inProgress',
+                        status: response.status === null ? null :
+                            response.status === 'SIGNED' ? 'completed' : 'inProgress',
                         account: {
                             ...response.account,
                             planText: response.account.plan === 'FREE' ? 'Free' : response.account.plan === 'LEGACY' ? 'Legacy'
