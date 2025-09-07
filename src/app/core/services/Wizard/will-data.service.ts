@@ -1,22 +1,23 @@
-import { inject, Injectable } from '@angular/core';
-import { ApiService } from '../../utils/api.service';
-import { tap } from 'rxjs/operators';
-import { BehaviorSubject, type Observable, firstValueFrom, forkJoin, map } from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {ApiService} from '../../utils/api.service';
+import {tap} from 'rxjs/operators';
+import {BehaviorSubject, firstValueFrom, forkJoin, map, type Observable} from 'rxjs';
 import type {
-    WillData,
-    PersonalDetailsData,
     AssetInventoryData,
+    BankAccount,
     EstateDistributionData,
     ExecutorAndWitnessData,
     IdentityVerificationData,
+    PersonalDetailsData,
     RealEstateProperty,
+    WillData,
     BankAccount,
     Exclusion,
     Executor,
     Witness,
 } from '../../models/interfaces/will-data.interface';
-import { environment } from '../../../../environments/environment';
-import { BeneficiaryShare, AssetType, Asset, BeneficiaryAssignment } from '../../models/interfaces/asset.interface';
+import {environment} from '../../../../environments/environment';
+import {BeneficiaryAssignment} from '../../models/interfaces/asset.interface';
 
 const routes = {
     draftWill: 'api/v1/wills',
@@ -30,6 +31,8 @@ const routes = {
     updateAssetsDistribution: 'api/v1/distributions',
     previewDraftWill: 'api/v1/wills/preview-draft',
     previewActiveWill: 'api/v1/wills/download',
+    createSchedule: 'api/v1/schedules',
+    createCodicil: 'api/v1/wills/codicil'
     createSchedule: 'api/v1/schedules'
     exclusions: 'api/v1/exclusions',
     updateExclusions: 'api/v1/exclusions',
@@ -199,7 +202,17 @@ export class WillDataService {
     );
 }
 
-    submitPersonalDetails(data: Partial<PersonalDetailsData>) {
+    async createCodicil(): Promise<any> {
+        return await firstValueFrom(
+            this.apiService.post<any>(this.baseURL + routes.createCodicil).pipe(
+                tap((response: any) => {
+                    // console.log('Draft will created successfully:', response);
+                })
+            )
+        );
+    }
+
+    submitTestatorProfile(data: Partial<PersonalDetailsData>) {
         const currentData = this.willDataSubject.value;
         this.willDataSubject.next({
             ...currentData,
@@ -210,10 +223,22 @@ export class WillDataService {
         });
 
         const updatedPersonalDetails = this.createPersonalDetailsPayload(data)
-            this.apiService
+        this.apiService
             .post<any>(this.baseURL + routes.updateTestator, updatedPersonalDetails)
             .pipe()
             .subscribe();
+    }
+
+
+    submitBeneficiaries(data: Partial<PersonalDetailsData>) {
+        const currentData = this.willDataSubject.value;
+        this.willDataSubject.next({
+            ...currentData,
+            personalDetails: {
+                ...currentData.personalDetails,
+                ...data,
+            },
+        });
 
         const updatedBeneficiaries = this.createBeneficiariesPayload(data);
         this.apiService
@@ -235,10 +260,9 @@ export class WillDataService {
                     });
                 })
             ).subscribe();
-
     }
 
-    submitAssetInventory(data: Partial<AssetInventoryData>): void {
+    async submitAssetInventory(data: Partial<AssetInventoryData>): Promise<any> {
         const currentData = this.willDataSubject.value;
         this.willDataSubject.next({
             ...currentData,
@@ -249,7 +273,7 @@ export class WillDataService {
         });
 
         const updatedAssets = this.createAssetPayload(data);
-        this.apiService.post<any>(this.baseURL + routes.updateAssets, updatedAssets)
+        return await firstValueFrom(this.apiService.post<any>(this.baseURL + routes.updateAssets, updatedAssets)
             .pipe(
                 tap((assets) => {
                 const { realEstateProperties, bankAccounts } = this.extractAssets(assets);
@@ -259,8 +283,13 @@ export class WillDataService {
                     bankAccounts
                 });
 
-                })
-            ).subscribe();
+                    console.log(this.willDataSubject.value.assetInventory);
+
+
+                }),
+                map(() => this.willDataSubject.value.assetInventory
+                )
+            ));
 
     }
 
