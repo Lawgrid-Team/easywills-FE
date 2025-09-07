@@ -117,6 +117,23 @@ export class ApiService {
                 catchError(this.handleRequestError)
             );
     };
+    getPreview = <T = any>(
+        route: string,
+        options?: any
+    ): Observable<T> => {
+        return this.http
+            .get<T>(
+                route,
+                options || {
+                    headers: new HttpHeaders(this.headers),
+                    responseType: 'arraybuffer'
+                 }
+            )
+            .pipe(
+                map((body: any) => body),
+                catchError(this.handleRequestError)
+            );
+    };
 
     // GET FILE
     getFile(url: string) {

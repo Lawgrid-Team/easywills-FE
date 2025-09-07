@@ -34,6 +34,7 @@ const routes = {
     updateExecutors: 'api/v1/executors',
     witnesses: 'api/v1/witnesses',
     updateWitnesses: 'api/v1/witnesses',
+    previewWill: 'api/v1/wills/preview-draft',
 }
 
 @Injectable({
@@ -359,6 +360,10 @@ export class WillDataService {
                 hasWitnesses: response.length > 0,
             });
         })));
+    }
+
+    previewWill() {
+        return this.apiService.getPreview<any>(this.baseURL + routes.previewWill)
     }
 
     getPersonalDetailsFromBE(): Observable<PersonalDetailsData> {
