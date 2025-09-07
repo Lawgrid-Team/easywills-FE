@@ -1,17 +1,13 @@
-import { Component, type OnDestroy, type OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {
-    ActivatedRoute,
-    NavigationEnd,
-    Router,
-    RouterOutlet,
-} from '@angular/router';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { HeaderWidgetComponent } from './header-widget/header-widget.component';
-import { WillStateService } from '../../shared/services/will-state.service';
-import { MyDocumentsComponent } from './my-documents/my-documents.component';
+import {AccountService} from './../../core/services/Wizard/account.service';
+import {Component, type OnDestroy, type OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute, NavigationEnd, Router, RouterOutlet,} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {filter} from 'rxjs/operators';
+import {SidebarComponent} from './sidebar/sidebar.component';
+import {HeaderWidgetComponent} from './header-widget/header-widget.component';
+import {WillStateService} from '../../shared/services/will-state.service';
+import {MyDocumentsComponent} from './my-documents/my-documents.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -49,11 +45,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     constructor(
         private willStateService: WillStateService,
+        private accountService: AccountService,
         private router: Router,
         private activatedRoute: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
+
+        this.willStateService.getWillState();
+        this.accountService.getUserProfile();
+
+        this.accountService.userData$.subscribe({
+            next: (value) => {
+                if (value) {
+                    this.userName = value.name;
+                    this.userEmail = value.email;
+                    if (value.avatar) {
+                        this.userAvatarUrl = value.avatar
+                    }
+                }
+            }
+        })
+
+        // this.willStateService.willState$
+        //     .subscribe({
+        //         next: (value: any) => {
+        //             this.badgeText = value.account.planText;
+        //             if (this.badgeText === '') {
+        //                 this.showUpgradePlan = false
+        //             }
+        //         },
+        //     })
+
         this.subscriptions.add(
             this.willStateService.isWillCompleted$.subscribe((completed) => {
                 this.isWillCompleted = completed;
@@ -132,7 +155,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.showUpgradeButton = true;
             this.badgeText = '';
         } else if (url.includes('/my-will')) {
-            this.headerTitle = 'Welcome back, John Doe!';
+            this.headerTitle = `Welcome back, ${this.userName!}`;
             this.headerSubtitle =
                 "Here's an overview of your Will planning progress.";
             this.hideHeader = false;
@@ -162,7 +185,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.badgeText = '';
         } else {
             // Default for /dashboard root
-            this.headerTitle = 'Welcome back, John Doe!';
+            this.headerTitle = `Welcome back, ${this.userName!}`;
             this.headerSubtitle =
                 "Here's an overview of your Will planning progress.";
             this.hideHeader = false;

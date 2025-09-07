@@ -56,7 +56,7 @@ export class ScheduleFormComponent {
     '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM'
 ];
 
-  
+
   form!: FormGroup;
 
   minDate: Date = new Date(); // today
@@ -68,7 +68,7 @@ export class ScheduleFormComponent {
   testatorName: string = '';
 
   ngOnInit(): void {
-  this.testatorName = 'John Doe';
+  this.testatorName = this.data.firstName + ' ' + this.data.lastName;
   this.form = this.fb.group({
     date: ['', Validators.required],
     time: ['', Validators.required]
@@ -76,21 +76,21 @@ export class ScheduleFormComponent {
 
   // Dummy witnesses for now
   this.witnesses = [
-    { 
-      id: '1', 
-      firstName: 'Alice', 
-      lastName: 'Smith', 
-      email: 'alice@example.com', 
-      phoneNumber: '123-456-7890', 
-      relationship: 'Friend' 
+    {
+      id: '1',
+      firstName: 'Alice',
+      lastName: 'Smith',
+      email: 'alice@example.com',
+      phoneNumber: '123-456-7890',
+      relationship: 'Friend'
     },
-    { 
-      id: '2', 
-      firstName: 'Bob', 
-      lastName: 'Johnson', 
-      email: 'bob@example.com', 
-      phoneNumber: '987-654-3210', 
-      relationship: 'Cousin' 
+    {
+      id: '2',
+      firstName: 'Bob',
+      lastName: 'Johnson',
+      email: 'bob@example.com',
+      phoneNumber: '987-654-3210',
+      relationship: 'Cousin'
     }
   ];
 
