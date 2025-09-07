@@ -11,6 +11,9 @@ import type {
     IdentityVerificationData,
     RealEstateProperty,
     BankAccount,
+    Exclusion,
+    Executor,
+    Witness,
 } from '../../models/interfaces/will-data.interface';
 import { environment } from '../../../../environments/environment';
 import { BeneficiaryShare, AssetType, Asset, BeneficiaryAssignment } from '../../models/interfaces/asset.interface';
@@ -28,6 +31,13 @@ const routes = {
     previewDraftWill: 'api/v1/wills/preview-draft',
     previewActiveWill: 'api/v1/wills/download',
     createSchedule: 'api/v1/schedules'
+    exclusions: 'api/v1/exclusions',
+    updateExclusions: 'api/v1/exclusions',
+    executors: 'api/v1/executors',
+    updateExecutors: 'api/v1/executors',
+    witnesses: 'api/v1/witnesses',
+    updateWitnesses: 'api/v1/witnesses',
+    previewWill: 'api/v1/wills/preview-draft',
 }
 
 @Injectable({
@@ -254,7 +264,7 @@ export class WillDataService {
 
     }
 
-    submitEstateDistribution() {
+    async submitEstateDistribution() {
         const distribution = this.willDataSubject.value.estateDistribution;
         const distributionPayload: any = {
             type: distribution.sharingAsAWhole ? 'WHOLE' : 'INDIVIDUAL',
@@ -280,11 +290,79 @@ export class WillDataService {
                 }
             })
         }
+        await firstValueFrom(this.apiService.post<any>(this.baseURL + routes.updateAssetsDistribution, distributionPayload)
+            .pipe());
+        // return new Promise<void>((resolve) => {
+        //     this.apiService.post<any>(this.baseURL + routes.updateAssetsDistribution, distributionPayload)
+        //     .pipe()
+        //     .subscribe(() => {
+        //         resolve();
+        //     });
+        // });
+    }
 
-        this.apiService.post<any>(this.baseURL + routes.updateAssetsDistribution, distributionPayload)
-        .pipe()
-        .subscribe();
+    async submitExclusions() {
+        await firstValueFrom(this.apiService.post<any>(this.baseURL + routes.updateExclusions, {
+            exclusions: this.willDataSubject.value.estateDistribution.exclusions,
+            deletedIds: this.willDataSubject.value.estateDistribution.deletedExclusions
+        })
+        .pipe(tap((response: any) => {
+            this.updateEstateDistribution({
+                exclusions: response || [],
+            });
+        })));
+        // .subscribe();
 
+    }
+
+    async submitExecutors() {
+        const executors = this.willDataSubject.value.executorAndWitness.executors.map((exec) => {
+            const executor: any = {
+                ...exec
+            }
+            if (exec.type === 'INDIVIDUAL') {
+                executor.name = `${exec.firstName} ${exec.lastName}`;
+            } else {
+                executor.name = exec.firstName;
+            }
+            return executor;
+        });
+        await firstValueFrom(this.apiService.post<any>(this.baseURL + routes.updateExecutors, {
+            executors,
+            deletedIds: this.willDataSubject.value.executorAndWitness.deletedExecutors
+        })
+        .pipe(tap((data: any) => {
+            const executors: Executor[] = data.map((exec: any) => {
+                        const executor: Executor = {
+                            ...exec
+                        }
+
+                        executor.firstName = exec.name.split(' ')[0];
+                        if(executor.type === 'INDIVIDUAL') {
+                            executor.lastName = exec.name.split(' ')[1];
+                        }
+                        return executor;
+                    });
+
+            this.updateExecutorAndWitness({
+                executors: executors || [],
+                hasExecutor: executors.length > 0,
+            });
+
+        })));
+    }
+
+    async submitWitnesses() {
+        await firstValueFrom(this.apiService.post<any>(this.baseURL + routes.updateWitnesses, {
+            witnesses: this.willDataSubject.value.executorAndWitness.witnesses,
+            deletedIds: this.willDataSubject.value.executorAndWitness.deletedWitnesses
+        })
+        .pipe(tap((response: any) => {
+            this.updateExecutorAndWitness({
+                witnesses: response || [],
+                hasWitnesses: response.length > 0,
+            });
+        })));
     }
 
     createSchedule(schedule: any): Observable<any>    {
@@ -388,6 +466,60 @@ export class WillDataService {
                 return this.extractBeneficiaries(data);
             })
         );
+    }
+
+    getExclusions(): Observable<Exclusion[]> {
+        return this.apiService.get<any>(this.baseURL + routes.exclusions)
+        .pipe(
+            map((data: any[]) => {
+                return data;
+            })
+        );
+    }
+
+    getExecutors(): Observable<Executor[]> {
+        return this.apiService.get<any>(this.baseURL + routes.executors)
+            .pipe(
+                tap((data: any[]) => {
+                    const executors: Executor[] = data.map((exec: any) => {
+                        const executor: Executor = {
+                            ...exec
+                        }
+
+                        executor.firstName = exec.name.split(' ')[0];
+                        if(executor.type === 'INDIVIDUAL') {
+                            executor.lastName = exec.name.split(' ')[1];
+                        }
+                        return executor;
+                    });
+
+                    this.updateExecutorAndWitness({
+                        executors,
+                        hasExecutor: executors.length > 0
+                    })
+
+                }),
+            map(() => this.willDataSubject.value.executorAndWitness.executors || [])
+            );
+    }
+
+    getWitnesses(): Observable<Witness[]> {
+        return this.apiService.get<any>(this.baseURL + routes.witnesses)
+            .pipe(
+                tap((data: any[]) => {
+                    const witnesses: Witness[] = data.map((witness: any) =>
+                    ({
+                        ...witness
+                    })
+                );
+                    this.updateExecutorAndWitness({
+                        witnesses,
+                        hasWitnesses: witnesses.length > 0
+                    })
+
+                }),
+            map(() => this.willDataSubject.value.executorAndWitness.witnesses || [])
+            );
     }
 
     getTestator(): any {
