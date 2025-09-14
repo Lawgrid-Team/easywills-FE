@@ -2,10 +2,16 @@ import { Component, type OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WillDataService } from '../../../core/services/Wizard/will-data.service';
-import { WillData } from '../../../core/models/interfaces/will-data.interface';
+import {
+    Beneficiary,
+    WillData,
+} from '../../../core/models/interfaces/will-data.interface';
 import { MatDividerModule } from '@angular/material/divider';
+import { AccountService } from '../../../core/services/Wizard/account.service';
+import { WillStateService } from '../../../shared/services/will-state.service';
+import { firstValueFrom, forkJoin, tap } from 'rxjs';
 
 interface WillSection {
     id: string;
@@ -38,9 +44,14 @@ export class WelcomeComponent implements OnInit {
     completionPercentage = 0;
 
     // User data for header display
-    userName = 'John Doe';
-    userEmail = 'johndoe@gmail.com';
-    userAvatarUrl = '/svg/display-pic.svg';
+    user = {
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        avatar: '/svg/display-pic.svg',
+    };
+    defaultAvatar = '/svg/display-pic.svg';
+    willState: any = {};
+    verified = false;
 
     willSections: WillSection[] = [
         {
@@ -96,7 +107,9 @@ export class WelcomeComponent implements OnInit {
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private willDataService: WillDataService
+        private willDataService: WillDataService,
+        private accountService: AccountService,
+        private willStateService: WillStateService
     ) {}
 
     ngOnInit(): void {
@@ -108,10 +121,35 @@ export class WelcomeComponent implements OnInit {
                 this.hasStartedWill = false;
             }
         });
+        this.accountService.getUserProfile();
+        this.willStateService.getWillState();
+
+        this.accountService.userData$.subscribe({
+            next: (value) => {
+                if (value) {
+                    this.user = value;
+                    if (!this.user.avatar || this.user.avatar === '') {
+                        this.user.avatar = this.defaultAvatar;
+                    }
+                }
+            },
+        });
+
+        this.willStateService.willState$.subscribe({
+            next: (willState) => {
+                if (willState) {
+                    this.willState = willState;
+                    if (willState.account.identityStatus === 'SUCCESSFUL') {
+                        this.verified = true;
+                    }
+                }
+            },
+        });
     }
 
-    checkWillStatus(): void {
+    async checkWillStatus(): Promise<void> {
         // Use dummy data for now
+        const beneficiaries: Beneficiary[] = [];
         const dummyWillData = {
             personalDetails: {
                 title: 'Mr.',
@@ -154,7 +192,7 @@ export class WelcomeComponent implements OnInit {
                         email: 'michael.doe@email.com',
                     },
                 ],
-                beneficiaries: [],
+                beneficiaries: beneficiaries,
             },
             assetInventory: {
                 realEstateProperties: [
@@ -190,6 +228,26 @@ export class WelcomeComponent implements OnInit {
                 hasWitnesses: false,
             },
         };
+
+        await firstValueFrom(
+            forkJoin({
+                personalDetails:
+                    this.willDataService.getPersonalDetailsFromBE(),
+                assets: this.willDataService.getAssetInventoryFromBE(),
+                // estateDistribution: this.willDataService.getAssetDistribution()
+            }).pipe(
+                tap(({ personalDetails, assets }: any) => {
+                    dummyWillData.personalDetails = {
+                        ...dummyWillData.personalDetails,
+                        ...personalDetails,
+                    };
+                    dummyWillData.assetInventory = {
+                        ...dummyWillData.assetInventory,
+                        ...assets,
+                    };
+                })
+            )
+        );
 
         // Only update sections if user has started will (don't override hasStartedWill)
         if (this.hasStartedWill) {
@@ -384,8 +442,8 @@ export class WelcomeComponent implements OnInit {
     }
 
     async onGetStarted(): Promise<void> {
-        if(!this.hasStartedWill) {
-            await this.willDataService.draftWill()
+        if (!this.hasStartedWill && this.willState.status !== 'inProgress') {
+            await this.willDataService.draftWill();
         }
         // Navigate to the first step of the wizard
         this.router.navigate(['/wiz/will/personal-details']);

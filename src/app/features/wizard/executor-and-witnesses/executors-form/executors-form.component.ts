@@ -85,26 +85,19 @@ export class ExecutorsFormComponent {
             const lastNameControl = this.executorForm.get('lastName');
             const addressControl = this.executorForm.get('address');
 
-            if (type === 'organization') {
-                lastNameControl?.setValidators([Validators.required]);
+            if (type === 'ORGANIZATION') {
+                lastNameControl?.clearValidators();
                 addressControl?.setValidators([Validators.required]);
+                lastNameControl?.updateValueAndValidity();
+                addressControl?.updateValueAndValidity();
             } else {
                 lastNameControl?.clearValidators();
                 addressControl?.clearValidators();
             }
-
-            lastNameControl?.updateValueAndValidity();
-            addressControl?.updateValueAndValidity();
-        });
-
-        // Update form validity whenever the form value changes
-         this.executorForm.statusChanges.subscribe(() => {
-            this.setFormValidity.emit(this.executorForm.valid);
         });
 
         // Initial form validity
         this.setFormValidity.emit(true);
-
     }
 
     handleHasExecutorChange(value: string): void {
@@ -135,7 +128,7 @@ export class ExecutorsFormComponent {
                 // Add new executor
                 const newExecutor = {
                     ...this.executorForm.value,
-                    id: uuidv4(),
+                    // id: uuidv4(),
                 } as Executor;
                 this.executors = [...this.executors, newExecutor];
             }

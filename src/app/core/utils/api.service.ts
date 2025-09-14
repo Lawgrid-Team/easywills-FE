@@ -7,6 +7,7 @@ import {
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { CookiesStorageService } from './cookies-storage.service';
+import { log } from 'console';
 
 @Injectable({
     providedIn: 'root',
@@ -110,6 +111,20 @@ export class ApiService {
                 options || {
                     headers: new HttpHeaders(this.headers),
                     responseType: 'json',
+                }
+            )
+            .pipe(
+                map((body: any) => body),
+                catchError(this.handleRequestError)
+            );
+    };
+    getPreview = <T = any>(route: string, options?: any): Observable<T> => {
+        return this.http
+            .get<T>(
+                route,
+                options || {
+                    headers: new HttpHeaders(this.headers),
+                    responseType: 'arraybuffer',
                 }
             )
             .pipe(

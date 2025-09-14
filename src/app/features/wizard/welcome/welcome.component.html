@@ -12,7 +12,13 @@
                         class="w-32"
                     />
                 </a>
-                <div
+                <div *ngIf="verified"
+                     class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
+                >
+                    <img alt="" src="icons/icon_verify.svg" srcset=""/>
+                    <span>Verified</span>
+                </div>
+                <div *ngIf="!verified"
                     class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
                 >
                     <img src="icons/icon_unverify.svg" alt="" srcset="" />
@@ -23,13 +29,13 @@
             <!-- User Profile Section for returning users -->
             <div *ngIf="hasStartedWill" class="flex items-center gap-3">
                 <img
-                    [src]="userAvatarUrl"
+                    [src]="user.avatar"
                     alt="User Avatar"
                     class="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
-                    <p class="font-semibold text-gray-800">{{ userName }}</p>
-                    <p class="text-sm text-gray-500">{{ userEmail }}</p>
+                    <p class="font-semibold text-gray-800">{{ user.name }}</p>
+                    <p class="text-sm text-gray-500">{{ user.email }}</p>
                 </div>
             </div>
         </div>
@@ -68,12 +74,12 @@
                         class="text-2xl text-foreground font-DM_Serif text-easywills-black mb-2"
                     >
                         The Last Will and Testament of
-                        <span class="font-bold">John Doe.</span>
+                        <span class="font-bold">{{ user.name }}e.</span>
                     </h3>
                     <p
                         class="text-foreground text-easywills-dark-grey text-lg mb-4"
                     >
-                        Last updated: <span class="font-bold">15/02/2025</span>
+                        Last updated: <span class="font-bold">{{ willState.lastUpdatedTimeAgo }}</span>
                     </p>
                 </ng-container>
             </div>
