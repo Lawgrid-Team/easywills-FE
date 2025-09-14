@@ -84,7 +84,8 @@ export class ReviewAndDownloadComponent implements OnInit {
         this.pdfError = false;
         this.originalPdfData = null;
         this.pdfSrc = null;
-        this.willDataService.previewDraftWill()
+        this.willDataService
+            .previewDraftWill()
             .pipe(
                 catchError((error) => {
                     console.error('Failed to load PDF:', error.message);
@@ -145,27 +146,28 @@ export class ReviewAndDownloadComponent implements OnInit {
     }
 
     signAndValidate(): void {
-        this.accountService.validateProfile()
-            .subscribe(
-                {
-                    next: (response) => {
-                        if (response.plan == 'FREE') {
-                            this.router.navigate(['/wiz/will/upgrade']);
-                        } else if (response.identityStatus == 'SUCCESSFUL') {
-                            this.router.navigate(['/wiz/will/schedule']);
-                        } else if (response.identityStatus == 'PENDING') {
-                            this.notification.showError("Your identity verification is still processing, please try again later");
-                            //TODO::Remove
-                            this.router.navigate(['/wiz/will/verify-account']);
-                        } else {
-                            this.router.navigate(['/wiz/will/verify-account']);
-                        }
-                    },
-                    error: (err) => {
-                        this.notification.showError(err.error.message);
-                    },
+        this.accountService.validateProfile().subscribe({
+            next: (response) => {
+                console.log(response, 'validate resp');
+                if (response.plan === 'FREE') {
+                    this.router.navigate(['/wiz/will/upgrade']);
+                } else if (response.identityStatus == 'SUCCESSFUL') {
+                    this.router.navigate(['/wiz/will/schedule']);
+                } else if (response.identityStatus == 'PENDING') {
+                    this.notification.showError(
+                        'Your identity verification is still processing, please try again later'
+                    );
+                    //TODO::Remove
+                    this.router.navigate(['/wiz/will/verify-account']);
+                } else {
+                    this.router.navigate(['/wiz/will/verify-account']);
                 }
-            )
+            },
+            error: (err) => {
+                console.log(err, 'err message');
+                this.notification.showError(err?.error?.message);
+            },
+        });
     }
     downloadWatermarked(): void {
         /* ... */
