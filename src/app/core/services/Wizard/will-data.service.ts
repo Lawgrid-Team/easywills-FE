@@ -30,7 +30,7 @@ const routes = {
     updateAssetsDistribution: 'api/v1/distributions',
     previewDraftWill: 'api/v1/wills/preview-draft',
     previewActiveWill: 'api/v1/wills/download',
-    createSchedule: 'api/v1/schedules'
+    createSchedule: 'api/v1/schedules',
     exclusions: 'api/v1/exclusions',
     updateExclusions: 'api/v1/exclusions',
     executors: 'api/v1/executors',
