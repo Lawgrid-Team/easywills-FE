@@ -1,16 +1,28 @@
-
 <!-- <div class="container mx-auto px-4 py-2 sm:px-6 lg:px-8"> -->
 <header class="w-full">
     <div class="">
-        <div class="flex justify-between items-center pt-4 pb-4 border-b border-b-gray-300">
-            <div class="container flex justify-between items-center mx-auto">
+        <div
+            class="flex justify-between items-center pt-4 pb-4 border-b border-b-gray-300"
+        >
+            <div
+                class="w-full max-w-[1440px] mx-auto px-8 flex justify-between items-center"
+            >
                 <div class="flex items-center">
-                    <img src="svg/easywill_logo.svg" routerLink='' alt="EasyWill Logo" class="cursor-pointer">
+                    <img
+                        src="svg/easywill_logo.svg"
+                        routerLink=""
+                        alt="EasyWill Logo"
+                        class="cursor-pointer"
+                    />
                 </div>
 
                 <div class="flex items-center justify-center gap-x-4">
-                    <button mat-stroked-button [routerLink]="['/auth/login']">Login</button>
-                    <button mat-flat-button [routerLink]="['auth/signup']">Write your will</button>
+                    <button mat-stroked-button [routerLink]="['/auth/login']">
+                        Login
+                    </button>
+                    <button mat-flat-button [routerLink]="['auth/signup']">
+                        Write your will
+                    </button>
 
                     <!-- <button [routerLink]="['/login']" class="bg-white hover:bg-white-200 ring-1 ring-gray-300 text-black font-bold py-2 px-4 rounded">
                         Login
@@ -22,33 +34,54 @@
             </div>
         </div>
         <div class="pt-4 pb-4 border-y-gray-300 border-b border-b-gray-300">
-            <nav class="flex justify-between items-center container mx-auto">
-                <ul class="flex items-center justify-center gap-x-8 text-base/7 text-gray-400">
+            <nav
+                class="w-full max-w-[1440px] mx-auto px-8 flex justify-between items-center"
+            >
+                <ul
+                    class="flex items-center justify-center gap-x-8 text-base/7 text-[#444444]"
+                >
                     <!-- <li class="hover:text-gray-500">
                         <a routerLink='' routerLinkActive="router-link-active" class="hover:text-gray-500">Home</a>
                     </li> -->
                     <li class="hover:text-gray-500">
-                        <a [routerLink]="['/']" fragment="how-it-works" class="hover:text-gray-500">How it Works</a>
+                        <a
+                            [routerLink]="['/']"
+                            fragment="how-it-works"
+                            class="hover:text-gray-500"
+                            >How it Works</a
+                        >
                     </li>
                     <li class="hover:text-gray-500">
-                        <a [routerLink]="['/pricing']" routerLinkActive="router-link-active" class="hover:text-gray-500">Pricing</a>
+                        <a
+                            [routerLink]="['/pricing']"
+                            routerLinkActive="router-link-active"
+                            class="hover:text-gray-500"
+                            >Pricing</a
+                        >
                     </li>
                     <li class="hover:text-gray-500">
-                        <a [routerLink]="['/help']" routerLinkActive="router-link-active" class="hover:text-gray-500">Help Centre</a>
+                        <a
+                            [routerLink]="['/help']"
+                            routerLinkActive="router-link-active"
+                            class="hover:text-gray-500"
+                            >Help Centre</a
+                        >
                     </li>
                     <!-- <li class="hover:text-gray-500">
                         <a href="#" class="hover:text-gray-500">Contact</a>
                     </li> -->
                 </ul>
 
-                <ul class="flex items-center justify-center gap-x-4 text-base/7 text-gray-400">
+                <ul
+                    class="flex items-center justify-center gap-x-4 text-base/7 text-[#444444]"
+                >
                     <li class="hover:text-gray-500">
-                        <a href="#" class="hover:text-gray-500">Digital Vault</a>
+                        <a href="#" class="hover:text-gray-500"
+                            >Digital Vault</a
+                        >
                     </li>
                 </ul>
             </nav>
         </div>
     </div>
 </header>
-
-
