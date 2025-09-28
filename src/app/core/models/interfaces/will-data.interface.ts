@@ -18,7 +18,7 @@ export interface Child {
 
 export interface Executor {
     id: string;
-    type: 'individual' | 'organization';
+    type: 'INDIVIDUAL' | 'ORGANIZATION';
     firstName: string;
     lastName: string;
     email: string;
@@ -45,7 +45,7 @@ export interface Beneficiary {
 }
 
 export interface Exclusion {
-    id: string;
+    id?: string;
     firstName: string;
     lastName: string;
     relationship: string;
@@ -85,8 +85,10 @@ export interface PersonalDetailsData {
 export interface  ExecutorAndWitnessData {
     executors: Executor[];
     hasExecutor: boolean;
+    deletedExecutors?: string[]; // List of executors that have been removed
     witnesses: Witness[];
     hasWitnesses: boolean;
+    deletedWitnesses?: string[]; // List of witnesses that have been removed
 }
 
 export interface RealEstateProperty {
@@ -124,6 +126,8 @@ export interface EstateDistributionData {
     beneficiaryShares?: { [key: string]: number }; // Maps beneficiary ID to percentage
     individualAssetAssignments?: { [assetId: string]: BeneficiaryAssignment[] }; // Maps asset ID to beneficiary assignment
     exclusions: Exclusion[]; // List of excluded individuals or entities
+
+    deletedExclusions?: string[]; // List of exclusions that have been removed
 
     beneficiaries? : BeneficiaryShare[]
     assets?: AssetType[];

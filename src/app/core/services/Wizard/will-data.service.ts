@@ -1,7 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from '../../utils/api.service';
 import { tap } from 'rxjs/operators';
-import { BehaviorSubject, type Observable, firstValueFrom, forkJoin, map } from 'rxjs';
+import {
+    BehaviorSubject,
+    type Observable,
+    firstValueFrom,
+    forkJoin,
+    map,
+} from 'rxjs';
 import type {
     WillData,
     PersonalDetailsData,
@@ -11,9 +17,17 @@ import type {
     IdentityVerificationData,
     RealEstateProperty,
     BankAccount,
+    Exclusion,
+    Executor,
+    Witness,
 } from '../../models/interfaces/will-data.interface';
 import { environment } from '../../../../environments/environment';
-import { BeneficiaryShare, AssetType, Asset, BeneficiaryAssignment } from '../../models/interfaces/asset.interface';
+import {
+    BeneficiaryShare,
+    AssetType,
+    Asset,
+    BeneficiaryAssignment,
+} from '../../models/interfaces/asset.interface';
 
 const routes = {
     draftWill: 'api/v1/wills',
@@ -25,14 +39,24 @@ const routes = {
     updateAssets: 'api/v1/assets',
     assetsDistribution: 'api/v1/distributions',
     updateAssetsDistribution: 'api/v1/distributions',
-}
+    previewDraftWill: 'api/v1/wills/preview-draft',
+    previewActiveWill: 'api/v1/wills/download',
+    createSchedule: 'api/v1/schedules',
+    exclusions: 'api/v1/exclusions',
+    updateExclusions: 'api/v1/exclusions',
+    executors: 'api/v1/executors',
+    updateExecutors: 'api/v1/executors',
+    witnesses: 'api/v1/witnesses',
+    updateWitnesses: 'api/v1/witnesses',
+    previewWill: 'api/v1/wills/preview-draft',
+};
 
 @Injectable({
     providedIn: 'root',
 })
 export class WillDataService {
-         private baseURL = environment.API_URL;
-      private apiService = inject(ApiService);
+    private baseURL = environment.API_URL;
+    private apiService = inject(ApiService);
     constructor() {}
 
     private initialPersonalDetails: PersonalDetailsData = {
@@ -156,7 +180,6 @@ export class WillDataService {
         alert('Your will has been saved successfully!');
     }
 
-
     // added this to save schedule
     private scheduleInfo: { date: string; time: string } | null = null;
 
@@ -168,23 +191,23 @@ export class WillDataService {
         return this.scheduleInfo;
     }
 
-      saveIdentityVerification(data: IdentityVerificationData): void {
-    this.identityVerificationData = data;
-  }
+    saveIdentityVerification(data: IdentityVerificationData): void {
+        this.identityVerificationData = data;
+    }
 
-  getIdentityVerification(): IdentityVerificationData | null {
-    return this.identityVerificationData || null;
-  }
+    getIdentityVerification(): IdentityVerificationData | null {
+        return this.identityVerificationData || null;
+    }
 
     async draftWill(): Promise<any> {
-    return await firstValueFrom(
-        this.apiService.post<any>(this.baseURL + routes.draftWill).pipe(
-            tap((response: any) => {
-                // console.log('Draft will created successfully:', response);
-            })
-        )
-    );
-}
+        return await firstValueFrom(
+            this.apiService.post<any>(this.baseURL + routes.draftWill).pipe(
+                tap((response: any) => {
+                    // console.log('Draft will created successfully:', response);
+                })
+            )
+        );
+    }
 
     submitPersonalDetails(data: Partial<PersonalDetailsData>) {
         const currentData = this.willDataSubject.value;
@@ -196,23 +219,30 @@ export class WillDataService {
             },
         });
 
-        const updatedPersonalDetails = this.createPersonalDetailsPayload(data)
-            this.apiService
-            .post<any>(this.baseURL + routes.updateTestator, updatedPersonalDetails)
+        const updatedPersonalDetails = this.createPersonalDetailsPayload(data);
+        this.apiService
+            .post<any>(
+                this.baseURL + routes.updateTestator,
+                updatedPersonalDetails
+            )
             .pipe()
             .subscribe();
 
         const updatedBeneficiaries = this.createBeneficiariesPayload(data);
         this.apiService
-            .post<any>(this.baseURL + routes.updateBeneficiaries, updatedBeneficiaries)
+            .post<any>(
+                this.baseURL + routes.updateBeneficiaries,
+                updatedBeneficiaries
+            )
             .pipe(
                 tap((beneficiaries: any[]) => {
-                    beneficiaries.forEach(beneficiary => {
+                    beneficiaries.forEach((beneficiary) => {
                         if (beneficiary.relationship === 'OTHER') {
-                            beneficiary.relationship = beneficiary.otherRelationship;
-                            }
-                        });
-                    const b = this.extractBeneficiaries(beneficiaries)
+                            beneficiary.relationship =
+                                beneficiary.otherRelationship;
+                        }
+                    });
+                    const b = this.extractBeneficiaries(beneficiaries);
                     this.updatePersonalDetails({
                         beneficiaries: b.beneficiaries,
                         children: b.children,
@@ -221,8 +251,8 @@ export class WillDataService {
                         isMarried: b.spouses.length > 0,
                     });
                 })
-            ).subscribe();
-
+            )
+            .subscribe();
     }
 
     submitAssetInventory(data: Partial<AssetInventoryData>): void {
@@ -236,58 +266,179 @@ export class WillDataService {
         });
 
         const updatedAssets = this.createAssetPayload(data);
-        this.apiService.post<any>(this.baseURL + routes.updateAssets, updatedAssets)
+        this.apiService
+            .post<any>(this.baseURL + routes.updateAssets, updatedAssets)
             .pipe(
                 tap((assets) => {
-                const { realEstateProperties, bankAccounts } = this.extractAssets(assets);
+                    const { realEstateProperties, bankAccounts } =
+                        this.extractAssets(assets);
 
-                this.updateAssetInventory({
-                    realEstateProperties,
-                    bankAccounts
-                });
-
+                    this.updateAssetInventory({
+                        realEstateProperties,
+                        bankAccounts,
+                    });
                 })
-            ).subscribe();
-
+            )
+            .subscribe();
     }
 
-    submitEstateDistribution() {
+    async submitEstateDistribution() {
         const distribution = this.willDataSubject.value.estateDistribution;
         const distributionPayload: any = {
             type: distribution.sharingAsAWhole ? 'WHOLE' : 'INDIVIDUAL',
             wholeDistributionDetails: [],
-            individualDistributionDetails: []
-        }
-        if(distribution.sharingAsAWhole){
+            individualDistributionDetails: [],
+        };
+        if (distribution.sharingAsAWhole) {
             const beneficiaries = distribution.beneficiaryShares || {};
-            distributionPayload.wholeDistributionDetails = Object.keys(beneficiaries || {}).map(beneficiaryId => (
-                {
-                    beneficiaryId: beneficiaryId,
-                    percentage: beneficiaries[beneficiaryId]
-                }))
-
+            distributionPayload.wholeDistributionDetails = Object.keys(
+                beneficiaries || {}
+            ).map((beneficiaryId) => ({
+                beneficiaryId: beneficiaryId,
+                percentage: beneficiaries[beneficiaryId],
+            }));
         } else {
             const beneficiaries = distribution.individualAssetAssignments || {};
             const assetIdToType: any = this.getAssetIdToTypeMap();
-            distributionPayload.individualDistributionDetails = Object.keys(beneficiaries || {}).map(assetId =>{
+            distributionPayload.individualDistributionDetails = Object.keys(
+                beneficiaries || {}
+            ).map((assetId) => {
                 return {
                     assetId: assetId,
                     assetType: assetIdToType[assetId].type,
-                    distributionDetails: beneficiaries[assetId]
-                }
-            })
+                    distributionDetails: beneficiaries[assetId],
+                };
+            });
         }
+        await firstValueFrom(
+            this.apiService
+                .post<any>(
+                    this.baseURL + routes.updateAssetsDistribution,
+                    distributionPayload
+                )
+                .pipe()
+        );
+        // return new Promise<void>((resolve) => {
+        //     this.apiService.post<any>(this.baseURL + routes.updateAssetsDistribution, distributionPayload)
+        //     .pipe()
+        //     .subscribe(() => {
+        //         resolve();
+        //     });
+        // });
+    }
 
-        this.apiService.post<any>(this.baseURL + routes.updateAssetsDistribution, distributionPayload)
-        .pipe()
-        .subscribe();
+    async submitExclusions() {
+        await firstValueFrom(
+            this.apiService
+                .post<any>(this.baseURL + routes.updateExclusions, {
+                    exclusions:
+                        this.willDataSubject.value.estateDistribution
+                            .exclusions,
+                    deletedIds:
+                        this.willDataSubject.value.estateDistribution
+                            .deletedExclusions,
+                })
+                .pipe(
+                    tap((response: any) => {
+                        this.updateEstateDistribution({
+                            exclusions: response || [],
+                        });
+                    })
+                )
+        );
+        // .subscribe();
+    }
 
+    async submitExecutors() {
+        const executors =
+            this.willDataSubject.value.executorAndWitness.executors.map(
+                (exec) => {
+                    const executor: any = {
+                        ...exec,
+                    };
+                    if (exec.type === 'INDIVIDUAL') {
+                        executor.name = `${exec.firstName} ${exec.lastName}`;
+                    } else {
+                        executor.name = exec.firstName;
+                    }
+                    return executor;
+                }
+            );
+        await firstValueFrom(
+            this.apiService
+                .post<any>(this.baseURL + routes.updateExecutors, {
+                    executors,
+                    deletedIds:
+                        this.willDataSubject.value.executorAndWitness
+                            .deletedExecutors,
+                })
+                .pipe(
+                    tap((data: any) => {
+                        const executors: Executor[] = data.map((exec: any) => {
+                            const executor: Executor = {
+                                ...exec,
+                            };
+
+                            executor.firstName = exec.name.split(' ')[0];
+                            if (executor.type === 'INDIVIDUAL') {
+                                executor.lastName = exec.name.split(' ')[1];
+                            }
+                            return executor;
+                        });
+
+                        this.updateExecutorAndWitness({
+                            executors: executors || [],
+                            hasExecutor: executors.length > 0,
+                        });
+                    })
+                )
+        );
+    }
+
+    async submitWitnesses() {
+        await firstValueFrom(
+            this.apiService
+                .post<any>(this.baseURL + routes.updateWitnesses, {
+                    witnesses:
+                        this.willDataSubject.value.executorAndWitness.witnesses,
+                    deletedIds:
+                        this.willDataSubject.value.executorAndWitness
+                            .deletedWitnesses,
+                })
+                .pipe(
+                    tap((response: any) => {
+                        this.updateExecutorAndWitness({
+                            witnesses: response || [],
+                            hasWitnesses: response.length > 0,
+                        });
+                    })
+                )
+        );
+    }
+
+    createSchedule(schedule: any): Observable<any> {
+        return this.apiService.post<any>(
+            this.baseURL + routes.createSchedule,
+            schedule
+        );
+    }
+
+    previewDraftWill() {
+        return this.apiService.getPreview<any>(
+            this.baseURL + routes.previewDraftWill
+        );
+    }
+
+    previewActiveWill() {
+        return this.apiService.getPreview<any>(
+            this.baseURL + routes.previewActiveWill
+        );
     }
 
     getPersonalDetailsFromBE(): Observable<PersonalDetailsData> {
         return forkJoin({
             beneficiaries: this.getBeneficiaries(),
-            testator: this.getTestator()
+            testator: this.getTestator(),
         }).pipe(
             tap(({ beneficiaries, testator }: any) => {
                 this.updatePersonalDetails({
@@ -296,7 +447,7 @@ export class WillDataService {
                     spouses: beneficiaries.spouses,
                     children: beneficiaries.children,
                     beneficiaries: beneficiaries.beneficiaries,
-                    ...testator
+                    ...testator,
                 });
             }),
             map(() => this.willDataSubject.value.personalDetails)
@@ -304,14 +455,14 @@ export class WillDataService {
     }
 
     getAssetInventoryFromBE(): Observable<AssetInventoryData> {
-        return this.apiService.get<any>(this.baseURL + routes.assets)
-        .pipe(
+        return this.apiService.get<any>(this.baseURL + routes.assets).pipe(
             tap((data: any[]) => {
-                const { realEstateProperties, bankAccounts } = this.extractAssets(data);
+                const { realEstateProperties, bankAccounts } =
+                    this.extractAssets(data);
 
                 this.updateAssetInventory({
                     realEstateProperties,
-                    bankAccounts
+                    bankAccounts,
                 });
             }),
             map(() => this.willDataSubject.value.assetInventory)
@@ -321,87 +472,151 @@ export class WillDataService {
     getAssetDistribution(): Observable<EstateDistributionData> {
         let isSharingAsAWhole = true;
         const beneficiaryShares: { [key: string]: number } = {};
-        const individualAssetAssignments: { [assetId: string]: BeneficiaryAssignment[] } = {};
+        const individualAssetAssignments: {
+            [assetId: string]: BeneficiaryAssignment[];
+        } = {};
 
-        return this.apiService.get<any>(this.baseURL + routes.assetsDistribution)
+        return this.apiService
+            .get<any>(this.baseURL + routes.assetsDistribution)
             .pipe(
                 tap((data: any[]) => {
-                    if ("WHOLE" == data[0]?.type) {
+                    if ('WHOLE' == data[0]?.type) {
                         isSharingAsAWhole = true;
                         data[0].distributionDetails.forEach((detail: any) => {
-                            beneficiaryShares[detail.beneficiary.id] = detail.percentage;
+                            beneficiaryShares[detail.beneficiary.id] =
+                                detail.percentage;
                         });
-                    } else if ("INDIVIDUAL" == data[0]?.type) {
+                    } else if ('INDIVIDUAL' == data[0]?.type) {
                         isSharingAsAWhole = false;
                         data.forEach((distribution: any) => {
-                            distribution.individualAssetDistributions.forEach((distribution: any) => {
-                                individualAssetAssignments[distribution.asset.id] =  distribution.distributionDetails.map((b: any) => ({
+                            distribution.individualAssetDistributions.forEach(
+                                (distribution: any) => {
+                                    individualAssetAssignments[
+                                        distribution.asset.id
+                                    ] = distribution.distributionDetails.map(
+                                        (b: any) => ({
                                             beneficiaryId: b.beneficiary.id,
-                                            percentage: b.percentage
-                                        }))
-
-                            })
-                        })
+                                            percentage: b.percentage,
+                                        })
+                                    );
+                                }
+                            );
+                        });
                     }
 
                     this.updateEstateDistribution({
                         sharingAsAWhole: isSharingAsAWhole,
                         beneficiaryShares: beneficiaryShares,
-                        individualAssetAssignments: individualAssetAssignments
-                    })
-
+                        individualAssetAssignments: individualAssetAssignments,
+                    });
                 }),
-            map(() => this.willDataSubject.value.estateDistribution)
+                map(() => this.willDataSubject.value.estateDistribution)
             );
     }
 
     getAssetInventoryForDistribution(): Observable<any> {
-        return this.apiService.get<any>(this.baseURL + routes.assets)
-        .pipe(
-            tap((data: any[]) => {
-
-            }),
+        return this.apiService.get<any>(this.baseURL + routes.assets).pipe(
+            tap((data: any[]) => {})
             // map((data) => this.willDataSubject.value.estateDistribution.assets || [])
         );
     }
 
     getBeneficiaries(): any {
-        return this.apiService.get<any>(this.baseURL + routes.beneficiaries)
-        .pipe(
+        return this.apiService
+            .get<any>(this.baseURL + routes.beneficiaries)
+            .pipe(
+                map((data: any[]) => {
+                    return this.extractBeneficiaries(data);
+                })
+            );
+    }
+
+    getExclusions(): Observable<Exclusion[]> {
+        return this.apiService.get<any>(this.baseURL + routes.exclusions).pipe(
             map((data: any[]) => {
-                return this.extractBeneficiaries(data);
+                return data;
             })
         );
     }
 
+    getExecutors(): Observable<Executor[]> {
+        return this.apiService.get<any>(this.baseURL + routes.executors).pipe(
+            tap((data: any[]) => {
+                const executors: Executor[] = data.map((exec: any) => {
+                    const executor: Executor = {
+                        ...exec,
+                    };
+
+                    executor.firstName = exec.name.split(' ')[0];
+                    if (executor.type === 'INDIVIDUAL') {
+                        executor.lastName = exec.name.split(' ')[1];
+                    }
+                    return executor;
+                });
+
+                this.updateExecutorAndWitness({
+                    executors,
+                    hasExecutor: executors.length > 0,
+                });
+            }),
+            map(
+                () =>
+                    this.willDataSubject.value.executorAndWitness.executors ||
+                    []
+            )
+        );
+    }
+
+    getWitnesses(): Observable<Witness[]> {
+        return this.apiService.get<any>(this.baseURL + routes.witnesses).pipe(
+            tap((data: any[]) => {
+                const witnesses: Witness[] = data.map((witness: any) => ({
+                    ...witness,
+                }));
+                this.updateExecutorAndWitness({
+                    witnesses,
+                    hasWitnesses: witnesses.length > 0,
+                });
+            }),
+            map(
+                () =>
+                    this.willDataSubject.value.executorAndWitness.witnesses ||
+                    []
+            )
+        );
+    }
+
     getTestator(): any {
-        return this.apiService.get<any>(this.baseURL + routes.testator)
-        .pipe(
+        return this.apiService.get<any>(this.baseURL + routes.testator).pipe(
             map((data: any) => {
                 let address = {};
-                if(data.address) {
+                if (data.address) {
                     address = {
                         streetAddress: data.address.primaryHomeAddress || '',
                         city: data.address.city || '',
                         state: data.address.state || '',
                         country: data.address.country || 'nigeria',
-                    }
+                    };
                 }
 
                 return {
                     ...data,
                     ...address,
-                    hasUsedOtherNames: (data.preferredName != null && data.preferredName != "") || false,
+                    hasUsedOtherNames:
+                        (data.preferredName != null &&
+                            data.preferredName != '') ||
+                        false,
                     otherFullName: data.preferredName || '',
                 };
-            }));
+            })
+        );
     }
 
     extractBeneficiaries(data: any[]) {
-        const children = data.filter(b => b.relationship === 'CHILD');
-        const spouses = data.filter(b => b.relationship === 'SPOUSE');
+        const children = data.filter((b) => b.relationship === 'CHILD');
+        const spouses = data.filter((b) => b.relationship === 'SPOUSE');
         const beneficiaries = data.filter(
-            b => b.relationship !== 'CHILD' && b.relationship !== 'SPOUSE'
+            (b) => b.relationship !== 'CHILD' && b.relationship !== 'SPOUSE'
         );
         return { children, spouses, beneficiaries };
     }
@@ -410,8 +625,9 @@ export class WillDataService {
         let realEstateProperties: RealEstateProperty[];
         let bankAccounts: BankAccount[];
         if (data.length > 0) {
-            realEstateProperties = data.filter(asset => asset.assetType === 'REAL_ESTATE')
-                .map(asset => ({
+            realEstateProperties = data
+                .filter((asset) => asset.assetType === 'REAL_ESTATE')
+                .map((asset) => ({
                     id: asset.id,
                     propertyType: asset.propertyType,
                     propertyTitle: asset.propertyTitle,
@@ -419,14 +635,15 @@ export class WillDataService {
                     city: asset.city,
                     state: asset.state,
                     country: asset.country,
-                    ownershipType: asset.ownershipType
+                    ownershipType: asset.ownershipType,
                 }));
-            bankAccounts = data.filter(asset => asset.assetType === 'BANK_ACCOUNT')
-                .map(asset => ({
+            bankAccounts = data
+                .filter((asset) => asset.assetType === 'BANK_ACCOUNT')
+                .map((asset) => ({
                     id: asset.id,
                     accountType: asset.accountType,
                     institution: asset.bankName,
-                    accountNumber: asset.accountNumber
+                    accountNumber: asset.accountNumber,
                 }));
         } else {
             realEstateProperties = [];
@@ -436,10 +653,11 @@ export class WillDataService {
     }
 
     getAssetIdToTypeMap(): { [assetId: string]: string } {
-    const assetTypes = this.willDataSubject.value.estateDistribution.assets || [];
-        const assetIdToType: any= {};
-        assetTypes.forEach(assetType => {
-            assetType.assets.forEach(asset => {
+        const assetTypes =
+            this.willDataSubject.value.estateDistribution.assets || [];
+        const assetIdToType: any = {};
+        assetTypes.forEach((assetType) => {
+            assetType.assets.forEach((asset) => {
                 assetIdToType[asset.id] = assetType.id;
             });
         });
@@ -453,7 +671,7 @@ export class WillDataService {
             firstName: data.firstName,
             lastName: data.lastName,
             otherNames: data.otherNames,
-            displayName: data.firstName + " " + data.lastName,
+            displayName: data.firstName + ' ' + data.lastName,
             preferredName: data.otherFullName,
             dateOfBirth: data.dateOfBirth,
             stateOfOrigin: data.stateOfOrigin,
@@ -462,76 +680,82 @@ export class WillDataService {
                 city: data.city,
                 state: data.state,
                 country: data.country,
-            }
+            },
         };
     }
 
     createBeneficiariesPayload(data: Partial<PersonalDetailsData>) {
         let beneficiaries: any[] = [];
         if (data.children != null && data.children.length > 0) {
-            beneficiaries = beneficiaries.concat(data.children.map(child => ({
-                ...child,
-                relationship: 'CHILD',
-            })));
+            beneficiaries = beneficiaries.concat(
+                data.children.map((child) => ({
+                    ...child,
+                    relationship: 'CHILD',
+                }))
+            );
         }
 
         if (data.spouses != null && data.spouses.length > 0) {
-            beneficiaries = beneficiaries.concat(data.spouses.map(spouse => ({
-                ...spouse,
-                relationship: 'SPOUSE',
-            })));
+            beneficiaries = beneficiaries.concat(
+                data.spouses.map((spouse) => ({
+                    ...spouse,
+                    relationship: 'SPOUSE',
+                }))
+            );
         }
 
         if (data.beneficiaries != null && data.beneficiaries.length > 0) {
-            beneficiaries = beneficiaries.concat(data.beneficiaries.map(beneficiary => ({
-                ...beneficiary,
-                relationship: 'OTHER',
-                otherRelationship: beneficiary.relationship || '',
-
-            })));
+            beneficiaries = beneficiaries.concat(
+                data.beneficiaries.map((beneficiary) => ({
+                    ...beneficiary,
+                    relationship: 'OTHER',
+                    otherRelationship: beneficiary.relationship || '',
+                }))
+            );
         }
 
         return {
             beneficiaries,
-            deletedIds: []
-        } ;
-
+            deletedIds: [],
+        };
     }
 
     createAssetPayload(data: Partial<AssetInventoryData>) {
         let assets: any[] = [];
         if (data.realEstateProperties && data.realEstateProperties.length > 0) {
-            assets = assets.concat(data.realEstateProperties.map(property => {
-                return {
-                    id: property.id,
-                    assetType: 'REAL_ESTATE',
-                    propertyType: property.propertyType,
-                    propertyTitle: property.propertyTitle,
-                    address: property.address,
-                    city: property.city,
-                    state: property.state,
-                    country: property.country,
-                    ownershipType: property.ownershipType
-                };
-
-            }));
+            assets = assets.concat(
+                data.realEstateProperties.map((property) => {
+                    return {
+                        id: property.id,
+                        assetType: 'REAL_ESTATE',
+                        propertyType: property.propertyType,
+                        propertyTitle: property.propertyTitle,
+                        address: property.address,
+                        city: property.city,
+                        state: property.state,
+                        country: property.country,
+                        ownershipType: property.ownershipType,
+                    };
+                })
+            );
         }
         if (data.bankAccounts && data.bankAccounts.length > 0) {
-            assets = assets.concat(data.bankAccounts.map(account => {
-                return {
-                    id: account.id,
-                    assetType: 'BANK_ACCOUNT',
-                    accountType: account.accountType,
-                    bankName: account.institution,
-                    accountNumber: account.accountNumber
-                };
-            }));
+            assets = assets.concat(
+                data.bankAccounts.map((account) => {
+                    return {
+                        id: account.id,
+                        assetType: 'BANK_ACCOUNT',
+                        accountType: account.accountType,
+                        bankName: account.institution,
+                        accountNumber: account.accountNumber,
+                    };
+                })
+            );
         }
 
         return {
             assets,
-            deletedIds: []
-        } ;
+            deletedIds: [],
+        };
     }
-
 }

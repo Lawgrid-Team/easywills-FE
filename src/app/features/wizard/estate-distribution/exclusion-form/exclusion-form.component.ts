@@ -96,7 +96,7 @@ export class ExclusionFormComponent implements OnInit {
             const formValue = this.exclusionForm.value;
 
             const exclusion: Exclusion = {
-                id: uuidv4(),
+                // id: uuidv4(),
                 firstName: formValue.firstName,
                 lastName: formValue.lastName,
                 relationship: formValue.relationship,
@@ -131,6 +131,8 @@ export class ExclusionFormComponent implements OnInit {
     }
 
     removeExclusion(index: number): void {
+        this.data.deletedExclusions = this.data.deletedExclusions || [];
+        this.data.deletedExclusions.push(this.data.exclusions[index].id || '');
         this.data.exclusions.splice(index, 1);
         this.updateData.emit(this.data);
         this.checkFormValidity();
@@ -152,7 +154,7 @@ export class ExclusionFormComponent implements OnInit {
     checkFormValidity(): void {
         // Form is valid if there's at no exclusion (exclusion is optional) or if the user is currently adding one
         const isValid =
-            this.data.exclusions?.length == 0 || this.isAddingExclusion;
+            this.data.exclusions?.length >= 0 || this.isAddingExclusion;
         this.setFormValidity.emit(isValid);
     }
 }
