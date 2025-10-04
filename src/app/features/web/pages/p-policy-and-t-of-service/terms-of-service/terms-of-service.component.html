@@ -1,60 +1,189 @@
-<div class="flex flex-col min-h-screen">
-  <main class="flex-1 container mx-auto px-4 py-12 max-w-4xl">
-    <h1 class="text-4xl font-bold text-center mb-2 text-black">Terms of Service</h1>
-    <p class="text-center text-gray-600 mb-24">Effective date: October 3, 2023</p>
+<div class="container mx-auto px-4 py-12">
+    <h1 class="text-5xl font-semibold text-[#32302f] mb-4 ml-8">
+        Terms of Service
+    </h1>
+    <p class="text-[#505050] mb-16 ml-8">Effective date: October 3, 2023</p>
 
-    <section class="mb-10">
-      <h2 class="text-2xl font-semibold mb-4 text-black">Introduction</h2>
-      <p class="text-gray-600">
-        Lorem ipsum dolor sit amet consectetur. Quam volutpat condimentum ipsum fusce feugiat fringilla tincidunt
-        massa pellentesque. Amet in amet.
-      </p>
-    </section>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-16">
+        <aside class="md:col-span-5 lg:col-span-4 pr-4">
+            <div class="sticky top-8 w-full">
+                <h2 class="text-lg font-medium mb-4 ml-8">Table of contents</h2>
+                <nav class="flex flex-col space-y-2 ml-8">
+                    <button
+                        (click)="scrollToSection('introduction')"
+                        [ngClass]="{
+                            'text-left py-2 px-4 rounded-md font-medium w-full': true,
+                            'bg-[#efefef] text-[#505050]':
+                                activeSection === 'introduction',
+                            'text-[#505050] hover:bg-gray-100':
+                                activeSection !== 'introduction'
+                        }"
+                    >
+                        Introduction
+                    </button>
+                    <button
+                        (click)="scrollToSection('content')"
+                        [ngClass]="{
+                            'text-left py-2 px-4 rounded-md w-full': true,
+                            'bg-[#efefef] text-[#505050]':
+                                activeSection === 'content',
+                            'text-[#505050] hover:bg-gray-100':
+                                activeSection !== 'content'
+                        }"
+                    >
+                        Content
+                    </button>
+                    <button
+                        (click)="scrollToSection('user-conduct')"
+                        [ngClass]="{
+                            'text-left py-2 px-4 rounded-md w-full': true,
+                            'bg-[#efefef] text-[#505050]':
+                                activeSection === 'user-conduct',
+                            'text-[#505050] hover:bg-gray-100':
+                                activeSection !== 'user-conduct'
+                        }"
+                    >
+                        User conduct
+                    </button>
+                    <button
+                        (click)="scrollToSection('intellectual-property')"
+                        [ngClass]="{
+                            'text-left py-2 px-4 rounded-md w-full break-words': true,
+                            'bg-[#efefef] text-[#505050]':
+                                activeSection === 'intellectual-property',
+                            'text-[#505050] hover:bg-gray-100':
+                                activeSection !== 'intellectual-property'
+                        }"
+                    >
+                        Intellectual property
+                    </button>
+                    <button
+                        (click)="scrollToSection('indemnification')"
+                        [ngClass]="{
+                            'text-left py-2 px-4 rounded-md w-full': true,
+                            'bg-[#efefef] text-[#505050]':
+                                activeSection === 'indemnification',
+                            'text-[#505050] hover:bg-gray-100':
+                                activeSection !== 'indemnification'
+                        }"
+                    >
+                        Indemnification
+                    </button>
+                </nav>
+            </div>
+        </aside>
 
-    <section class="mb-10">
-      <h2 class="text-2xl font-semibold mb-4 text-black">Content</h2>
-      <p class="text-gray-600">
-        Lorem ipsum dolor sit amet consectetur. Id nibh eget risus nullam dui non porttitor pharelius adipiscing.
-        Leo erat enim elementum iaculis in gravida sed dui sit. Sit ipsum a urna malesuada eu sagittis urna. Duis eu
-        euismod commodo ullamcorper amet. Consectetur cursus facilisis.
-      </p>
-    </section>
+        <div class="md:col-span-7 lg:col-span-8 space-y-12">
+            <section id="introduction">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold': activeSection === 'introduction',
+                        'font-normal': activeSection !== 'introduction'
+                    }"
+                >
+                    Introduction
+                </h2>
+                <p class="text-[#505050] mb-4">
+                    Lorem ipsum dolor sit amet consectetur. Quam volutpat
+                    condimentum ipsum fusce feugiat fringilla tincidunt massa
+                    pellentesque. Amet in amet.
+                </p>
+            </section>
 
-    <section class="mb-10">
-      <h2 class="text-2xl font-semibold mb-4 text-black">User conduct</h2>
-      <p class="text-gray-600">
-        Lorem ipsum dolor sit amet consectetur. Est tincidunt consectetur in turpis orci eget vitae malesuada mi.
-        Netus eget congue eu mauris nunc pharetra rhoncus magna vitae. Odio turpis risus mattis pretium tincidunt
-        turpis sem egestas elit. Blandit augue feoreet libero metus sit.
-      </p>
-    </section>
+            <section id="content">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold': activeSection === 'content',
+                        'font-normal': activeSection !== 'content'
+                    }"
+                >
+                    Content
+                </h2>
+                <p class="text-[#505050] mb-4">
+                    Lorem ipsum dolor sit amet consectetur. Id nibh eget risus
+                    nullam dui non porttitor pharelius adipiscing. Leo erat enim
+                    elementum iaculis in gravida sed dui sit. Sit ipsum a urna
+                    malesuada eu sagittis urna. Duis eu euismod commodo
+                    ullamcorper amet. Consectetur cursus facilisis.
+                </p>
+            </section>
 
-    <section class="mb-10">
-      <h2 class="text-2xl font-semibold mb-4 text-black">Intellectual property</h2>
-      <p class="text-gray-600">
-        Lorem ipsum dolor sit amet consectetur. Nulla scelerisque nulla mi pretium vitae proin non mollis nisl.
-        Augue dignissim risus hendrerit et. Ut ultrices tristique tempor posuere vitae egestas pellentesque
-        scelerisque. Ac mattis massa pellentesque sagittis sollicitudin. Lorem facilisis lectus felis sollicitudin.
-        Amet vitae posuere viverra eu. Ut facilisis et gravida suspendisse. Id at aliquet et et aliquet. Viverra
-        diam eleifend morbi bibendum.
-        <br />
-        <br />
-        Venenatis odio id neque consequat vel et malesuada vulputate ipius. Gravida pretium in velit nibh. Amet
-        integer arcu arcu scelerisque leo viverra. Suspendisse nunc neque sollicitudin sed id.
-      </p>
-    </section>
+            <section id="user-conduct">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold': activeSection === 'user-conduct',
+                        'font-normal': activeSection !== 'user-conduct'
+                    }"
+                >
+                    User conduct
+                </h2>
+                <p class="text-[#505050] mb-4">
+                    Lorem ipsum dolor sit amet consectetur. Est tincidunt
+                    consectetur in turpis orci eget vitae malesuada mi. Netus
+                    eget congue eu mauris nunc pharetra rhoncus magna vitae.
+                    Odio turpis risus mattis pretium tincidunt turpis sem
+                    egestas elit. Blandit augue feoreet libero metus sit.
+                </p>
+            </section>
 
-    <section class="mb-10">
-      <h2 class="text-2xl font-semibold mb-4 text-black">Indemnification</h2>
-      <p class="text-gray-600">
-        Lorem ipsum dolor sit amet consectetur. Ultricies hendrerit facilisis auctor placerat est fames. In risus
-        facilisi egestas amet non etiam. Aenean volutpat in urna euismod ut malesuada id nunc enim. Risus viverra
-        locus proin in diam elit sed. Integer et vitae eget enim. Id molestie malesuada neque morbi velit amet massa
-        pretium. In dignissim semper purus turpis massa pharelius urna molestie donec. Semper venenatis pellentesque
-        massa risus nec. Volutpat molestie tincidunt vivamus nibh vulputate vestibulum ipsum nibh aliquet. Feugiat
-        pretium in aliquet mattis. Sit nibh rutrum risus vitae turpis bibendum sed accumsan. Suspendisse vel
-        tincidunt turpis diam commodo felis facilisis eleifend eu. Fames eros sed fermentum blandit justo.
-      </p>
-    </section>
-  </main>
+            <section id="intellectual-property">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold':
+                            activeSection === 'intellectual-property',
+                        'font-normal': activeSection !== 'intellectual-property'
+                    }"
+                >
+                    Intellectual property
+                </h2>
+                <p class="text-[#505050] mb-4">
+                    Lorem ipsum dolor sit amet consectetur. Nulla scelerisque
+                    nulla mi pretium vitae proin non mollis nisl. Augue
+                    dignissim risus hendrerit et. Ut ultrices tristique tempor
+                    posuere vitae egestas pellentesque scelerisque. Ac mattis
+                    massa pellentesque sagittis sollicitudin. Lorem facilisis
+                    lectus felis sollicitudin. Amet vitae posuere viverra eu. Ut
+                    facilisis et gravida suspendisse. Id at aliquet et et
+                    aliquet. Viverra diam eleifend morbi bibendum.
+                </p>
+                <p class="text-[#505050] mb-4">
+                    Venenatis odio id neque consequat vel et malesuada vulputate
+                    ipius. Gravida pretium in velit nibh. Amet integer arcu arcu
+                    scelerisque leo viverra. Suspendisse nunc neque sollicitudin
+                    sed id.
+                </p>
+            </section>
+
+            <section id="indemnification">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold': activeSection === 'indemnification',
+                        'font-normal': activeSection !== 'indemnification'
+                    }"
+                >
+                    Indemnification
+                </h2>
+                <p class="text-[#505050] mb-4">
+                    Lorem ipsum dolor sit amet consectetur. Ultricies hendrerit
+                    facilisis auctor placerat est fames. In risus facilisi
+                    egestas amet non etiam. Aenean volutpat in urna euismod ut
+                    malesuada id nunc enim. Risus viverra locus proin in diam
+                    elit sed. Integer et vitae eget enim. Id molestie malesuada
+                    neque morbi velit amet massa pretium. In dignissim semper
+                    purus turpis massa pharelius urna molestie donec. Semper
+                    venenatis pellentesque massa risus nec. Volutpat molestie
+                    tincidunt vivamus nibh vulputate vestibulum ipsum nibh
+                    aliquet. Feugiat pretium in aliquet mattis. Sit nibh rutrum
+                    risus vitae turpis bibendum sed accumsan. Suspendisse vel
+                    tincidunt turpis diam commodo felis facilisis eleifend eu.
+                    Fames eros sed fermentum blandit justo.
+                </p>
+            </section>
+        </div>
+    </div>
 </div>
