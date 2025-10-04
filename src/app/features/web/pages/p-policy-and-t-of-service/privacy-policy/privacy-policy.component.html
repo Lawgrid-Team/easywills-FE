@@ -1,5 +1,5 @@
 <div class="container mx-auto px-4 py-12">
-    <h1 class="text-4xl font-semibold text-[#32302f] mb-2 ml-8">
+    <h1 class="text-5xl font-semibold text-[#32302f] mb-4 ml-8">
         Privacy Policy
     </h1>
     <p class="text-[#505050] mb-16 ml-8">Effective date: October 3, 2023</p>
@@ -75,7 +75,13 @@
 
         <div class="md:col-span-7 lg:col-span-8 space-y-12">
             <section id="introduction">
-                <h2 class="text-3xl font-bold text-[#32302f] mb-6">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold': activeSection === 'introduction',
+                        'font-normal': activeSection !== 'introduction'
+                    }"
+                >
                     Introduction
                 </h2>
                 <p class="text-[#505050] mb-4">
@@ -88,7 +94,15 @@
             </section>
 
             <section id="information-collection">
-                <h2 class="text-3xl font-bold text-[#32302f] mb-6">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold':
+                            activeSection === 'information-collection',
+                        'font-normal':
+                            activeSection !== 'information-collection'
+                    }"
+                >
                     Information collection
                 </h2>
                 <p class="text-[#505050] mb-4">
@@ -108,7 +122,13 @@
             </section>
 
             <section id="data-storage">
-                <h2 class="text-3xl font-bold text-[#32302f] mb-6">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold': activeSection === 'data-storage',
+                        'font-normal': activeSection !== 'data-storage'
+                    }"
+                >
                     Data storage and security
                 </h2>
                 <p class="text-[#505050] mb-4">
@@ -123,7 +143,13 @@
             </section>
 
             <section id="access-control">
-                <h2 class="text-3xl font-bold text-[#32302f] mb-6">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold': activeSection === 'access-control',
+                        'font-normal': activeSection !== 'access-control'
+                    }"
+                >
                     Access and control of your information
                 </h2>
                 <p class="text-[#505050] mb-4">
@@ -143,7 +169,13 @@
             </section>
 
             <section id="contact-us">
-                <h2 class="text-3xl font-bold text-[#32302f] mb-6">
+                <h2
+                    [ngClass]="{
+                        'text-3xl text-[#32302f] mb-6': true,
+                        'font-semibold': activeSection === 'contact-us',
+                        'font-normal': activeSection !== 'contact-us'
+                    }"
+                >
                     Contact us:
                 </h2>
                 <p class="text-[#505050] mb-4">
