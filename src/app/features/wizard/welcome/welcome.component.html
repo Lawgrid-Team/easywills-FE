@@ -49,12 +49,12 @@
                 <!-- New user welcome -->
                 <ng-container *ngIf="!hasStartedWill">
                     <h2
-                        class="text-6xl font-bold text-foreground font-DM_Serif text-easywills-black mb-4"
+                        class="text-5xl font-semibold text-foreground font-DM_Serif text-easywills-black mb-4"
                     >
                         Welcome!
                     </h2>
                     <h3
-                        class="text-6xl font-bold text-foreground font-DM_Serif text-easywills-black mb-6"
+                        class="text-5xl font-semibold text-foreground font-DM_Serif text-easywills-black mb-6"
                     >
                         Let's get started
                     </h3>
@@ -68,33 +68,33 @@
                 <!-- Returning user welcome -->
                 <ng-container *ngIf="hasStartedWill">
                     <h2
-                        class="text-6xl font-semibold text-foreground font-DM_Serif text-easywills-black mb-4"
+                        class="text-5xl font-semibold text-foreground font-DM_Serif text-easywills-black mb-6"
                     >
                         Continue from where you last stopped.
                     </h2>
                     <h3
-                        class="text-2xl text-foreground font-DM_Serif text-easywills-black mb-2"
+                        class="text-xl text-foreground text-easywills-black mb-2"
                     >
                         The Last Will and Testament of
-                        <span class="font-bold">{{ user.name }}e.</span>
+                        <span class="font-semibold">{{ user.name }}.</span>
                     </h3>
                     <p
                         class="text-foreground text-easywills-dark-grey text-lg mb-4"
                     >
                         Last updated:
-                        <span class="font-bold">{{
+                        <span class="font-semibold">{{
                             willState.lastUpdatedTimeAgo
                         }}</span>
                     </p>
                 </ng-container>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-4 max-w-lg">
                 <!-- Sections for new users (cards) -->
                 <ng-container *ngIf="!hasStartedWill">
                     <div
                         *ngFor="let section of willSections"
-                        class="bg-easywills-white border border-border rounded-lg px-8 py-7 shadow-sm flex items-center"
+                        class="bg-easywills-white border border-border rounded-lg px-8 py-4 shadow-sm flex items-center"
                     >
                         <div
                             class="w-10 h-10 bg-easywills-black-11% rounded-md flex items-center justify-center mr-4 flex-shrink-0"
@@ -106,7 +106,7 @@
                         </div>
                         <div>
                             <h4
-                                class="text-lg font-semibold text-easywills-black text-foreground"
+                                class="text-lg font-medium text-easywills-black text-foreground"
                             >
                                 {{ section.title }}
                             </h4>
@@ -127,7 +127,7 @@
                     >
                         <!-- Accordion Header -->
                         <button
-                            class="w-full px-8 py-8 flex items-center justify-between text-left focus:outline-none"
+                            class="w-full px-8 py-5 flex items-center justify-between text-left focus:outline-none"
                             (click)="toggleSection(section.id)"
                             [attr.aria-expanded]="section.expanded"
                             [attr.aria-controls]="'section-' + section.id"
@@ -143,7 +143,7 @@
                                 </div>
                                 <div>
                                     <h4
-                                        class="text-lg font-semibold text-easywills-black text-foreground"
+                                        class="text-lg font-medium text-easywills-black text-foreground"
                                     >
                                         {{
                                             section.returningUserTitle ||
@@ -325,7 +325,7 @@
                                                 "
                                                 class="bg-[#737373] text-white rounded-lg p-4 mb-4"
                                             >
-                                                <h5 class="font-bold text-lg">
+                                                <h5 class="font-medium text-lg">
                                                     {{ $any(spouse).firstName }}
                                                     {{ $any(spouse).lastName }}
                                                 </h5>
@@ -386,7 +386,7 @@
                                                 "
                                                 class="bg-[#737373] text-white rounded-lg p-4 mb-4"
                                             >
-                                                <h5 class="font-bold text-lg">
+                                                <h5 class="font-medium text-lg">
                                                     {{ $any(child).firstName }}
                                                     {{ $any(child).lastName }}
                                                 </h5>
