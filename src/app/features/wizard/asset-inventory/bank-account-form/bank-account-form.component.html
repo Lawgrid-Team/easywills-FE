@@ -1,63 +1,110 @@
 <div>
     <div class="flex items-center mb-4">
-        <h2 class="text-3xl font-bold text-easywills-black">List all your assets</h2>
+        <h2 class="text-3xl font-bold text-easywills-black">
+            List all your assets
+        </h2>
         <mat-icon class="ml-2">help</mat-icon>
     </div>
 
-    <p class="text-easywills-dark-grey mb-6">Including bank accounts, real estate, bonds, cryptocurrency, and so on.</p>
+    <p class="text-easywills-dark-grey mb-6">
+        Including bank accounts, real estate, bonds, cryptocurrency, and so on.
+    </p>
 
-    <div class="p-6 rounded-lg border border-[#b7b7b7] border-border bg-easywills-white">
+    <div
+        class="p-6 rounded-lg border border-[#b7b7b7] border-border bg-easywills-white"
+    >
         <div class="flex items-center mb-6">
-            <img class="mr-2" src='icons/icon_account.svg' alt="assets_icons">
-            <h3 class="text-xl font-medium text-easywills-black">Bank accounts</h3>
+            <img class="mr-2" src="icons/icon_account.svg" alt="assets_icons" />
+            <h3 class="text-xl font-medium text-easywills-black">
+                Bank accounts
+            </h3>
         </div>
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
-
             <div>
-                <label class="block pb-2 text-easywills-black">Account Type</label>
+                <label class="block pb-2 text-easywills-black"
+                    >Account Type</label
+                >
                 <mat-form-field appearance="outline" class="w-full">
-                    <mat-select formControlName="accountType">
-                        <mat-option *ngFor="let type of accountTypes" [value]="type.value">
-                            {{type.viewValue}}
+                    <mat-select
+                        formControlName="accountType"
+                        placeholder="Please select"
+                    >
+                        <mat-option
+                            *ngFor="let type of accountTypes"
+                            [value]="type.value"
+                        >
+                            {{ type.viewValue }}
                         </mat-option>
                     </mat-select>
                     <mat-icon matSuffix>help</mat-icon>
-                    <mat-error *ngIf="form.get('accountType')?.hasError('required')">
+                    <mat-error
+                        *ngIf="form.get('accountType')?.hasError('required')"
+                    >
                         Account type is required
                     </mat-error>
                 </mat-form-field>
             </div>
 
             <div>
-                <label class="block pb-2 text-easywills-dark-grey">Name of Institution</label>
+                <label class="block pb-2 text-easywills-dark-grey"
+                    >Name of Institution</label
+                >
                 <mat-form-field appearance="outline" class="w-full">
-                    <input matInput formControlName="institution" placeholder="Bank name">
-                    <mat-error *ngIf="form.get('institution')?.hasError('required')">
+                    <input
+                        matInput
+                        formControlName="institution"
+                        placeholder="Bank name"
+                    />
+                    <mat-error
+                        *ngIf="form.get('institution')?.hasError('required')"
+                    >
                         Institution name is required
                     </mat-error>
                 </mat-form-field>
             </div>
 
             <div>
-                <label class="block pb-2 text-easywills-dark-grey">Last 4 digits of account number</label>
+                <label class="block pb-2 text-easywills-dark-grey"
+                    >Last 4 digits of account number</label
+                >
                 <mat-form-field appearance="outline" class="w-full">
-                    <input matInput formControlName="accountNumber" placeholder="1234" maxlength="4">
-                    <mat-error *ngIf="form.get('accountNumber')?.hasError('required')">
+                    <input
+                        matInput
+                        formControlName="accountNumber"
+                        placeholder="1234"
+                        maxlength="4"
+                    />
+                    <mat-error
+                        *ngIf="form.get('accountNumber')?.hasError('required')"
+                    >
                         Account number is required
                     </mat-error>
-                    <mat-error *ngIf="form.get('accountNumber')?.hasError('pattern')">
+                    <mat-error
+                        *ngIf="form.get('accountNumber')?.hasError('pattern')"
+                    >
                         Please enter 4 digits
                     </mat-error>
                 </mat-form-field>
             </div>
 
             <div class="flex flex-col md:flex-row gap-4">
-                <button mat-flat-button color="primary" type="submit" class="w-full">
+                <button
+                    mat-flat-button
+                    color="primary"
+                    type="submit"
+                    class="w-full"
+                >
                     Save
                 </button>
-                <button *ngIf="!editingAssetId" mat-stroked-button color="primary" type="button"
-                    (click)="onAddAnother()" class="w-full">
+                <button
+                    *ngIf="!editingAssetId"
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    (click)="onAddAnother()"
+                    class="w-full"
+                >
                     <mat-icon>add</mat-icon>
                     Add another account
                 </button>
