@@ -1,9 +1,9 @@
 <div>
     <div class="flex items-center mb-4">
-        <h2 class="text-3xl font-bold text-easywills-black">
+        <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
             List all your assets
         </h2>
-        <mat-icon class="ml-2">help</mat-icon>
+        <mat-icon class="ml-2">info_outline</mat-icon>
     </div>
 
     <p class="text-easywills-dark-grey mb-6">
@@ -19,7 +19,7 @@
         >
             <div
                 *ngIf="assetType.count > 0"
-                class="absolute top-2 right-2 bg-foreground text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                class="absolute top-2 right-2 bg-[#444444] text-white rounded-full w-8 h-8 flex items-center justify-center text-base font-medium"
             >
                 {{ assetType.count }}
             </div>
@@ -43,72 +43,50 @@
     <!-- Display added assets -->
     <div *ngIf="data.bankAccounts.length > 0" class="mt-8">
         <h3 class="text-xl font-bold text-foreground mb-4">Bank Accounts</h3>
-        <mat-card
+        <div
             *ngFor="let account of data.bankAccounts"
-            class="bg-easywills-dark-grey text-white p-4 rounded-md mb-4"
+            class="bg-white rounded-md border border-[#8e8e8e] p-4 mb-4 relative"
         >
-            <div class="flex justify-between items-start">
-                <div>
-                    <h3 class="text-xl font-medium">
-                        {{ account.accountType }}
-                    </h3>
-                    <p style="color: #d3d3d3">{{ account.institution }}</p>
-                    <p style="color: #d3d3d3">
-                        Account ending in {{ account.accountNumber }}
-                    </p>
-                </div>
-                <button
-                    mat-icon-button
-                    (click)="
-                        handleEditAsset('bank-account', account.id);
-                        $event.stopPropagation()
-                    "
-                    style="color: #efefef"
-                >
-                    <mat-icon>edit</mat-icon>
-                </button>
+            <div>
+                <h3 class="text-lg font-medium text-easywills-black">
+                    {{ account.accountType }}
+                </h3>
+                <p class="text-sm text-gray-600">
+                    {{ account.institution }}
+                </p>
+                <p class="text-sm text-gray-600">
+                    Account ending in {{ account.accountNumber }}
+                </p>
             </div>
-        </mat-card>
+        </div>
     </div>
 
     <div *ngIf="data.realEstateProperties.length > 0" class="mt-8">
         <h3 class="text-xl font-bold text-foreground mb-4">
             Real Estate Properties
         </h3>
-        <mat-card
+        <div
             *ngFor="let property of data.realEstateProperties"
-            class="bg-easywills-dark-grey text-white p-4 rounded-md mb-4"
+            class="bg-white rounded-md border border-[#8e8e8e] p-4 mb-4 relative"
         >
-            <div class="flex justify-between items-start">
-                <div>
-                    <h3 class="text-xl font-medium">
-                        {{ property.propertyType }} property
-                    </h3>
-                    <p style="color: #d3d3d3">{{ property.ownershipType }}</p>
-                    <p style="color: #d3d3d3">{{ property.address }}</p>
-                </div>
-                <div class="flex space-x-2">
-                    <button
-                        mat-icon-button
-                        (click)="
-                            handleEditAsset('real-estate', property.id);
-                            $event.stopPropagation()
-                        "
-                        style="color: #efefef"
-                    >
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                </div>
+            <div>
+                <h3 class="text-lg font-medium text-easywills-black">
+                    {{ property.propertyType }} property
+                </h3>
+                <p class="text-sm text-gray-600">
+                    {{ property.ownershipType }}
+                </p>
+                <p class="text-sm text-gray-600">{{ property.address }}</p>
             </div>
-        </mat-card>
+        </div>
     </div>
 
-    <div class="absolute bottom-24 right-8">
+    <div class="fixed bottom-24 right-8 z-50">
         <div
-            class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white"
+            class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white shadow-lg"
         >
             <span class="mr-2">Need help?</span>
-            <mat-icon>help</mat-icon>
+            <mat-icon>question_answer</mat-icon>
         </div>
     </div>
 </div>

@@ -1,9 +1,9 @@
 <div>
     <div class="flex items-center mb-4">
-        <h2 class="text-3xl font-bold text-easywills-black">
+        <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
             List all your assets
         </h2>
-        <mat-icon class="ml-2">help</mat-icon>
+        <mat-icon class="ml-2">info_outline</mat-icon>
     </div>
 
     <p class="text-easywills-dark-grey mb-6">
@@ -20,95 +20,171 @@
             </h3>
         </div>
 
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
-            <div>
-                <label class="block pb-2 text-easywills-black"
-                    >Account Type</label
+        <!-- Show existing accounts if any exist and form is not shown -->
+        <div *ngIf="data.bankAccounts.length > 0 && !showForm">
+            <!-- Display existing bank accounts in cards -->
+            <div class="space-y-4 mb-6">
+                <div
+                    *ngFor="let account of data.bankAccounts"
+                    class="bg-white rounded-md border border-[#8e8e8e] p-4 mb-4 relative"
                 >
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-select
-                        formControlName="accountType"
-                        placeholder="Please select"
-                    >
-                        <mat-option
-                            *ngFor="let type of accountTypes"
-                            [value]="type.value"
-                        >
-                            {{ type.viewValue }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-icon matSuffix>help</mat-icon>
-                    <mat-error
-                        *ngIf="form.get('accountType')?.hasError('required')"
-                    >
-                        Account type is required
-                    </mat-error>
-                </mat-form-field>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4
+                                class="text-lg font-medium text-easywills-black"
+                            >
+                                {{ account.accountType }}
+                            </h4>
+                            <p class="text-sm text-gray-600">
+                                {{ account.institution }}
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                Account ending in {{ account.accountNumber }}
+                            </p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button
+                                mat-icon-button
+                                (click)="editAccount(account.id)"
+                                class="text-gray-600"
+                            >
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button
+                                mat-icon-button
+                                (click)="deleteAccount(account.id)"
+                                class="text-gray-600"
+                            >
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <label class="block pb-2 text-easywills-dark-grey"
-                    >Name of Institution</label
+            <!-- Action buttons for when accounts exist -->
+            <div class="flex flex-col gap-4">
+                <button
+                    type="button"
+                    (click)="onAddAnother()"
+                    class="w-full bg-transparent border-none text-gray-600 hover:text-gray-800 flex items-center justify-center gap-2 py-3"
                 >
-                <mat-form-field appearance="outline" class="w-full">
-                    <input
-                        matInput
-                        formControlName="institution"
-                        placeholder="Bank name"
-                    />
-                    <mat-error
-                        *ngIf="form.get('institution')?.hasError('required')"
-                    >
-                        Institution name is required
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div>
-                <label class="block pb-2 text-easywills-dark-grey"
-                    >Last 4 digits of account number</label
-                >
-                <mat-form-field appearance="outline" class="w-full">
-                    <input
-                        matInput
-                        formControlName="accountNumber"
-                        placeholder="1234"
-                        maxlength="4"
-                    />
-                    <mat-error
-                        *ngIf="form.get('accountNumber')?.hasError('required')"
-                    >
-                        Account number is required
-                    </mat-error>
-                    <mat-error
-                        *ngIf="form.get('accountNumber')?.hasError('pattern')"
-                    >
-                        Please enter 4 digits
-                    </mat-error>
-                </mat-form-field>
-            </div>
-
-            <div class="flex flex-col md:flex-row gap-4">
+                    <span class="underline flex items-center gap-2">
+                        <mat-icon class="w-4 h-4">add</mat-icon>
+                        Add another account
+                    </span>
+                </button>
                 <button
                     mat-flat-button
                     color="primary"
-                    type="submit"
+                    type="button"
+                    (click)="saveAllAccounts()"
                     class="w-full"
                 >
                     Save
                 </button>
-                <button
-                    *ngIf="!editingAssetId"
-                    mat-stroked-button
-                    color="primary"
-                    type="button"
-                    (click)="onAddAnother()"
-                    class="w-full"
-                >
-                    <mat-icon>add</mat-icon>
-                    Add another account
-                </button>
             </div>
-        </form>
+        </div>
+
+        <!-- Show form when no accounts exist or when adding/editing -->
+        <div *ngIf="data.bankAccounts.length === 0 || showForm">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+                <div>
+                    <label class="flex items-center pb-2 text-easywills-black"
+                        >Account Type
+                        <mat-icon class="ml-2 text-sm">info_outline</mat-icon>
+                    </label>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-select
+                            formControlName="accountType"
+                            placeholder="Please select"
+                        >
+                            <mat-option
+                                *ngFor="let type of accountTypes"
+                                [value]="type.value"
+                            >
+                                {{ type.viewValue }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="
+                                form.get('accountType')?.hasError('required')
+                            "
+                        >
+                            Account type is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div>
+                    <label class="block pb-2 text-easywills-dark-grey"
+                        >Name of Institution</label
+                    >
+                    <mat-form-field appearance="outline" class="w-full">
+                        <input
+                            matInput
+                            formControlName="institution"
+                            placeholder="Bank name"
+                        />
+                        <mat-error
+                            *ngIf="
+                                form.get('institution')?.hasError('required')
+                            "
+                        >
+                            Institution name is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div>
+                    <label class="block pb-2 text-easywills-dark-grey"
+                        >Last 4 digits of account number</label
+                    >
+                    <mat-form-field appearance="outline" class="w-full">
+                        <input
+                            matInput
+                            formControlName="accountNumber"
+                            placeholder="1234"
+                            maxlength="4"
+                        />
+                        <mat-error
+                            *ngIf="
+                                form.get('accountNumber')?.hasError('required')
+                            "
+                        >
+                            Account number is required
+                        </mat-error>
+                        <mat-error
+                            *ngIf="
+                                form.get('accountNumber')?.hasError('pattern')
+                            "
+                        >
+                            Please enter 4 digits
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4">
+                    <button
+                        mat-flat-button
+                        color="primary"
+                        type="submit"
+                        class="w-full"
+                    >
+                        Save
+                    </button>
+
+                    <button
+                        *ngIf="data.bankAccounts.length > 0"
+                        mat-stroked-button
+                        type="button"
+                        (click)="onCancel()"
+                        class="w-full"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
