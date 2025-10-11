@@ -12,13 +12,15 @@
                         class="w-32"
                     />
                 </a>
-                <div *ngIf="verified"
-                     class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
+                <div
+                    *ngIf="verified"
+                    class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
                 >
-                    <img alt="" src="icons/icon_verify.svg" srcset=""/>
+                    <img alt="" src="icons/icon_verify.svg" srcset="" />
                     <span>Verified</span>
                 </div>
-                <div *ngIf="!verified"
+                <div
+                    *ngIf="!verified"
                     class="ml-4 rounded-md border border-border px-3 py-1 text-sm text-secondary flex gap-2 items-center"
                 >
                     <img src="icons/icon_unverify.svg" alt="" srcset="" />
@@ -79,7 +81,10 @@
                     <p
                         class="text-foreground text-easywills-dark-grey text-lg mb-4"
                     >
-                        Last updated: <span class="font-bold">{{ willState.lastUpdatedTimeAgo }}</span>
+                        Last updated:
+                        <span class="font-bold">{{
+                            willState.lastUpdatedTimeAgo
+                        }}</span>
                     </p>
                 </ng-container>
             </div>
@@ -160,16 +165,6 @@
                             }}</mat-icon>
                         </button>
 
-                        <!-- Progress bar for collapsed cards -->
-                        <div *ngIf="!section.expanded" class="px-8 pb-5">
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div
-                                    class="bg-[#444444] h-2 rounded-full"
-                                    [style.width]="getProgressWidth(section.id)"
-                                ></div>
-                            </div>
-                        </div>
-
                         <!-- Accordion Content -->
                         <div
                             *ngIf="section.expanded"
@@ -186,35 +181,6 @@
                                             else noPersonalData
                                         "
                                     >
-                                        <!-- Progress bar -->
-                                        <div
-                                            class="w-full bg-gray-200 rounded-full h-2 mb-4"
-                                        >
-                                            <div
-                                                class="bg-[#444444] h-2 rounded-full w-full"
-                                            ></div>
-                                        </div>
-
-                                        <div
-                                            class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
-                                        >
-                                            <svg
-                                                class="w-4 h-4"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                                                    stroke="#444444"
-                                                    stroke-width="2"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                            <span>100% complete</span>
-                                        </div>
-
                                         <div class="mt-4 space-y-3 text-sm">
                                             <div class="flex justify-between">
                                                 <span class="text-gray-500"
@@ -357,7 +323,7 @@
                                                         personalDetails
                                                     ).spouses
                                                 "
-                                                class="bg-[#737373] text-white rounded-lg p-4"
+                                                class="bg-[#737373] text-white rounded-lg p-4 mb-4"
                                             >
                                                 <h5 class="font-bold text-lg">
                                                     {{ $any(spouse).firstName }}
@@ -418,7 +384,7 @@
                                                         personalDetails
                                                     ).children
                                                 "
-                                                class="bg-[#737373] text-white rounded-lg p-4 mt-2"
+                                                class="bg-[#737373] text-white rounded-lg p-4 mb-4"
                                             >
                                                 <h5 class="font-bold text-lg">
                                                     {{ $any(child).firstName }}
@@ -506,35 +472,6 @@
                                             else noAssetData
                                         "
                                     >
-                                        <!-- Progress bar -->
-                                        <div
-                                            class="w-full bg-gray-200 rounded-full h-2 mb-4"
-                                        >
-                                            <div
-                                                class="bg-[#444444] h-2 rounded-full w-full"
-                                            ></div>
-                                        </div>
-
-                                        <div
-                                            class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
-                                        >
-                                            <svg
-                                                class="w-4 h-4"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                                                    stroke="#444444"
-                                                    stroke-width="2"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                />
-                                            </svg>
-                                            <span>100% complete</span>
-                                        </div>
-
                                         <!-- Real Estate Properties -->
                                         <div
                                             *ngIf="
@@ -691,22 +628,6 @@
                                 <!-- Estate Distribution Section -->
                                 <div *ngSwitchCase="'distribution'">
                                     <div class="pt-4">
-                                        <!-- Progress bar -->
-                                        <div
-                                            class="w-full bg-gray-200 rounded-full h-2 mb-4"
-                                        >
-                                            <div
-                                                class="bg-[#444444] h-2 rounded-full"
-                                                style="width: 10%"
-                                            ></div>
-                                        </div>
-
-                                        <div
-                                            class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
-                                        >
-                                            <span>10% complete</span>
-                                        </div>
-
                                         <div class="mt-4 space-y-3 text-sm">
                                             <div class="flex justify-between">
                                                 <span class="text-gray-500"
@@ -758,22 +679,6 @@
                                 <!-- Executor & Witnesses Section -->
                                 <div *ngSwitchCase="'executor'">
                                     <div class="pt-4">
-                                        <!-- Progress bar -->
-                                        <div
-                                            class="w-full bg-gray-200 rounded-full h-2 mb-4"
-                                        >
-                                            <div
-                                                class="bg-[#444444] h-2 rounded-full"
-                                                style="width: 0%"
-                                            ></div>
-                                        </div>
-
-                                        <div
-                                            class="flex items-center justify-center gap-2 text-sm text-[#6f6f6f] font-medium mb-4"
-                                        >
-                                            <span>0% complete</span>
-                                        </div>
-
                                         <!-- Horizontal border line -->
                                         <div
                                             class="w-full flex justify-center mt-6"
