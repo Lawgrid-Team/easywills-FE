@@ -1,12 +1,10 @@
 <div>
-    <h2 class="text-3xl font-bold text-easywills-black mb-8">
+    <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
         Assign your Executor(s)
     </h2>
     <label class="text-easywills-black flex items-center mb-2" for="title"
         >Select one of the options below to proceed</label
     >
-    <!-- <mat-form-field appearance="outline" class="w-full"> -->
-
     <form (ngSubmit)="onSubmit()" class="space-y-6">
         <mat-radio-group
             [(ngModel)]="hasExecutor"
@@ -39,27 +37,47 @@
 
         <div *ngIf="hasExecutor" class="space-y-4">
             <!-- Display existing executor -->
-            <mat-card
+            <div
                 *ngFor="let executor of executors"
-                class="bg-easywills-dark-grey text-white p-4 rounded-md"
+                class="bg-white border border-[#e0e0e0] rounded-lg p-4 mb-4"
             >
                 <div class="flex justify-between items-start">
-                    <h3 class="text-xl font-semibold">
-                        {{ executor.firstName }} {{ executor.lastName }}
-                    </h3>
-                    <button
-                        type="button"
-                        mat-icon-button
-                        (click)="handleEditExecutor(executor)"
-                        class="text-white"
-                    >
-                        <mat-icon>edit</mat-icon>
-                    </button>
+                    <div class="executor-details">
+                        <h4
+                            class="font-medium text-easywills-black text-base mb-1"
+                        >
+                            {{ executor.firstName }} {{ executor.lastName }}
+                        </h4>
+                        <p class="text-easywills-dark-grey text-sm mb-1">
+                            Lawyer
+                        </p>
+                        <p class="text-easywills-dark-grey text-sm mb-1">
+                            Email: {{ executor.email }}
+                        </p>
+                        <p class="text-easywills-dark-grey text-sm">
+                            Phone: {{ executor.phoneNumber }}
+                        </p>
+                    </div>
+                    <div class="flex">
+                        <button
+                            type="button"
+                            mat-icon-button
+                            (click)="handleEditExecutor(executor)"
+                            class="text-foreground"
+                        >
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button
+                            type="button"
+                            mat-icon-button
+                            (click)="removeExecutor(executor)"
+                            class="text-foreground"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
                 </div>
-                <p class="text-grey">Lawyer</p>
-                <p>Email: {{ executor.email }}</p>
-                <p>Phone: {{ executor.phoneNumber }}</p>
-            </mat-card>
+            </div>
 
             <!-- Form to add/edit executor -->
             <div *ngIf="isAddingExecutor" class="space-y-4">
@@ -70,7 +88,9 @@
                     <div>
                         <label class="flex items-center mb-2">
                             Is your executor an individual or an organization?
-                            <mat-icon class="ml-2 text-sm">help</mat-icon>
+                            <mat-icon class="ml-2 text-sm"
+                                >info_outline</mat-icon
+                            >
                         </label>
                         <mat-form-field appearance="outline" class="w-full">
                             <!-- <mat-label>Select type</mat-label> -->
@@ -240,6 +260,7 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
+                        <br />
                         <div>
                             <label class="block mb-2"
                                 >What is the organization’s business
@@ -263,7 +284,7 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-
+                        <br />
                         <div>
                             <label class="block mb-2">Email</label>
                             <mat-form-field appearance="outline" class="w-full">
@@ -294,7 +315,7 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-
+                        <br />
                         <div>
                             <label class="block mb-2">Phone Number</label>
                             <mat-form-field appearance="outline" class="w-full">

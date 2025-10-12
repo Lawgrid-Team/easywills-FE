@@ -1,9 +1,9 @@
 <div>
-    <div class="flex items-center mb-8">
-        <h2 class="text-3xl font-bold text-easywills-black">
+    <div class="flex items-center mb-4">
+        <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
             Assigned Your Witnesses
         </h2>
-        <mat-icon class="ml-2">help</mat-icon>
+        <mat-icon class="ml-2">info_outline</mat-icon>
     </div>
 
     <p class="text-easywills-dark-grey mb-6">
@@ -12,28 +12,46 @@
 
     <form (ngSubmit)="onSubmit()" class="space-y-6">
         <!-- Display existing witnesses -->
-        <mat-card
+        <div
             *ngFor="let witness of witnesses"
-            class="bg-white p-4 rounded-md border border-border"
+            class="bg-white border border-[#e0e0e0] rounded-lg p-4 mb-4"
         >
             <div class="flex justify-between items-start">
-                <h3 class="text-xl font-semibold">
-                    {{ witness.firstName | titlecase }}
-                    {{ witness.lastName | titlecase }}
-                </h3>
-                <button
-                    type="button"
-                    mat-icon-button
-                    (click)="handleEditWitness(witness)"
-                    class="text-foreground"
-                >
-                    <mat-icon>edit</mat-icon>
-                </button>
+                <div class="witness-details">
+                    <h4 class="font-medium text-easywills-black text-base mb-1">
+                        {{ witness.firstName | titlecase }}
+                        {{ witness.lastName | titlecase }}
+                    </h4>
+                    <p class="text-easywills-dark-grey text-sm mb-1">
+                        {{ witness.email }}
+                    </p>
+                    <p class="text-easywills-dark-grey text-sm mb-1">
+                        {{ witness.phoneNumber }}
+                    </p>
+                    <p class="text-easywills-dark-grey text-sm">
+                        {{ witness.relationship }}
+                    </p>
+                </div>
+                <div class="flex">
+                    <button
+                        type="button"
+                        mat-icon-button
+                        (click)="handleEditWitness(witness)"
+                        class="text-foreground"
+                    >
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button
+                        type="button"
+                        mat-icon-button
+                        (click)="removeWitness(witness)"
+                        class="text-foreground"
+                    >
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
             </div>
-            <p>{{ witness.email }}</p>
-            <p>{{ witness.phoneNumber }}</p>
-            <p>{{ witness.relationship }}</p>
-        </mat-card>
+        </div>
 
         <div *ngIf="isAddingWitness" class="space-y-4">
             <h3 class="text-xl font-semibold text-foreground">

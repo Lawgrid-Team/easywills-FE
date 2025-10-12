@@ -91,19 +91,14 @@ export class ExecutorsFormComponent {
                 addressControl?.setValidators([Validators.required]);
                 lastNameControl?.updateValueAndValidity();
                 addressControl?.updateValueAndValidity();
-
             } else {
                 addressControl?.clearValidators();
                 addressControl?.updateValueAndValidity();
-
             }
-
         });
-
 
         // Initial form validity
         this.setFormValidity.emit(true);
-
     }
 
     handleHasExecutorChange(value: string): void {
@@ -116,7 +111,6 @@ export class ExecutorsFormComponent {
         } else {
             this.setFormValidity.emit(false);
         }
-
 
         if (this.hasExecutor && this.executors.length === 0) {
             this.isAddingExecutor = true;
@@ -155,10 +149,7 @@ export class ExecutorsFormComponent {
             this.isAddingExecutor = false;
             this.editingExecutorId = null;
         }
-
     }
-
-
 
     handleEditExecutor(executor: Executor): void {
         this.executorForm.patchValue({
@@ -169,6 +160,19 @@ export class ExecutorsFormComponent {
         });
         this.editingExecutorId = executor.id;
         this.isAddingExecutor = true;
+    }
+
+    removeExecutor(executor: Executor): void {
+        this.executors = this.executors.filter((e) => e.id !== executor.id);
+        this.updateData.emit({ executors: this.executors });
+
+        // If no executors left and hasExecutor is true, show add form
+        if (this.executors.length === 0 && this.hasExecutor) {
+            this.isAddingExecutor = true;
+            this.setFormValidity.emit(false);
+        } else {
+            this.setFormValidity.emit(true);
+        }
     }
 
     handleAddAnotherExecutor(): void {
