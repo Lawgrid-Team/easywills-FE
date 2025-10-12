@@ -1,9 +1,8 @@
 <div>
     <div class="flex items-center mb-4">
         <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
-            Assigned Your Witnesses
+            Assign Your Witnesses
         </h2>
-        <mat-icon class="ml-2">info_outline</mat-icon>
     </div>
 
     <p class="text-easywills-dark-grey mb-6">
@@ -54,121 +53,145 @@
         </div>
 
         <div *ngIf="isAddingWitness" class="space-y-4">
-            <h3 class="text-xl font-semibold text-foreground">
+            <h3 class="text-2xl font-semibold font-DM_Serif mb-4">
                 {{ editingWitnessId ? "Edit Witness" : "Add Witness" }}
             </h3>
 
             <form [formGroup]="witnessForm" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <mat-form-field appearance="outline">
-                        <input
-                            matInput
-                            formControlName="firstName"
-                            placeholder="First name"
-                        />
-                        <mat-error
-                            *ngIf="
-                                witnessForm
-                                    .get('firstName')
-                                    ?.hasError('required')
-                            "
-                        >
-                            First name is required
-                        </mat-error>
-                        <mat-error
-                            *ngIf="
-                                witnessForm
-                                    .get('firstName')
-                                    ?.hasError('minlength')
-                            "
-                        >
-                            First name must be at least 2 characters
-                        </mat-error>
-                    </mat-form-field>
+                <div>
+                    <label class="block mb-2"
+                        >What is the name of the individual?</label
+                    >
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <mat-form-field appearance="outline">
+                            <input
+                                matInput
+                                formControlName="firstName"
+                                placeholder="First name"
+                            />
+                            <mat-error
+                                *ngIf="
+                                    witnessForm
+                                        .get('firstName')
+                                        ?.hasError('required')
+                                "
+                            >
+                                First name is required
+                            </mat-error>
+                            <mat-error
+                                *ngIf="
+                                    witnessForm
+                                        .get('firstName')
+                                        ?.hasError('minlength')
+                                "
+                            >
+                                First name must be at least 2 characters
+                            </mat-error>
+                        </mat-form-field>
 
-                    <mat-form-field appearance="outline">
+                        <mat-form-field appearance="outline">
+                            <input
+                                matInput
+                                formControlName="lastName"
+                                placeholder="Last name"
+                            />
+                            <mat-error
+                                *ngIf="
+                                    witnessForm
+                                        .get('lastName')
+                                        ?.hasError('required')
+                                "
+                            >
+                                Last name is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <br />
+                <div>
+                    <label class="block mb-2"
+                        >What is their email address?</label
+                    >
+                    <mat-form-field appearance="outline" class="w-full">
                         <input
                             matInput
-                            formControlName="lastName"
-                            placeholder="Last name"
+                            type="email"
+                            formControlName="email"
+                            placeholder="Enter email"
                         />
                         <mat-error
                             *ngIf="
-                                witnessForm
-                                    .get('lastName')
-                                    ?.hasError('required')
+                                witnessForm.get('email')?.hasError('required')
                             "
                         >
-                            Last name is required
+                            Email is required
+                        </mat-error>
+                        <mat-error
+                            *ngIf="witnessForm.get('email')?.hasError('email')"
+                        >
+                            Please enter a valid email address
                         </mat-error>
                     </mat-form-field>
                 </div>
-
-                <mat-form-field appearance="outline" class="w-full">
-                    <input
-                        matInput
-                        type="email"
-                        formControlName="email"
-                        placeholder="Enter email"
-                    />
-                    <mat-error
-                        *ngIf="witnessForm.get('email')?.hasError('required')"
+                <br />
+                <div>
+                    <label class="block mb-2"
+                        >What is their Phone number?</label
                     >
-                        Email is required
-                    </mat-error>
-                    <mat-error
-                        *ngIf="witnessForm.get('email')?.hasError('email')"
-                    >
-                        Please enter a valid email address
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="w-full">
-                    <input
-                        matInput
-                        type="text"
-                        formControlName="phoneNumber"
-                        placeholder="Enter phone number"
-                    />
-                    <mat-error
-                        *ngIf="
-                            witnessForm.get('phoneNumber')?.hasError('required')
-                        "
-                    >
-                        Phone number is required
-                    </mat-error>
-                    <mat-error
-                        *ngIf="
-                            witnessForm.get('phoneNumber')?.hasError('pattern')
-                        "
-                    >
-                        Please enter a valid 10-digit phone number
-                    </mat-error>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-select
-                        formControlName="relationship"
-                        placeholder="Select relationship"
-                    >
-                        <mat-option
-                            *ngFor="let option of relationshipOptions"
-                            [value]="option.value"
+                    <mat-form-field appearance="outline" class="w-full">
+                        <input
+                            matInput
+                            type="text"
+                            formControlName="phoneNumber"
+                            placeholder="Enter phone number"
+                        />
+                        <mat-error
+                            *ngIf="
+                                witnessForm
+                                    .get('phoneNumber')
+                                    ?.hasError('required')
+                            "
                         >
-                            {{ option.viewValue }}
-                        </mat-option>
-                    </mat-select>
-                    <mat-error
-                        *ngIf="
-                            witnessForm
-                                .get('relationship')
-                                ?.hasError('required')
-                        "
-                    >
-                        Relationship is required
-                    </mat-error>
-                </mat-form-field>
-
+                            Phone number is required
+                        </mat-error>
+                        <mat-error
+                            *ngIf="
+                                witnessForm
+                                    .get('phoneNumber')
+                                    ?.hasError('pattern')
+                            "
+                        >
+                            Please enter a valid 10-digit phone number
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <br />
+                <div>
+                    <label class="block mb-2">What is your relationship?</label>
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-select
+                            formControlName="relationship"
+                            placeholder="Select relationship"
+                        >
+                            <mat-option
+                                *ngFor="let option of relationshipOptions"
+                                [value]="option.value"
+                            >
+                                {{ option.viewValue }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="
+                                witnessForm
+                                    .get('relationship')
+                                    ?.hasError('required')
+                            "
+                        >
+                            Relationship is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <br />
                 <button
                     type="button"
                     mat-flat-button
