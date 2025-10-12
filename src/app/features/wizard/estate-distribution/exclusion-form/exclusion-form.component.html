@@ -1,15 +1,30 @@
 <div>
-    <div class="flex items-center mb-8">
-        <h2 class="text-3xl font-bold text-easywills-black">Exclude Individuals or Entities</h2>
-        <mat-icon class="ml-2">info</mat-icon>
+    <div class="flex items-center mb-4">
+        <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
+            Exclude Individuals or Entities
+        </h2>
+        <mat-icon class="ml-2">info_outline</mat-icon>
     </div>
 
     <p class="text-easywills-dark-grey mb-6">
-        Specify any individuals, groups or organizations that you wish to exclude from your Will. This ensures that your last wishes are very clear.
+        Specify any individuals, groups or organizations that you wish to
+        exclude from your Will. This ensures that your last wishes are very
+        clear.
     </p>
 
-    <div *ngIf="!isAddingExclusion && (!data.exclusions || data.exclusions.length === 0)">
-        <button type="button" mat-flat-button color="primary" (click)="startAddExclusion()" class="w-full flex items-center justify-center">
+    <div
+        *ngIf="
+            !isAddingExclusion &&
+            (!data.exclusions || data.exclusions.length === 0)
+        "
+    >
+        <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            (click)="startAddExclusion()"
+            class="w-full flex items-center justify-center"
+        >
             <mat-icon class="mr-2">add</mat-icon>
             Add exclusion
         </button>
@@ -17,31 +32,58 @@
 
     <div *ngIf="isAddingExclusion" class="exclusion-form-container">
         <h3 class="text-xl font-semibold mb-4">Add exclusion</h3>
-        
+
         <form [formGroup]="exclusionForm">
             <div class="mb-4">
-                <label class="block mb-2">What is the name of the individual?</label>
+                <label class="block mb-2"
+                    >What is the name of the individual?</label
+                >
                 <div class="flex flex-col md:flex-row gap-4">
                     <mat-form-field appearance="outline" class="w-full">
-                        <input matInput placeholder="First name" formControlName="firstName">
-                        <mat-error *ngIf="exclusionForm.get('firstName')?.hasError('required')">
+                        <input
+                            matInput
+                            placeholder="First name"
+                            formControlName="firstName"
+                        />
+                        <mat-error
+                            *ngIf="
+                                exclusionForm
+                                    .get('firstName')
+                                    ?.hasError('required')
+                            "
+                        >
                             First name is required
                         </mat-error>
                     </mat-form-field>
-                    
+
                     <mat-form-field appearance="outline" class="w-full">
-                        <input matInput placeholder="Last name" formControlName="lastName">
-                        <mat-error *ngIf="exclusionForm.get('lastName')?.hasError('required')">
+                        <input
+                            matInput
+                            placeholder="Last name"
+                            formControlName="lastName"
+                        />
+                        <mat-error
+                            *ngIf="
+                                exclusionForm
+                                    .get('lastName')
+                                    ?.hasError('required')
+                            "
+                        >
                             Last name is required
                         </mat-error>
                     </mat-form-field>
                 </div>
             </div>
-            
+
             <div class="mb-4">
-                <label class="block mb-2">What is their relationship to you?</label>
+                <label class="block mb-2"
+                    >What is their relationship to you?</label
+                >
                 <mat-form-field appearance="outline" class="w-full">
-                    <mat-select placeholder="Please select" formControlName="relationship">
+                    <mat-select
+                        placeholder="Please select"
+                        formControlName="relationship"
+                    >
                         <mat-option value="spouse">Spouse</mat-option>
                         <mat-option value="child">Child</mat-option>
                         <mat-option value="parent">Parent</mat-option>
@@ -49,49 +91,110 @@
                         <mat-option value="friend">Friend</mat-option>
                         <mat-option value="other">Other</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="exclusionForm.get('relationship')?.hasError('required')">
+                    <mat-error
+                        *ngIf="
+                            exclusionForm
+                                .get('relationship')
+                                ?.hasError('required')
+                        "
+                    >
                         Relationship is required
                     </mat-error>
                 </mat-form-field>
             </div>
-            
+
             <div class="mb-4">
-                <label class="block mb-2">Give reason for exclusion (Optional)</label>
+                <label class="block mb-2"
+                    >Give reason for exclusion (Optional)</label
+                >
                 <mat-form-field appearance="outline" class="w-full">
-                    <textarea matInput rows="5" placeholder="Enter reason" formControlName="reason"></textarea>
+                    <textarea
+                        matInput
+                        rows="5"
+                        placeholder="Enter reason"
+                        formControlName="reason"
+                    ></textarea>
                 </mat-form-field>
             </div>
-            
+
             <div class="mb-4">
-                <mat-checkbox formControlName="legalDeclaration" class="legal-declaration">
+                <mat-checkbox
+                    formControlName="legalDeclaration"
+                    class="legal-declaration"
+                >
                     <div class="declaration-text">
-                        I, John Doe, being of sound mind, hereby declare that at the time of executing this will:
+                        I, John Doe, being of sound mind, hereby declare that at
+                        the time of executing this will:
                         <ul class="ml-6 mt-2">
-                            <li class="mb-1">I fully understand that I am making a Last Will and Testament.</li>
-                            <li>I am aware of and understand the nature and extent of my estate, including all assets and liabilities.</li>
+                            <li class="mb-1">
+                                I fully understand that I am making a Last Will
+                                and Testament.
+                            </li>
+                            <li>
+                                I am aware of and understand the nature and
+                                extent of my estate, including all assets and
+                                liabilities.
+                            </li>
                         </ul>
                     </div>
                 </mat-checkbox>
-                <mat-error *ngIf="exclusionForm.get('legalDeclaration')?.hasError('required') && exclusionForm.get('legalDeclaration')?.touched" class="mt-2">
+                <mat-error
+                    *ngIf="
+                        exclusionForm
+                            .get('legalDeclaration')
+                            ?.hasError('required') &&
+                        exclusionForm.get('legalDeclaration')?.touched
+                    "
+                    class="mt-2"
+                >
                     You must confirm this declaration
                 </mat-error>
             </div>
-            
+
             <div class="flex justify-end gap-4 mt-6">
-                <button type="button" mat-stroked-button (click)="cancelAddExclusion()">Cancel</button>
-                <button type="button" mat-flat-button color="primary" [disabled]="exclusionForm.invalid" (click)="saveExclusion()">Save</button>
+                <button
+                    type="button"
+                    mat-stroked-button
+                    (click)="cancelAddExclusion()"
+                >
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    mat-flat-button
+                    color="primary"
+                    [disabled]="exclusionForm.invalid"
+                    (click)="saveExclusion()"
+                >
+                    Save
+                </button>
             </div>
         </form>
     </div>
-    
-    <div *ngIf="data.exclusions && data.exclusions.length > 0 && !isAddingExclusion" class="exclusions-list">
-        <div *ngFor="let exclusion of data.exclusions; let i = index" class="exclusion-item">
+
+    <div
+        *ngIf="
+            data.exclusions && data.exclusions.length > 0 && !isAddingExclusion
+        "
+        class="exclusions-list"
+    >
+        <div
+            *ngFor="let exclusion of data.exclusions; let i = index"
+            class="exclusion-item"
+        >
             <div class="flex justify-between items-start">
                 <div class="exclusion-details">
-                    <h4 class="font-semibold">{{exclusion.firstName}} {{exclusion.lastName}}</h4>
-                    <p class="text-easywills-dark-grey relationship-text">{{getRelationshipLabel(exclusion.relationship)}}</p>
-                    <p *ngIf="exclusion.reason" class="text-easywills-dark-grey reason-text">
-                        {{exclusion.reason}}
+                    <h4 class="font-medium">
+                        {{ exclusion.firstName }} {{ exclusion.lastName }}
+                    </h4>
+                    <p class="text-easywills-dark-grey relationship-text">
+                        {{ getRelationshipLabel(exclusion.relationship) }}
+                    </p>
+                    <p
+                        *ngIf="exclusion.reason"
+                        class="text-easywills-dark-grey reason-text"
+                    >
+                        {{ exclusion.reason }}
                     </p>
                 </div>
                 <div class="flex">
@@ -104,10 +207,25 @@
                 </div>
             </div>
         </div>
-        
-        <button type="button" mat-flat-button color="primary" (click)="startAddExclusion()" class="w-full flex items-center justify-center mt-4">
+
+        <button
+            type="button"
+            mat-flat-button
+            color="primary"
+            (click)="startAddExclusion()"
+            class="w-full flex items-center justify-center mt-4"
+        >
             <mat-icon class="mr-2">add</mat-icon>
             Add another exclusion
         </button>
+    </div>
+
+    <div class="fixed bottom-24 right-8 z-50">
+        <div
+            class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white shadow-lg"
+        >
+            <span class="mr-2">Need help?</span>
+            <mat-icon>question_answer</mat-icon>
+        </div>
     </div>
 </div>
