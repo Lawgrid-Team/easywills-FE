@@ -1,16 +1,27 @@
 <div>
     <div class="flex items-center mb-8">
-        <h2 class="text-3xl font-bold text-easywills-black">How would you like to distribute your estate?</h2>
+        <h2 class="text-3xl font-bold text-easywills-black">
+            How would you like to distribute your estate?
+        </h2>
         <mat-icon class="ml-2">info</mat-icon>
     </div>
-    <p class="text-easywills-dark-grey mb-6">Select one of the options below to distribute your estate to your loved ones.</p>
+    <p class="text-easywills-dark-grey mb-6">
+        Select one of the options below to distribute your estate to your loved
+        ones.
+    </p>
 
     <form (ngSubmit)="onSubmit()" class="space-y-6">
-
         <div class="space-y-3">
             <!-- Share as a whole option -->
-            <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
-                <mat-radio-button [value]="true" [checked]="sharingAsAWhole" (change)="handleEstateDistributionType('yes')" color="primary">
+            <div
+                class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border"
+            >
+                <mat-radio-button
+                    [value]="true"
+                    [checked]="sharingAsAWhole"
+                    (change)="handleEstateDistributionType('yes')"
+                    color="primary"
+                >
                     Share my estate as a whole
                 </mat-radio-button>
                 <div class="flex-grow"></div>
@@ -18,44 +29,62 @@
             </div>
 
             <!-- White box that appears when "Share as a whole" is selected -->
-            <div *ngIf="sharingAsAWhole" class="bg-white rounded-md p-6 border border-border">
+            <div
+                *ngIf="sharingAsAWhole"
+                class="bg-white rounded-md p-6 border border-border"
+            >
                 <h3 class="text-xl font-bold mb-4">Share entire Estate</h3>
-                
+
                 <!-- Remaining share indicator with grid layout -->
                 <div class="distribution-row mb-6">
                     <div class="label-column">
-                        <span class="text-easywills-dark-grey">Remaining share of estate</span>
+                        <span class="text-easywills-dark-grey"
+                            >Remaining share of estate</span
+                        >
                     </div>
                     <div class="percentage-column">
                         <div class="percentage-input-container remaining-share">
-                            <span class="percentage-value">{{ getRemainingPercentage() }}</span>
+                            <span class="percentage-value">{{
+                                getRemainingPercentage()
+                            }}</span>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Beneficiary cards -->
-                <div *ngFor="let beneficiary of beneficiaryList" class="bg-gray-600 rounded-md p-4 text-white mb-4">
+                <div
+                    *ngFor="let beneficiary of beneficiaryList"
+                    class="bg-gray-600 rounded-md p-4 text-white mb-4"
+                >
                     <div class="distribution-row">
                         <div class="label-column">
                             <p class="text-sm opacity-80">Dependant's name</p>
                             <p class="font-medium">{{ beneficiary.name }}</p>
-                            <p class="text-sm mt-1">{{ beneficiary.dateInfo }}</p>
+                            <p class="text-sm mt-1">
+                                {{ beneficiary.dateInfo }}
+                            </p>
                         </div>
                         <div class="percentage-column">
                             <div class="percentage-input-container">
-                                <input 
-                                    type="number" 
-                                    [ngModel]="beneficiary.percentage" 
-                                    (ngModelChange)="updatePercentage(beneficiary, $event)"
+                                <input
+                                    type="number"
+                                    [ngModel]="beneficiary.percentage"
+                                    (ngModelChange)="
+                                        updatePercentage(beneficiary, $event)
+                                    "
                                     (focus)="onPercentageFocus($event)"
                                     (blur)="onPercentageBlur($event)"
-                                    name="percentage-{{beneficiary.id}}" 
+                                    name="percentage-{{ beneficiary.id }}"
                                     class="percentage-input"
-                                    min="0" 
+                                    min="0"
                                     max="100"
-                                >
+                                />
                             </div>
-                            <button type="button" (click)="removeBeneficiary(beneficiary.id)" class="remove-button">
+                            <button
+                                type="button"
+                                (click)="removeBeneficiary(beneficiary.id)"
+                                class="remove-button"
+                            >
                                 <mat-icon>close</mat-icon>
                             </button>
                         </div>
@@ -64,8 +93,15 @@
             </div>
 
             <!-- Share individually option -->
-            <div class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border">
-                <mat-radio-button [value]="false" [checked]="!sharingAsAWhole" (change)="handleEstateDistributionType('no')" color="primary">
+            <div
+                class="flex items-center space-x-2 bg-white rounded-md p-4 border border-border"
+            >
+                <mat-radio-button
+                    [value]="false"
+                    [checked]="!sharingAsAWhole"
+                    (change)="handleEstateDistributionType('no')"
+                    color="primary"
+                >
                     Share my assets individually
                 </mat-radio-button>
                 <div class="flex-grow"></div>
@@ -73,14 +109,20 @@
             </div>
 
             <!-- White box that appears when "Share individually" is selected -->
-            <div *ngIf="!sharingAsAWhole" class="bg-white rounded-md p-6 border border-border">
+            <div
+                *ngIf="!sharingAsAWhole"
+                class="bg-white rounded-md p-6 border border-border"
+            >
                 <h3 class="text-xl font-bold mb-4">Share individual assets</h3>
-                
+
                 <!-- Asset type cards -->
                 <div class="space-y-4">
-                    <div *ngFor="let assetType of assetTypes" class="asset-type-section">
+                    <div
+                        *ngFor="let assetType of assetTypes"
+                        class="asset-type-section"
+                    >
                         <!-- Asset type header card -->
-                        <div 
+                        <div
                             class="flex items-center justify-between p-6 bg-white rounded-md border border-border cursor-pointer"
                             [class.mb-0]="assetType.expanded"
                             [class.rounded-b-none]="assetType.expanded"
@@ -89,118 +131,227 @@
                         >
                             <div class="flex items-center">
                                 <div class="asset-icon mr-4">
-                                    <img [src]="assetType.icon" [alt]="assetType.name + ' icon'" class="w-8 h-8">
+                                    <img
+                                        [src]="assetType.icon"
+                                        [alt]="assetType.name + ' icon'"
+                                        class="w-8 h-8"
+                                    />
                                 </div>
-                                <span class="text-lg font-medium">{{ assetType.name }}</span>
+                                <span class="text-lg font-medium">{{
+                                    assetType.name
+                                }}</span>
                             </div>
                             <div class="asset-count">
-                                <span class="count-badge">{{ assetType.count }}</span>
+                                <span class="count-badge">{{
+                                    assetType.count
+                                }}</span>
                             </div>
                         </div>
-                        
+
                         <!-- Expanded asset list -->
-                        <div *ngIf="assetType.expanded" class="bg-white rounded-b-md border border-t-0 border-border p-4">
-    <div *ngFor="let asset of assetType.assets" class="asset-item bg-white rounded-md border border-border p-4 mb-4 last:mb-0 relative">
-        <!-- Asset assigned badge - positioned in top right corner -->
-        <span *ngIf="asset.remainingShare === 0 && !asset.showAssignments" class="asset-assigned-badge">
-            <mat-icon class="badge-icon">done</mat-icon>
-            Asset assigned
-        </span>
-        
-        <div class="mb-4">
-            <h4 class="text-lg font-medium">{{ asset.name }}</h4>
-            <p class="text-sm text-gray-600">{{ asset.ownershipType }}</p>
-            <p class="text-sm text-gray-600">{{ asset.address || asset.details }}</p>
-        </div>
-        
-        <!-- Beneficiary assignments (if being edited) -->
-        <div *ngIf="asset.showAssignments" class="mb-4">
-            <!-- Remaining share indicator -->
-            <div class="flex justify-between items-center mb-4">
-                <span class="text-sm text-gray-600">Remaining share of Asset</span>
-                <span class="bg-gray-100 px-4 py-2 rounded-md text-sm font-medium">{{ asset.remainingShare || 100 }}%</span>
-            </div>
-            
-            <!-- Beneficiary cards -->
-            <div *ngFor="let assignment of asset.beneficiaries" class="bg-gray-600 rounded-md p-4 text-white mb-4">
-                <div class="distribution-row">
-                    <div class="label-column">
-                        <p class="text-sm opacity-80">Dependant's name</p>
-                        <p class="font-medium">{{ getBeneficiaryById(assignment.beneficiaryId)?.name }}</p>
-                        <p class="text-sm mt-1">{{ getBeneficiaryById(assignment.beneficiaryId)?.dateInfo }}</p>
-                    </div>
-                    <div class="percentage-column">
-                        <div class="percentage-input-container">
-                            <input 
-                                type="number" 
-                                [ngModel]="assignment.percentage" 
-                                (ngModelChange)="updateBeneficiaryPercentage(asset, assignment.beneficiaryId, $event)"
-                                (focus)="onPercentageFocus($event)"
-                                (blur)="onPercentageBlur($event)"
-                                name="percentage-{{assignment.beneficiaryId}}" 
-                                class="percentage-input"
-                                min="0" 
-                                max="100"
+                        <div
+                            *ngIf="assetType.expanded"
+                            class="bg-white rounded-b-md border border-t-0 border-border p-4"
+                        >
+                            <div
+                                *ngFor="let asset of assetType.assets"
+                                class="asset-item bg-white rounded-md border border-border p-4 mb-4 last:mb-0 relative"
                             >
+                                <!-- Asset assigned badge - positioned in top right corner -->
+                                <span
+                                    *ngIf="
+                                        asset.remainingShare === 0 &&
+                                        !asset.showAssignments
+                                    "
+                                    class="asset-assigned-badge"
+                                >
+                                    <mat-icon class="badge-icon">done</mat-icon>
+                                    Asset assigned
+                                </span>
+
+                                <div class="mb-4">
+                                    <h4 class="text-lg font-medium">
+                                        {{ asset.name }}
+                                    </h4>
+                                    <p class="text-sm text-gray-600">
+                                        {{ asset.ownershipType }}
+                                    </p>
+                                    <p class="text-sm text-gray-600">
+                                        {{ asset.address || asset.details }}
+                                    </p>
+                                </div>
+
+                                <!-- Beneficiary assignments (if being edited) -->
+                                <div *ngIf="asset.showAssignments" class="mb-4">
+                                    <!-- Remaining share indicator -->
+                                    <div
+                                        class="flex justify-between items-center mb-4"
+                                    >
+                                        <span class="text-sm text-gray-600"
+                                            >Remaining share of Asset</span
+                                        >
+                                        <span
+                                            class="bg-gray-100 px-4 py-2 rounded-md text-sm font-medium"
+                                            >{{
+                                                asset.remainingShare || 100
+                                            }}%</span
+                                        >
+                                    </div>
+
+                                    <!-- Beneficiary cards -->
+                                    <div
+                                        *ngFor="
+                                            let assignment of asset.beneficiaries
+                                        "
+                                        class="bg-gray-600 rounded-md p-4 text-white mb-4"
+                                    >
+                                        <div class="distribution-row">
+                                            <div class="label-column">
+                                                <p class="text-sm opacity-80">
+                                                    Dependant's name
+                                                </p>
+                                                <p class="font-medium">
+                                                    {{
+                                                        getBeneficiaryById(
+                                                            assignment.beneficiaryId
+                                                        )?.name
+                                                    }}
+                                                </p>
+                                                <p class="text-sm mt-1">
+                                                    {{
+                                                        getBeneficiaryById(
+                                                            assignment.beneficiaryId
+                                                        )?.dateInfo
+                                                    }}
+                                                </p>
+                                            </div>
+                                            <div class="percentage-column">
+                                                <div
+                                                    class="percentage-input-container"
+                                                >
+                                                    <input
+                                                        type="number"
+                                                        [ngModel]="
+                                                            assignment.percentage
+                                                        "
+                                                        (ngModelChange)="
+                                                            updateBeneficiaryPercentage(
+                                                                asset,
+                                                                assignment.beneficiaryId,
+                                                                $event
+                                                            )
+                                                        "
+                                                        (focus)="
+                                                            onPercentageFocus(
+                                                                $event
+                                                            )
+                                                        "
+                                                        (blur)="
+                                                            onPercentageBlur(
+                                                                $event
+                                                            )
+                                                        "
+                                                        name="percentage-{{
+                                                            assignment.beneficiaryId
+                                                        }}"
+                                                        class="percentage-input"
+                                                        min="0"
+                                                        max="100"
+                                                    />
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    (click)="
+                                                        removeBeneficiaryFromAsset(
+                                                            asset,
+                                                            assignment.beneficiaryId
+                                                        )
+                                                    "
+                                                    class="remove-button"
+                                                >
+                                                    <mat-icon>close</mat-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Save button for beneficiary assignments -->
+                                    <button
+                                        type="button"
+                                        class="w-full py-3 bg-[#444444] text-white rounded-md flex items-center justify-center"
+                                        (click)="saveAssetAssignments(asset)"
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+
+                                <!-- When not in edit mode and asset is fully assigned (remaining share = 0) -->
+                                <div
+                                    *ngIf="
+                                        !asset.showAssignments &&
+                                        asset.remainingShare === 0
+                                    "
+                                >
+                                    <button
+                                        type="button"
+                                        class="edit-beneficiary-link flex items-center justify-center"
+                                        (click)="showAssetAssignments(asset)"
+                                    >
+                                        <mat-icon class="mr-2">edit</mat-icon>
+                                        Edit Beneficiary
+                                    </button>
+                                </div>
+
+                                <!-- When not in edit mode and asset is not fully assigned or has no beneficiaries -->
+                                <div
+                                    *ngIf="
+                                        !asset.showAssignments &&
+                                        (asset.remainingShare === undefined ||
+                                            asset.remainingShare > 0)
+                                    "
+                                >
+                                    <!-- Remaining share indicator - only show if there are some beneficiaries assigned -->
+                                    <div
+                                        *ngIf="
+                                            asset.beneficiaries &&
+                                            asset.beneficiaries.length > 0
+                                        "
+                                        class="flex justify-between items-center mb-4"
+                                    >
+                                        <span class="text-sm text-gray-600"
+                                            >Remaining share of Asset</span
+                                        >
+                                        <span
+                                            class="bg-gray-100 px-4 py-2 rounded-md text-sm font-medium"
+                                            >{{ asset.remainingShare }}%</span
+                                        >
+                                    </div>
+
+                                    <!-- Assign beneficiary button -->
+                                    <button
+                                        type="button"
+                                        class="w-full py-3 bg-[#444444] text-white rounded-md flex items-center justify-center"
+                                        (click)="assignBeneficiary(asset)"
+                                    >
+                                        <mat-icon class="mr-2"
+                                            >person_add</mat-icon
+                                        >
+                                        Assign Beneficiary
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <button type="button" (click)="removeBeneficiaryFromAsset(asset, assignment.beneficiaryId)" class="remove-button">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Save button for beneficiary assignments -->
-            <button 
-                type="button" 
-                class="w-full py-3 bg-[#444444] text-white rounded-md flex items-center justify-center"
-                (click)="saveAssetAssignments(asset)"
-            >
-                Save
-            </button>
-        </div>
-        
-        <!-- When not in edit mode and asset is fully assigned (remaining share = 0) -->
-        <div *ngIf="!asset.showAssignments && asset.remainingShare === 0">
-            <button 
-                type="button" 
-                class="edit-beneficiary-link flex items-center justify-center"
-                (click)="showAssetAssignments(asset)"
-            >
-                <mat-icon class="mr-2">edit</mat-icon>
-                Edit Beneficiary
-            </button>
-        </div>
-        
-        <!-- When not in edit mode and asset is not fully assigned or has no beneficiaries -->
-        <div *ngIf="!asset.showAssignments && (asset.remainingShare === undefined || asset.remainingShare > 0)">
-            <!-- Remaining share indicator - only show if there are some beneficiaries assigned -->
-            <div *ngIf="asset.beneficiaries && asset.beneficiaries.length > 0" class="flex justify-between items-center mb-4">
-                <span class="text-sm text-gray-600">Remaining share of Asset</span>
-                <span class="bg-gray-100 px-4 py-2 rounded-md text-sm font-medium">{{ asset.remainingShare }}%</span>
-            </div>
-            
-            <!-- Assign beneficiary button -->
-            <button 
-                type="button" 
-                class="w-full py-3 bg-[#444444] text-white rounded-md flex items-center justify-center"
-                (click)="assignBeneficiary(asset)"
-            >
-                <mat-icon class="mr-2">person_add</mat-icon>
-                Assign Beneficiary
-            </button>
-        </div>
-    </div>
-</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="absolute bottom-24 right-8">
-            <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
+        <div class="fixed bottom-24 right-8 z-50">
+            <div
+                class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white shadow-lg"
+            >
                 <span class="mr-2">Need help?</span>
-                <mat-icon>help</mat-icon>
+                <mat-icon>question_answer</mat-icon>
             </div>
         </div>
     </form>
