@@ -21,6 +21,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import {
+    getCountries,
+    getStatesForCountry,
+    getCitiesForState,
+} from '../../../../shared/data/address-data';
 
 @Component({
     selector: 'app-real-estate-form',
@@ -69,39 +74,27 @@ export class RealEstateFormComponent implements OnInit {
         { value: 'Other', viewValue: 'Other' },
     ];
 
-    cities = [
-        { value: 'New York', viewValue: 'New York' },
-        { value: 'Los Angeles', viewValue: 'Los Angeles' },
-        { value: 'Chicago', viewValue: 'Chicago' },
-        { value: 'Houston', viewValue: 'Houston' },
-        { value: 'Phoenix', viewValue: 'Phoenix' },
-    ];
+    countries: { value: string; viewValue: string }[] = [];
+    states: { value: string; viewValue: string }[] = [];
+    cities: { value: string; viewValue: string }[] = [];
 
-    states = [
-        { value: 'New York', viewValue: 'New York' },
-        { value: 'California', viewValue: 'California' },
-        { value: 'Texas', viewValue: 'Texas' },
-        { value: 'Florida', viewValue: 'Florida' },
-        { value: 'Illinois', viewValue: 'Illinois' },
-    ];
-
-    countries = [
-        { value: 'United States', viewValue: 'United States' },
-        { value: 'Canada', viewValue: 'Canada' },
-        { value: 'United Kingdom', viewValue: 'United Kingdom' },
-        { value: 'Australia', viewValue: 'Australia' },
-        { value: 'Nigeria', viewValue: 'Nigeria' },
-    ];
+    private isInitializing = true;
 
     constructor(private fb: FormBuilder) {}
 
     ngOnInit(): void {
+        // Initialize countries
+        this.countries = getCountries();
+
+        console.log('Real Estate Form - Received data:', this.data);
+        console.log('Real Estate Properties:', this.data.realEstateProperties);
+
         this.form = this.fb.group({
             propertyType: ['', Validators.required],
             propertyTitle: ['', Validators.required],
             address: ['', [Validators.required, Validators.minLength(5)]],
-            city: ['', Validators.required],
-            state: ['', Validators.required],
+            city: [{ value: '', disabled: true }, Validators.required],
+            state: [{ value: '', disabled: true }, Validators.required],
             country: ['', Validators.required],
             ownershipType: ['Sole owner', Validators.required],
         });
@@ -115,10 +108,40 @@ export class RealEstateFormComponent implements OnInit {
             const propertyToEdit = this.data.realEstateProperties.find(
                 (property) => property.id === this.editingAssetId
             );
+            console.log('Editing property:', propertyToEdit);
             if (propertyToEdit) {
+                // Initialize address dropdowns based on existing data
+                if (propertyToEdit.country) {
+                    this.states = getStatesForCountry(propertyToEdit.country);
+                    this.form.get('state')?.enable();
+
+                    if (propertyToEdit.state) {
+                        this.cities = getCitiesForState(
+                            propertyToEdit.country,
+                            propertyToEdit.state
+                        );
+                        this.form.get('city')?.enable();
+                    }
+                }
+
                 this.form.patchValue(propertyToEdit);
             }
         }
+
+        // React to country changes
+        this.form.get('country')?.valueChanges.subscribe((selectedCountry) => {
+            this.onCountryChange(selectedCountry);
+        });
+
+        // React to state changes
+        this.form.get('state')?.valueChanges.subscribe((selectedState) => {
+            this.onStateChange(selectedState);
+        });
+
+        // Mark initialization as complete
+        setTimeout(() => {
+            this.isInitializing = false;
+        });
     }
 
     onSubmit(): void {
@@ -242,6 +265,88 @@ export class RealEstateFormComponent implements OnInit {
         // If no properties remain, show the form to add the first property
         if (updatedProperties.length === 0) {
             this.showForm = true;
+        }
+    }
+
+    onCountryChange(country: string): void {
+        console.log('Country changed to:', country);
+
+        if (country) {
+            this.states = getStatesForCountry(country);
+            this.cities = [];
+
+            if (this.form) {
+                // Enable state control and disable city control
+                this.form.get('state')?.enable();
+                this.form.get('city')?.disable();
+
+                // Only clear fields if this is not during initialization
+                if (!this.isInitializing) {
+                    const currentState = this.form.get('state')?.value;
+                    const currentCity = this.form.get('city')?.value;
+
+                    // Clear state and city values when country changes
+                    if (currentState || currentCity) {
+                        console.log(
+                            'Clearing state and city due to country change'
+                        );
+                        this.form.patchValue({
+                            state: '',
+                            city: '',
+                        });
+
+                        // Force form validation update
+                        this.form.get('state')?.markAsTouched();
+                        this.form.get('city')?.markAsTouched();
+                        this.form.updateValueAndValidity();
+                    }
+                }
+            }
+        } else {
+            this.states = [];
+            this.cities = [];
+
+            if (this.form) {
+                // Disable both state and city controls when no country is selected
+                this.form.get('state')?.disable();
+                this.form.get('city')?.disable();
+            }
+        }
+    }
+
+    onStateChange(state: string): void {
+        const country = this.form.get('country')?.value;
+        if (country && state) {
+            this.cities = getCitiesForState(country, state);
+
+            if (this.form) {
+                // Enable city control when state is selected
+                this.form.get('city')?.enable();
+
+                // Only clear city field if this is not during initialization
+                if (!this.isInitializing) {
+                    const currentCity = this.form.get('city')?.value;
+
+                    // Clear city value when state changes
+                    if (currentCity) {
+                        console.log('Clearing city due to state change');
+                        this.form.patchValue({
+                            city: '',
+                        });
+
+                        // Force form validation update
+                        this.form.get('city')?.markAsTouched();
+                        this.form.updateValueAndValidity();
+                    }
+                }
+            }
+        } else {
+            this.cities = [];
+
+            if (this.form) {
+                // Disable city control when no state is selected
+                this.form.get('city')?.disable();
+            }
         }
     }
 }

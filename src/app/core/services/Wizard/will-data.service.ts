@@ -72,7 +72,7 @@ export class WillDataService {
         streetAddress: '',
         city: '',
         state: '',
-        country: 'nigeria',
+        country: '',
         // Marital status and family
         isMarried: false,
         spouses: [],
@@ -595,7 +595,7 @@ export class WillDataService {
                         streetAddress: data.address.primaryHomeAddress || '',
                         city: data.address.city || '',
                         state: data.address.state || '',
-                        country: data.address.country || 'nigeria',
+                        country: data.address.country || '',
                     };
                 }
 

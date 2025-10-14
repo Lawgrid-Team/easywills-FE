@@ -1,10 +1,4 @@
-import {
-    Component,
-    Input,
-    Output,
-    EventEmitter,
-    OnInit,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
@@ -21,6 +15,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import {
+    getCountries,
+    getStatesForCountry,
+    getCitiesForState,
+} from '../../../../shared/data/address-data';
 
 @Component({
     selector: 'app-address-info-form',
@@ -47,115 +46,194 @@ export class AddressInfoFormComponent implements OnInit {
 
     form!: FormGroup;
 
+    countries: { value: string; viewValue: string }[] = [];
+    states: { value: string; viewValue: string }[] = [];
     cities: { value: string; viewValue: string }[] = [];
 
-    stateCityMap: Record<string, { value: string; viewValue: string }[]> = {
-        lagos: [
-            { value: 'ikeja', viewValue: 'Ikeja' },
-            { value: 'lekki', viewValue: 'Lekki' },
-            { value: 'ikorodu', viewValue: 'Ikorodu' },
-        ],
-        fct: [
-            { value: 'garki', viewValue: 'Garki' },
-            { value: 'maitama', viewValue: 'Maitama' },
-        ],
-        rivers: [
-            { value: 'port-harcourt', viewValue: 'Port Harcourt' },
-            { value: 'obio-akpor', viewValue: 'Obio-Akpor' },
-        ],
-        kano: [
-            { value: 'nassarawa', viewValue: 'Nassarawa' },
-            { value: 'tarauni', viewValue: 'Tarauni' },
-        ],
-        oyo: [
-            { value: 'ibadan', viewValue: 'Ibadan' },
-            { value: 'oyo-town', viewValue: 'Oyo Town' },
-        ],
-        edo: [{ value: 'benin-city', viewValue: 'Benin City' }],
-        enugu: [
-            { value: 'enugu-north', viewValue: 'Enugu North' },
-            { value: 'enugu-south', viewValue: 'Enugu South' },
-        ],
-        kaduna: [
-            { value: 'kaduna-north', viewValue: 'Kaduna North' },
-            { value: 'kaduna-south', viewValue: 'Kaduna South' },
-        ],
-    };
-
-    states = [
-        { value: 'abia', viewValue: 'Abia' },
-        { value: 'adamawa', viewValue: 'Adamawa' },
-        { value: 'akwa-ibom', viewValue: 'Akwa Ibom' },
-        { value: 'anambra', viewValue: 'Anambra' },
-        { value: 'bauchi', viewValue: 'Bauchi' },
-        { value: 'bayelsa', viewValue: 'Bayelsa' },
-        { value: 'benue', viewValue: 'Benue' },
-        { value: 'borno', viewValue: 'Borno' },
-        { value: 'cross-river', viewValue: 'Cross River' },
-        { value: 'delta', viewValue: 'Delta' },
-        { value: 'ebonyi', viewValue: 'Ebonyi' },
-        { value: 'edo', viewValue: 'Edo' },
-        { value: 'ekiti', viewValue: 'Ekiti' },
-        { value: 'enugu', viewValue: 'Enugu' },
-        { value: 'gombe', viewValue: 'Gombe' },
-        { value: 'imo', viewValue: 'Imo' },
-        { value: 'jigawa', viewValue: 'Jigawa' },
-        { value: 'kaduna', viewValue: 'Kaduna' },
-        { value: 'kano', viewValue: 'Kano' },
-        { value: 'katsina', viewValue: 'Katsina' },
-        { value: 'kebbi', viewValue: 'Kebbi' },
-        { value: 'kogi', viewValue: 'Kogi' },
-        { value: 'kwara', viewValue: 'Kwara' },
-        { value: 'lagos', viewValue: 'Lagos' },
-        { value: 'nasarawa', viewValue: 'Nasarawa' },
-        { value: 'niger', viewValue: 'Niger' },
-        { value: 'ogun', viewValue: 'Ogun' },
-        { value: 'ondo', viewValue: 'Ondo' },
-        { value: 'osun', viewValue: 'Osun' },
-        { value: 'oyo', viewValue: 'Oyo' },
-        { value: 'plateau', viewValue: 'Plateau' },
-        { value: 'rivers', viewValue: 'Rivers' },
-        { value: 'sokoto', viewValue: 'Sokoto' },
-        { value: 'taraba', viewValue: 'Taraba' },
-        { value: 'yobe', viewValue: 'Yobe' },
-        { value: 'zamfara', viewValue: 'Zamfara' },
-        { value: 'fct', viewValue: 'FCT' },
-    ];
-
-    countries = [{ value: 'nigeria', viewValue: 'Nigeria' }];
+    private isInitializing = true;
 
     constructor(private fb: FormBuilder) {}
 
     ngOnInit(): void {
+        // Initialize countries
+        this.countries = getCountries();
+
+        console.log('Address form received data:', this.data);
+
         this.form = this.fb.group({
             streetAddress: [
                 this.data.streetAddress || '',
                 [Validators.required, Validators.minLength(5)],
             ],
-            city: [this.data.city || '', Validators.required],
-            state: [this.data.state || '', Validators.required],
-            country: [this.data.country || 'nigeria', Validators.required],
+            city: [
+                { value: this.data.city || '', disabled: true },
+                Validators.required,
+            ],
+            state: [
+                { value: this.data.state || '', disabled: true },
+                Validators.required,
+            ],
+            country: [this.data.country || '', Validators.required],
         });
 
-        // Populate cities if a state is already selected
-        if (this.data.state) {
-            this.cities = this.stateCityMap[this.data.state] || [];
+        // Initialize states and cities based on existing data ONLY if we have data
+        if (this.data.country) {
+            // Populate dropdowns without triggering field clearing during initialization
+            this.states = getStatesForCountry(this.data.country);
+            this.form.get('state')?.enable();
+
+            if (this.data.state) {
+                this.cities = getCitiesForState(
+                    this.data.country,
+                    this.data.state
+                );
+                this.form.get('city')?.enable();
+            }
+        } else {
+            // Ensure state and city are disabled initially
+            this.form.get('state')?.disable();
+            this.form.get('city')?.disable();
         }
+
+        // React to country changes
+        this.form.get('country')?.valueChanges.subscribe((selectedCountry) => {
+            this.onCountryChange(selectedCountry);
+        });
 
         // React to state changes
         this.form.get('state')?.valueChanges.subscribe((selectedState) => {
-            this.cities = this.stateCityMap[selectedState] || [];
-            this.form.get('city')?.setValue(''); // Reset city selection
+            this.onStateChange(selectedState);
         });
 
         this.form.statusChanges.subscribe(() => {
-            this.setFormValidity.emit(this.form.valid);
-            if (this.form.valid) {
-                this.updateData.emit(this.form.value);
-            }
+            console.log(
+                'Form status changed - Valid:',
+                this.form.valid,
+                'Values:',
+                this.form.value
+            );
+
+            // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+            setTimeout(() => {
+                this.setFormValidity.emit(this.form.valid);
+                if (this.form.valid) {
+                    this.updateData.emit(this.form.value);
+                }
+            });
         });
 
-        this.setFormValidity.emit(this.form.valid);
+        console.log(
+            'Initial form state - Valid:',
+            this.form.valid,
+            'Values:',
+            this.form.value
+        );
+
+        // Mark initialization as complete
+        setTimeout(() => {
+            this.isInitializing = false;
+            this.setFormValidity.emit(this.form.valid);
+        });
+    }
+
+    onCountryChange(country: string): void {
+        console.log('Country changed to:', country);
+
+        if (country) {
+            this.states = getStatesForCountry(country);
+            this.cities = [];
+
+            if (this.form) {
+                // Enable state control and disable city control
+                this.form.get('state')?.enable();
+                this.form.get('city')?.disable();
+
+                // Only clear fields if this is not during initialization
+                if (!this.isInitializing) {
+                    const currentState = this.form.get('state')?.value;
+                    const currentCity = this.form.get('city')?.value;
+
+                    // Clear state and city values when country changes
+                    if (currentState || currentCity) {
+                        console.log(
+                            'Clearing state and city due to country change'
+                        );
+                        this.form.patchValue({
+                            state: '',
+                            city: '',
+                        });
+
+                        // Force form validation update
+                        this.form.get('state')?.markAsTouched();
+                        this.form.get('city')?.markAsTouched();
+                        this.form.updateValueAndValidity();
+
+                        // Use setTimeout to avoid change detection issues
+                        setTimeout(() => {
+                            console.log(
+                                'Form validity after clearing:',
+                                this.form.valid
+                            );
+                            this.setFormValidity.emit(this.form.valid);
+                        });
+                    }
+                }
+            }
+        } else {
+            this.states = [];
+            this.cities = [];
+
+            if (this.form) {
+                // Disable both state and city controls when no country is selected
+                this.form.get('state')?.disable();
+                this.form.get('city')?.disable();
+            }
+        }
+    }
+
+    onStateChange(state: string): void {
+        const country = this.form.get('country')?.value;
+        if (country && state) {
+            this.cities = getCitiesForState(country, state);
+
+            if (this.form) {
+                // Enable city control when state is selected
+                this.form.get('city')?.enable();
+
+                // Only clear city field if this is not during initialization
+                if (!this.isInitializing) {
+                    const currentCity = this.form.get('city')?.value;
+
+                    // Clear city value when state changes
+                    if (currentCity) {
+                        console.log('Clearing city due to state change');
+                        this.form.patchValue({
+                            city: '',
+                        });
+
+                        // Force form validation update
+                        this.form.get('city')?.markAsTouched();
+                        this.form.updateValueAndValidity();
+
+                        // Use setTimeout to avoid change detection issues
+                        setTimeout(() => {
+                            console.log(
+                                'Form validity after clearing city:',
+                                this.form.valid
+                            );
+                            this.setFormValidity.emit(this.form.valid);
+                        });
+                    }
+                }
+            }
+        } else {
+            this.cities = [];
+
+            if (this.form) {
+                // Disable city control when no state is selected
+                this.form.get('city')?.disable();
+            }
+        }
     }
 
     onSubmit(): void {

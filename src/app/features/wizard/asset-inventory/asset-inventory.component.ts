@@ -45,14 +45,39 @@ export class AssetInventoryComponent {
     ) {
         this.data = this.willDataService.getAssetInventory();
 
-        this.willDataService.getAssetInventoryFromBE()
-        .subscribe({
+        this.willDataService.getAssetInventoryFromBE().subscribe({
             next: (data: AssetInventoryData) => {
+                console.log('Asset Inventory - API response data:', data);
+                console.log(
+                    'Real Estate Properties from API:',
+                    data.realEstateProperties
+                );
+                if (
+                    data.realEstateProperties &&
+                    data.realEstateProperties.length > 0
+                ) {
+                    console.log(
+                        'First property data:',
+                        data.realEstateProperties[0]
+                    );
+                    console.log(
+                        'Property has city?',
+                        data.realEstateProperties[0].city
+                    );
+                    console.log(
+                        'Property has state?',
+                        data.realEstateProperties[0].state
+                    );
+                    console.log(
+                        'Property has country?',
+                        data.realEstateProperties[0].country
+                    );
+                }
                 this.data = data;
             },
             error: (error) => {
                 console.error('Error fetching asset inventory:', error);
-            }
+            },
         });
     }
 

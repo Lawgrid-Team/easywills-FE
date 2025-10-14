@@ -172,31 +172,31 @@
                     </mat-form-field>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block pb-2 text-easywills-black"
-                            >City</label
+                <div>
+                    <label class="block pb-2 text-easywills-black"
+                        >Country</label
+                    >
+                    <mat-form-field appearance="outline" class="w-full">
+                        <mat-select
+                            formControlName="country"
+                            placeholder="Select Country"
                         >
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-select
-                                formControlName="city"
-                                placeholder="Please select"
+                            <mat-option
+                                *ngFor="let country of countries"
+                                [value]="country.value"
                             >
-                                <mat-option
-                                    *ngFor="let city of cities"
-                                    [value]="city.value"
-                                >
-                                    {{ city.viewValue }}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error
-                                *ngIf="form.get('city')?.hasError('required')"
-                            >
-                                City is required
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
+                                {{ country.viewValue }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="form.get('country')?.hasError('required')"
+                        >
+                            Country is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block pb-2 text-easywills-black"
                             >State/Province</label
@@ -204,7 +204,7 @@
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-select
                                 formControlName="state"
-                                placeholder="Please select"
+                                placeholder="Select State/Province"
                             >
                                 <mat-option
                                     *ngFor="let state of states"
@@ -220,30 +220,30 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
-                </div>
 
-                <div>
-                    <label class="block pb-2 text-easywills-black"
-                        >Country</label
-                    >
-                    <mat-form-field appearance="outline" class="w-full">
-                        <mat-select
-                            formControlName="country"
-                            placeholder="Please select"
+                    <div>
+                        <label class="block pb-2 text-easywills-black"
+                            >City</label
                         >
-                            <mat-option
-                                *ngFor="let country of countries"
-                                [value]="country.value"
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-select
+                                formControlName="city"
+                                placeholder="Select City"
                             >
-                                {{ country.viewValue }}
-                            </mat-option>
-                        </mat-select>
-                        <mat-error
-                            *ngIf="form.get('country')?.hasError('required')"
-                        >
-                            Country is required
-                        </mat-error>
-                    </mat-form-field>
+                                <mat-option
+                                    *ngFor="let city of cities"
+                                    [value]="city.value"
+                                >
+                                    {{ city.viewValue }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="form.get('city')?.hasError('required')"
+                            >
+                                City is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
                 </div>
 
                 <div class="flex flex-col md:flex-row gap-4">
