@@ -6,7 +6,12 @@ import {
     type OnInit,
     inject,
 } from '@angular/core';
-import { FormBuilder, type FormGroup, FormsModule, Validators } from '@angular/forms';
+import {
+    FormBuilder,
+    type FormGroup,
+    FormsModule,
+    Validators,
+} from '@angular/forms';
 import { type PersonalDetailsData } from '../../../../core/models/interfaces/will-data.interface';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +20,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
     selector: 'app-basic-info-form',
@@ -29,6 +35,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         MatSelectModule,
         MatCheckboxModule,
         CommonModule,
+        MatExpansionModule,
     ],
     templateUrl: './basic-info-form.component.html',
     styleUrl: './basic-info-form.component.scss',
@@ -42,6 +49,7 @@ export class BasicInfoFormComponent {
     form!: FormGroup;
 
     checked = false;
+    showHelpBox = false;
 
     constructor(private fb: FormBuilder) {}
     //private fb = inject(FormBuilder);
@@ -92,5 +100,13 @@ export class BasicInfoFormComponent {
             this.updateData.emit(this.form.value);
             this.next.emit();
         }
+    }
+
+    toggleHelpBox(): void {
+        this.showHelpBox = !this.showHelpBox;
+    }
+
+    closeHelpBox(): void {
+        this.showHelpBox = false;
     }
 }
