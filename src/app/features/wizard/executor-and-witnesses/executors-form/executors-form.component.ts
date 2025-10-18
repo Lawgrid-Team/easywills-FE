@@ -29,6 +29,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
+import { WizardHelpBoxComponent, HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-executors-form',
@@ -45,6 +47,7 @@ import { MatCardModule } from '@angular/material/card';
         MatRadioModule,
         CommonModule,
         MatCardModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './executors-form.component.html',
     styleUrl: './executors-form.component.scss',
@@ -59,12 +62,14 @@ export class ExecutorsFormComponent {
     executors: Executor[] = [];
     isAddingExecutor = false;
     editingExecutorId: string | null = null;
+    helpFAQs: HelpFAQ[] = [];
 
     executorForm!: FormGroup;
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder, private helpService: WizardHelpService) {}
 
     ngOnInit(): void {
+        this.helpFAQs = this.helpService.getFAQsForForm('executors');
         this.hasExecutor = this.data.hasExecutor;
         this.executors =
             this.data.executors.length > 0 ? [...this.data.executors] : [];

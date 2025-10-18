@@ -27,6 +27,9 @@ import type {
     EstateDistributionData,
     Exclusion,
 } from '../../../../core/models/interfaces/will-data.interface';
+import { WizardHelpBoxComponent } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-exclusion-form',
@@ -43,6 +46,7 @@ import type {
         MatRadioModule,
         MatCardModule,
         CommonModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './exclusion-form.component.html',
     styleUrl: './exclusion-form.component.scss',
@@ -57,10 +61,12 @@ export class ExclusionFormComponent implements OnInit {
     exclusionForm!: FormGroup;
     isAddingExclusion = false;
     editingIndex: number | null = null;
+    helpFAQs: HelpFAQ[] = [];
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder, private helpService: WizardHelpService) {}
 
     ngOnInit(): void {
+        this.helpFAQs = this.helpService.getFAQsForForm('exclusion-form');
         // Initialize exclusions array if it doesn't exist
         if (!this.data.exclusions) {
             this.data.exclusions = [];

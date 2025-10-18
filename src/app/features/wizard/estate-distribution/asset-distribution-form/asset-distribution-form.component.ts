@@ -15,6 +15,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { BeneficiaryShare, AssetType, Asset, BeneficiaryAssignment } from '../../../../core/models/interfaces/asset.interface';
 import { EstateDistributionData } from '../../../../core/models/interfaces/will-data.interface';
+import { WizardHelpBoxComponent } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-asset-distribution-form',
@@ -27,6 +30,7 @@ import { EstateDistributionData } from '../../../../core/models/interfaces/will-
         ReactiveFormsModule,
         MatRadioModule,
         MatIconModule,
+        WizardHelpBoxComponent,
     ],
 })
 export class AssetDistributionFormComponent implements OnInit {
@@ -38,6 +42,7 @@ export class AssetDistributionFormComponent implements OnInit {
     sharingAsAWhole = true;
     beneficiaryList: BeneficiaryShare[] = [];
     assetTypes: AssetType[] = [];
+    helpFAQs: HelpFAQ[] = [];
 
     // Dummy data for beneficiaries
     dummyBeneficiaries: BeneficiaryShare[] = [
@@ -211,9 +216,10 @@ export class AssetDistributionFormComponent implements OnInit {
         },
     ];
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder, private helpService: WizardHelpService) {}
 
     ngOnInit(): void {
+        this.helpFAQs = this.helpService.getFAQsForForm('asset-distribution-form');
         // Initialize with data from parent component
         this.sharingAsAWhole = this.data.sharingAsAWhole;
 

@@ -20,6 +20,11 @@ import {
     getStatesForCountry,
     getCitiesForState,
 } from '../../../../shared/data/address-data';
+import {
+    WizardHelpBoxComponent,
+    HelpFAQ,
+} from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-address-info-form',
@@ -34,6 +39,7 @@ import {
         MatSelectModule,
         MatCheckboxModule,
         CommonModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './address-info-form.component.html',
     styleUrl: './address-info-form.component.scss',
@@ -49,14 +55,19 @@ export class AddressInfoFormComponent implements OnInit {
     countries: { value: string; viewValue: string }[] = [];
     states: { value: string; viewValue: string }[] = [];
     cities: { value: string; viewValue: string }[] = [];
+    helpFAQs: HelpFAQ[] = [];
 
     private isInitializing = true;
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
 
     ngOnInit(): void {
-        // Initialize countries
+        // Initialize countries and help FAQs
         this.countries = getCountries();
+        this.helpFAQs = this.helpService.getFAQsForForm('address-info');
 
         console.log('Address form received data:', this.data);
 

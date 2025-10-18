@@ -21,7 +21,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatExpansionModule } from '@angular/material/expansion';
+import {
+    WizardHelpBoxComponent,
+    HelpFAQ,
+} from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-basic-info-form',
@@ -35,7 +39,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
         MatSelectModule,
         MatCheckboxModule,
         CommonModule,
-        MatExpansionModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './basic-info-form.component.html',
     styleUrl: './basic-info-form.component.scss',
@@ -49,12 +53,18 @@ export class BasicInfoFormComponent {
     form!: FormGroup;
 
     checked = false;
-    showHelpBox = false;
+    helpFAQs: HelpFAQ[] = [];
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
     //private fb = inject(FormBuilder);
 
     ngOnInit(): void {
+        // Initialize help FAQs
+        this.helpFAQs = this.helpService.getFAQsForForm('basic-info');
+
         this.form = this.fb.group({
             title: [this.data.title, Validators.required],
             firstName: [
@@ -100,13 +110,5 @@ export class BasicInfoFormComponent {
             this.updateData.emit(this.form.value);
             this.next.emit();
         }
-    }
-
-    toggleHelpBox(): void {
-        this.showHelpBox = !this.showHelpBox;
-    }
-
-    closeHelpBox(): void {
-        this.showHelpBox = false;
     }
 }

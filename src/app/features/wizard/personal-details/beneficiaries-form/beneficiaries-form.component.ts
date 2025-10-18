@@ -12,6 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { PersonalDetailsData, Beneficiary } from '../../../../core/models/interfaces/will-data.interface';
+import { WizardHelpBoxComponent, HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-beneficiaries-form',
@@ -28,6 +30,7 @@ import { PersonalDetailsData, Beneficiary } from '../../../../core/models/interf
         MatRadioModule,
         MatCardModule,
         CommonModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './beneficiaries-form.component.html',
     styleUrl: './beneficiaries-form.component.scss',
@@ -39,6 +42,7 @@ export class BeneficiariesFormComponent {
     @Output() setFormValidity = new EventEmitter<boolean>();
 
     beneficiaries: Beneficiary[] = [];
+    helpFAQs: HelpFAQ[] = [];
     isAddingBeneficiary = false;
     editingBeneficiaryId: string | null = null;
 
@@ -52,9 +56,14 @@ export class BeneficiariesFormComponent {
         { value: 'other', viewValue: 'Other' },
     ];
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
 
     ngOnInit(): void {
+        // Initialize help FAQs
+        this.helpFAQs = this.helpService.getFAQsForForm('beneficiaries');
         this.beneficiaries = this.data.beneficiaries || [];
 
         this.beneficiaryForm = this.fb.group({

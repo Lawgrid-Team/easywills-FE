@@ -15,6 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { WizardHelpBoxComponent, HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-children-form',
@@ -31,6 +33,7 @@ import { MatSelectModule } from '@angular/material/select';
         MatRadioModule,
         MatCardModule,
         CommonModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './children-form.component.html',
     styleUrl: './children-form.component.scss',
@@ -43,14 +46,21 @@ export class ChildrenFormComponent {
 
     hasChildren = false;
     children: Child[] = [];
+    helpFAQs: HelpFAQ[] = [];
     isAddingChild = false;
     editingChildId: string | null = null;
 
     childForm!: FormGroup;
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
 
     ngOnInit(): void {
+        // Initialize help FAQs
+        this.helpFAQs = this.helpService.getFAQsForForm('children');
+
         this.hasChildren = this.data.hasChildren;
         this.children =
             this.data.children.length > 0 ? [...this.data.children] : [];

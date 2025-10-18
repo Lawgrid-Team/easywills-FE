@@ -216,13 +216,6 @@
             Add Witness
         </button>
 
-        <div class="fixed bottom-24 right-8 z-50">
-            <div
-                class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white shadow-lg"
-            >
-                <span class="mr-2">Need help?</span>
-                <mat-icon>question_answer</mat-icon>
-            </div>
-        </div>
+        <app-wizard-help-box [faqs]="helpFAQs"></app-wizard-help-box>
     </form>
 </div>

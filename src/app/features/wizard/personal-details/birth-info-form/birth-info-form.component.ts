@@ -21,6 +21,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { WizardHelpBoxComponent, HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-birth-info-form',
@@ -35,6 +37,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
         MatCheckboxModule,
         MatDatepickerModule,
         CommonModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './birth-info-form.component.html',
     styleUrl: './birth-info-form.component.scss',
@@ -46,6 +49,7 @@ export class BirthInfoFormComponent {
     @Output() setFormValidity = new EventEmitter<boolean>();
 
     form!: FormGroup;
+    helpFAQs: HelpFAQ[] = [];
     maxDate = new Date();
 
     states = [
@@ -88,9 +92,15 @@ export class BirthInfoFormComponent {
         { value: 'fct', viewValue: 'FCT' },
     ];
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
 
     ngOnInit(): void {
+        // Initialize help FAQs
+        this.helpFAQs = this.helpService.getFAQsForForm('birth-info');
+
         this.form = this.fb.group({
             dateOfBirth: [
                 this.data.dateOfBirth,

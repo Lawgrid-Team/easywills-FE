@@ -21,6 +21,9 @@ import {
     ExecutorAndWitnessData,
     Witness,
 } from '../../../../core/models/interfaces/will-data.interface';
+import { WizardHelpBoxComponent } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-witnesses-form',
@@ -38,6 +41,7 @@ import {
         MatRadioModule,
         MatCardModule,
         CommonModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './witnesses-form.component.html',
     styleUrl: './witnesses-form.component.scss',
@@ -51,6 +55,7 @@ export class WitnessesFormComponent {
     witnesses: Witness[] = [];
     isAddingWitness = false;
     editingWitnessId: string | null = null;
+    helpFAQs: HelpFAQ[] = [];
 
     witnessForm!: FormGroup;
 
@@ -62,9 +67,10 @@ export class WitnessesFormComponent {
         { value: 'OTHER', viewValue: 'Other' },
     ];
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder, private helpService: WizardHelpService) {}
 
     ngOnInit(): void {
+        this.helpFAQs = this.helpService.getFAQsForForm('witnesses');
         this.witnesses = this.data?.witnesses || [];
 
         this.witnessForm = this.fb.group({
