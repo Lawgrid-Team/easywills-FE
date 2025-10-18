@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+    ReactiveFormsModule,
+    FormsModule,
+    FormGroup,
+    FormBuilder,
+    Validators,
+} from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,8 +17,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { PersonalDetailsData, Beneficiary } from '../../../../core/models/interfaces/will-data.interface';
-import { WizardHelpBoxComponent, HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import {
+    PersonalDetailsData,
+    Beneficiary,
+} from '../../../../core/models/interfaces/will-data.interface';
+import {
+    WizardHelpBoxComponent,
+    HelpFAQ,
+} from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
 import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({

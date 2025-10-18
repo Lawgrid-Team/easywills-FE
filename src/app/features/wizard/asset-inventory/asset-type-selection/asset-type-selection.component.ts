@@ -44,7 +44,7 @@ export class AssetTypeSelectionComponent {
         type: AssetFormType;
         id: string;
     }>();
-    
+
     helpFAQs: HelpFAQ[] = [];
 
     assetTypes = [

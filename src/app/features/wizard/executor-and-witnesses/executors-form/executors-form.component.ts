@@ -29,7 +29,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
-import { WizardHelpBoxComponent, HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import {
+    WizardHelpBoxComponent,
+    HelpFAQ,
+} from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
 import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
@@ -66,7 +69,10 @@ export class ExecutorsFormComponent {
 
     executorForm!: FormGroup;
 
-    constructor(private fb: FormBuilder, private helpService: WizardHelpService) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
 
     ngOnInit(): void {
         this.helpFAQs = this.helpService.getFAQsForForm('executors');

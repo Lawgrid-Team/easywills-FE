@@ -63,7 +63,10 @@ export class ExclusionFormComponent implements OnInit {
     editingIndex: number | null = null;
     helpFAQs: HelpFAQ[] = [];
 
-    constructor(private fb: FormBuilder, private helpService: WizardHelpService) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
 
     ngOnInit(): void {
         this.helpFAQs = this.helpService.getFAQsForForm('exclusion-form');

@@ -67,7 +67,10 @@ export class WitnessesFormComponent {
         { value: 'OTHER', viewValue: 'Other' },
     ];
 
-    constructor(private fb: FormBuilder, private helpService: WizardHelpService) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
 
     ngOnInit(): void {
         this.helpFAQs = this.helpService.getFAQsForForm('witnesses');
