@@ -23,10 +23,33 @@
             background-color: white !important;
         }
     }
+}
 
+/* Use ::ng-deep to penetrate Material Design encapsulation */
+::ng-deep .help-accordion {
     .mat-expansion-panel-body {
-        padding: 0 12px 8px 12px !important;
+        padding: 0 !important;
         background: white !important;
+    }
+
+    .mat-expansion-panel-content {
+        padding: 0 !important;
+
+        .mat-expansion-panel-body {
+            padding: 0 !important;
+        }
+    }
+
+    /* Force answer content to have same left alignment as questions */
+    .answer-content {
+        margin: 0 !important;
+        padding: 8px 12px !important;
+        margin-left: 0 !important;
+        padding-left: 12px !important;
+        position: relative !important;
+        left: 0 !important;
+        transform: translateX(0) !important;
+        text-indent: 0 !important;
     }
 }
 
