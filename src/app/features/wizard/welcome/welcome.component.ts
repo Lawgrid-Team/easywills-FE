@@ -442,9 +442,9 @@ export class WelcomeComponent implements OnInit {
     }
 
     async onGetStarted(): Promise<void> {
-        if (!this.hasStartedWill && this.willState.status !== 'inProgress') {
+        // if (!this.hasStartedWill && this.willState.status !== 'inProgress') {
             await this.willDataService.draftWill();
-        }
+        // }
         // Navigate to the first step of the wizard
         this.router.navigate(['/wiz/will/personal-details']);
     }
