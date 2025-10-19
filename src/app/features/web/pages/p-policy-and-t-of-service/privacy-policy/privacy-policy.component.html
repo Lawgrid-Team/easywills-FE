@@ -1,6 +1,6 @@
 <div class="container mx-auto px-4 py-12">
   <h1 class="text-4xl font-bold text-[#32302f] mb-2">Privacy Policy</h1>
-  <p class="text-[#505050] mb-16">Effective date: October 3, 2023</p>
+  <p class="text-[#505050] mb-16">Last Updated: March 2025  </p>
 
   <div class="grid grid-cols-1 md:grid-cols-12 gap-16">
     <aside class="md:col-span-6 lg:col-span-5 pr-4">
@@ -17,6 +17,7 @@
           >
             Introduction
           </button>
+          
           <button
             (click)="scrollToSection('information-collection')"
             [ngClass]="{
@@ -25,8 +26,20 @@
               'text-[#505050] hover:bg-gray-100': activeSection !== 'information-collection'
             }"
           >
-            Information collection
+            Information We Collect
           </button>
+          
+          <button
+            (click)="scrollToSection('information-use')"
+            [ngClass]="{
+              'text-left py-2 px-4 rounded-md pl-12 w-full': true,
+              'bg-[#efefef] text-[#505050]': activeSection === 'information-use',
+              'text-[#505050] hover:bg-gray-100': activeSection !== 'information-use'
+            }"
+          >
+            How We Use Your Information
+          </button>
+          
           <button
             (click)="scrollToSection('data-storage')"
             [ngClass]="{
@@ -37,20 +50,54 @@
           >
             Data storage and security
           </button>
+
+          <button
+            (click)="scrollToSection('information-sharing')"
+            [ngClass]="{
+              'text-left py-2 px-4 rounded-md pl-16 w-full': true,
+              'bg-[#efefef] text-[#505050]': activeSection === 'information-sharing',
+              'text-[#505050] hover:bg-gray-100': activeSection !== 'information-sharing'
+            }"
+          >
+            Sharing of Information
+          </button>
+
           <button
             (click)="scrollToSection('access-control')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-18 w-full break-words': true,
+              'text-left py-2 px-4 rounded-md pl-18 w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'access-control',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'access-control'
             }"
           >
-            Access and control of your information
+            User Rights
+          </button>
+
+          <button
+            (click)="scrollToSection('cookies-and-tracking')"
+            [ngClass]="{
+              'text-left py-2 px-4 rounded-md pl-20 w-full': true,
+              'bg-[#efefef] text-[#505050]': activeSection === 'cookies-and-tracking',
+              'text-[#505050] hover:bg-gray-100': activeSection !== 'cookies-and-tracking'
+            }"
+          >
+            Cookies and Tracking Technologies
+          </button>
+
+          <button
+            (click)="scrollToSection('ndpr-compliance')"
+            [ngClass]="{
+              'text-left py-2 px-4 rounded-md pl-22 w-full': true,
+              'bg-[#efefef] text-[#505050]': activeSection === 'ndpr-compliance',
+              'text-[#505050] hover:bg-gray-100': activeSection !== 'ndpr-compliance'
+            }"
+          >
+            Compliance with the Nigeria Data Protection Regulation (NDPR)
           </button>
           <button
             (click)="scrollToSection('contact-us')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-22 w-full': true,
+              'text-left py-2 px-4 rounded-md pl-24 w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'contact-us',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'contact-us'
             }"
@@ -63,57 +110,99 @@
 
     <div class="md:col-span-6 lg:col-span-7 space-y-12">
       <section id="introduction">
-        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Introduction</h2>
-        <p class="text-[#505050] mb-4">
-          Lorem ipsum dolor sit amet consectetur. Laoreet eget facilisi quis nunc facilisis. Faucibus egestas
-          velit urna proin aenean. Dictum tellus urna mi eget. Ultrices ut et ultricies auctor cras malesuada.
-          In ut est lorem scelerisque sit.
+        <h2 class="text-3xl strong text-[#32302f] mb-1">1. Introduction</h2>
+        <p class="text-[#505050] pl-6 mb-1">
+          easyWills is committed to protecting your privacy. 
+          This Privacy Policy explains how we collect, use, store, and protect your personal data when you use our platform. By using easyWills, 
+          you consent to the collection and processing of your personal information as described in this policy.
         </p>
       </section>
 
       <section id="information-collection">
-        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Information collection</h2>
-        <p class="text-[#505050] mb-4">
-          Lorem ipsum dolor sit amet consectetur. Gravida at urna malesuada tempor velit sem cursus sit.
-          Faucibus dolor nisi amet commodo id sit aliquam. Id viverra sit pharetra nullam proin ipsum sed lacus.
-          Ut porttitor imperdiet sagittis malesuada. Ultrices at nullam porta tortor sit.
+        <h2 class="text-3xl strong text-[#32302f] mb-1">2. Information We Collect</h2>
+        <p class="text-[#505050] pl-6 mb-1">
+          We may collect the following types of personal information:
         </p>
-        <p class="text-[#505050] mb-4">
-          Lorem ipsum dolor sit amet consectetur. Nibh eu vel sapien sollicitudin amet. Commodo neque vestibulum
-          ac nisl sapien. Et malesuada ac mollis ipsum venenatis leo nunc. Sed lacus lacus pulvinar risus
-          vestibulum aliquet. Elit metus cursus condimentum tempor. Id arci lacus cursus id.
+         <ul class="list-disc pl-12 space-y-1">
+          <li>Personal Identifiable Information (PII): Name, email address, phone number, date of birth, and contact details.</li>
+          <li>Estate and Will Related Information: Details about assets, beneficiaries, executors, and any other information inputted into the will writing wizard.</li>
+          <li>Financial Information: Payment details (processed securely by third party payment providers).</li>
+          <li>Usage Data: IP address, device information, browser type, and interaction history with our platform.</li>
+          <li>Video and Electronic Signature Data: Video recordings of will execution sessions and digital signature logs.</li>
+         </ul>
+      </section>
+      
+      <section id="information-use">
+        <h3 class="text-3xl strong text-[#32302f] mb-1">3. How We Use Your Information</h3>
+        <p class="text-[#505050] pl-6 mb-1">
+          We use your information to:
         </p>
+          <ul class="list-disc pl-12 space-y-1">
+            <li>Facilitate creation, execution, and secure storage of your Will.</li>
+            <li>Verify user identity and ensure legal compliance.</li>
+            <li>Provide customer support and respond to inquiries.</li>
+            <li>Improve platform security and user experience.</li>
+            <li>Process transactions and manage billing.</li>
+            <li>Comply with legal obligations and regulatory requirements.</li>
+          </ul>
       </section>
 
       <section id="data-storage">
-        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Data storage and security</h2>
-        <p class="text-[#505050] mb-4">
-          Lorem ipsum dolor sit amet consectetur. Amet tincidunt cras nunc ac a. Varius ultrices elementum vel
-          in a ut tempus eleifend libero. Augue montes egestas sem mi dolor egestas adipiscing vel vivamus.
-          Mattis sed leo tincidunt volutpat in euismod. Mollis in amet neque in felis id. Ullamcorper velit
-          metus convallis pulvinar id. Ultrices luctus senectus at aliquet in consectetur.
+        <h2 class="text-3xl strong text-[#32302f] mb-1">4. Data storage and security</h2>
+        <p class="text-[#505050] pl-6 mb-1">
+          We implement strict security measures to protect user data, including:
         </p>
+        <ul class="list-disc pl-12 space-y-1 mb-3">
+          <li>Encryption of sensitive information.</li>
+          <li>Secure cloud based storage for digital wills and execution records.</li>
+          <li>Restricted access to authorized personnel only.</li>
+          <li>Regular security audits and updates.</li>
+        </ul>
+        <p class="pl-6">Your data is stored for as long as necessary to provide our services or as required by law. Upon request, we can delete your personal data, except where retention is legally required.</p>
+      </section>
+
+      <section id="information-sharing">
+        <h2 class="text-3xl strong text-[#32302f] mb-1">5. Sharing of Information</h2>
+        <p class="text-[#505050] pl-6 mb-1">We do not sell or rent personal data. However, we may share information:</p>
+        <ul class="list-disc pl-12 space-y-1">
+          <li>With authorized legal professionals for consultation (only with user consent).</li>
+          <li>With third party service providers for payment processing, authentication, and data storage.</li>
+          <li>If required by law or in response to legal proceedings.</li>
+        </ul>
       </section>
 
       <section id="access-control">
-        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Access and control of your information</h2>
-        <p class="text-[#505050] mb-4">
-          Lorem ipsum dolor sit amet consectetur. Et duis aliquam ac eget dignissim elit tellus lorem etiam.
-          Semper volutpat lacus et sodales integer habitasse quisque vestibulum. Dictum elit egestas libero
-          volutpat lacus risus urna ornare velit. Pulvinar orci sit gravida viverra fermentum ut at tempus diam.
-        </p>
-        <p class="text-[#505050] mb-4">
-          Urna mattis purus tempor placerat risus mauris non sed. Est in eget sodales vitae in maecenas aliquet
-          eleifend. Quis at nec semper nunc arci facilisis maecenas ut. Eu urna morbi faucibus.
-        </p>
+        <h3 class="text-3xl strong text-[#32302f] mb-1">6. User Rights </h3>
+        <p class="text-[#505050] pl-6 mb-1">Users have the right to:</p>
+        <ul class="list-disc pl-12 space-y-1">
+          <li>Access and review personal data collected by easyWills.</li>
+          <li>Request corrections to inaccurate information.</li>
+          <li>Withdraw consent for data processing (this may limit service functionality).</li>
+          <li>Request deletion of personal data, subject to legal limitations.</li>
+        </ul>
+      </section>
+
+      <section id="cookies-and-tracking">
+        <h3 class="text-3xl strong text-[#32302f] mb-1">7. Cookies and Tracking Technologies </h3>
+        <p class="pl-6">We use cookies to enhance user experience and analyze site traffic. Users can manage cookie preferences through their browser settings.</p>
+      </section>
+
+      <section id="ndpr-compliance">
+        <h3 class="text-3xl strong text-[#32302f] mb-1">8. Compliance with the Nigeria Data Protection Regulation (NDPR)</h3>
+        <p class="text-[#505050] pl-6 mb-1">We comply with the NDPR and adhere to its principles of:</p>
+        <ul class="list-disc pl-12 space-y-1">
+          <li>Lawfulness, fairness, and transparency in data processing.</li>
+          <li>Data minimization and accuracy.</li>
+          <li>Security and confidentiality of personal information.</li>
+        </ul>
       </section>
 
       <section id="contact-us">
-        <h2 class="text-3xl font-bold text-[#32302f] mb-6">Contact us:</h2>
-        <p class="text-[#505050] mb-4">
-          If you have any questions or concerns about this privacy policy, please contact us at 13 rd Floor, 18
-          Uptown Road, Canada A2 5AA
+        <h2 class="text-3xl strong text-[#32302f] mb-1">9. Contact Information</h2>
+        <p class="text-[#505050] pl-6 mb-1">For privacy related inquiries or data access requests, contact us at 
+          <a href="mailto:admin@lawgrid.ng" class="text-blue-600 underline">admin&#64;lawgrid.ng</a>
         </p>
+        <p class="text-[#505050] pl-6 mb-1">By using easyWills, you acknowledge and consent to the terms outlined in this Privacy Policy.</p>
       </section>
     </div>
   </div>

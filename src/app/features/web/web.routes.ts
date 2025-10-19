@@ -54,6 +54,13 @@ export const routes: Routes = [
                         (m) => m.TermsOfServiceComponent
                     ),
             },
+             {
+                path: 'cookies-settings',
+                loadComponent: () =>
+                    import('./pages/cookies-settings/cookies-settings.component').then(
+                        (m) => m.CookiesSettingsComponent
+                    ),
+            },
             {
                 path: '**',
                 redirectTo: '',

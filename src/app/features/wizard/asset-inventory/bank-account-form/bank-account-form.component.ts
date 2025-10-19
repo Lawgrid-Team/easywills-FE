@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import {
     FormGroup,
     FormBuilder,
@@ -41,13 +41,14 @@ import { MatSelectModule } from '@angular/material/select';
     templateUrl: './bank-account-form.component.html',
     styleUrl: './bank-account-form.component.scss',
 })
-export class BankAccountFormComponent {
+export class BankAccountFormComponent implements OnInit {
     @Input() data!: AssetInventoryData;
     @Input() editingAssetId: string | null = null;
     @Output() updateData = new EventEmitter<Partial<AssetInventoryData>>();
     @Output() save = new EventEmitter<void>();
 
     form!: FormGroup;
+    showForm = false;
 
     accountTypes = [
         { value: 'Savings account', viewValue: 'Savings account' },
@@ -75,6 +76,10 @@ export class BankAccountFormComponent {
                 ],
             ],
         });
+
+        // Show form if no accounts exist or if editing an existing account
+        this.showForm =
+            this.data.bankAccounts.length === 0 || this.editingAssetId !== null;
 
         if (this.editingAssetId) {
             const accountToEdit = this.data.bankAccounts.find(
@@ -109,13 +114,29 @@ export class BankAccountFormComponent {
                     bankAccounts: [...this.data.bankAccounts, newAccount],
                 });
             }
-            this.save.emit();
+
+            // After saving, hide form and show cards view instead of navigating away
+            this.showForm = false;
+            this.editingAssetId = null;
+            this.form.reset();
+
+            // Only emit save for overall completion, not individual account saves
+            // this.save.emit();
         }
     }
 
     onAddAnother(): void {
-        if (this.form.valid) {
-            // Add current account
+        if (this.data.bankAccounts.length > 0 && !this.showForm) {
+            // When accounts exist and form is not shown, show the form to add another
+            this.showForm = true;
+            this.editingAssetId = null; // Clear editing mode
+            this.form.reset({
+                accountType: '',
+                institution: '',
+                accountNumber: '',
+            });
+        } else if (this.form.valid) {
+            // Original behavior for when in form mode
             const newAccount = {
                 ...this.form.value,
                 id: uuidv4(),
@@ -130,6 +151,50 @@ export class BankAccountFormComponent {
                 institution: '',
                 accountNumber: '',
             });
+        }
+    }
+
+    editAccount(accountId: string): void {
+        // Set editing mode and populate form with account data
+        this.editingAssetId = accountId;
+        this.showForm = true;
+        const accountToEdit = this.data.bankAccounts.find(
+            (account) => account.id === accountId
+        );
+        if (accountToEdit) {
+            this.form.patchValue(accountToEdit);
+        }
+    }
+
+    saveAllAccounts(): void {
+        // Emit save event to parent component
+        this.save.emit();
+    }
+
+    onCancel(): void {
+        // Hide form and show cards view
+        this.showForm = false;
+        this.editingAssetId = null;
+        this.form.reset();
+    }
+
+    deleteAccount(accountId: string): void {
+        // Remove the account from the data
+        const updatedAccounts = this.data.bankAccounts.filter(
+            (account) => account.id !== accountId
+        );
+        this.updateData.emit({ bankAccounts: updatedAccounts });
+
+        // If we were editing this account, clear the editing state
+        if (this.editingAssetId === accountId) {
+            this.editingAssetId = null;
+            this.showForm = false;
+            this.form.reset();
+        }
+
+        // If no accounts remain, show the form to add the first account
+        if (updatedAccounts.length === 0) {
+            this.showForm = true;
         }
     }
 }

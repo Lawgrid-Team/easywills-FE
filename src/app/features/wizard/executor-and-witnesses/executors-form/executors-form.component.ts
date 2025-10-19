@@ -29,6 +29,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
+import {
+    WizardHelpBoxComponent,
+    HelpFAQ,
+} from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-executors-form',
@@ -45,6 +50,7 @@ import { MatCardModule } from '@angular/material/card';
         MatRadioModule,
         CommonModule,
         MatCardModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './executors-form.component.html',
     styleUrl: './executors-form.component.scss',
@@ -59,12 +65,17 @@ export class ExecutorsFormComponent {
     executors: Executor[] = [];
     isAddingExecutor = false;
     editingExecutorId: string | null = null;
+    helpFAQs: HelpFAQ[] = [];
 
     executorForm!: FormGroup;
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
 
     ngOnInit(): void {
+        this.helpFAQs = this.helpService.getFAQsForForm('executors');
         this.hasExecutor = this.data.hasExecutor;
         this.executors =
             this.data.executors.length > 0 ? [...this.data.executors] : [];
@@ -93,6 +104,7 @@ export class ExecutorsFormComponent {
             } else {
                 lastNameControl?.clearValidators();
                 addressControl?.clearValidators();
+                addressControl?.updateValueAndValidity();
             }
         });
 
@@ -102,6 +114,14 @@ export class ExecutorsFormComponent {
 
     handleHasExecutorChange(value: string): void {
         this.hasExecutor = value === 'yes';
+
+        if (this.hasExecutor && this.executors.length > 0) {
+            this.setFormValidity.emit(true);
+        } else if (!this.hasExecutor) {
+            this.setFormValidity.emit(true);
+        } else {
+            this.setFormValidity.emit(false);
+        }
 
         if (this.hasExecutor && this.executors.length === 0) {
             this.isAddingExecutor = true;
@@ -149,6 +169,19 @@ export class ExecutorsFormComponent {
         });
         this.editingExecutorId = executor.id;
         this.isAddingExecutor = true;
+    }
+
+    removeExecutor(executor: Executor): void {
+        this.executors = this.executors.filter((e) => e.id !== executor.id);
+        this.updateData.emit({ executors: this.executors });
+
+        // If no executors left and hasExecutor is true, show add form
+        if (this.executors.length === 0 && this.hasExecutor) {
+            this.isAddingExecutor = true;
+            this.setFormValidity.emit(false);
+        } else {
+            this.setFormValidity.emit(true);
+        }
     }
 
     handleAddAnotherExecutor(): void {

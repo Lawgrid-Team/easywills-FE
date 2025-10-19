@@ -6,7 +6,12 @@ import {
     type OnInit,
     inject,
 } from '@angular/core';
-import { FormBuilder, type FormGroup, FormsModule, Validators } from '@angular/forms';
+import {
+    FormBuilder,
+    type FormGroup,
+    FormsModule,
+    Validators,
+} from '@angular/forms';
 import { type PersonalDetailsData } from '../../../../core/models/interfaces/will-data.interface';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +20,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {
+    WizardHelpBoxComponent,
+    HelpFAQ,
+} from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-basic-info-form',
@@ -29,6 +39,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         MatSelectModule,
         MatCheckboxModule,
         CommonModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './basic-info-form.component.html',
     styleUrl: './basic-info-form.component.scss',
@@ -42,11 +53,18 @@ export class BasicInfoFormComponent {
     form!: FormGroup;
 
     checked = false;
+    helpFAQs: HelpFAQ[] = [];
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
     //private fb = inject(FormBuilder);
 
     ngOnInit(): void {
+        // Initialize help FAQs
+        this.helpFAQs = this.helpService.getFAQsForForm('basic-info');
+
         this.form = this.fb.group({
             title: [this.data.title, Validators.required],
             firstName: [

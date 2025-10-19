@@ -11,6 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { WizardHelpBoxComponent } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 type AssetFormType = 'real-estate' | 'bank-account' | null;
 
@@ -29,6 +32,7 @@ type AssetFormType = 'real-estate' | 'bank-account' | null;
         MatRadioModule,
         MatCardModule,
         CommonModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './asset-type-selection.component.html',
     styleUrl: './asset-type-selection.component.scss',
@@ -40,6 +44,8 @@ export class AssetTypeSelectionComponent {
         type: AssetFormType;
         id: string;
     }>();
+
+    helpFAQs: HelpFAQ[] = [];
 
     assetTypes = [
         {
@@ -100,7 +106,10 @@ export class AssetTypeSelectionComponent {
         },
     ];
 
+    constructor(private helpService: WizardHelpService) {}
+
     ngOnInit(): void {
+        this.helpFAQs = this.helpService.getFAQsForForm('asset-type-selection');
         // Update asset types with data
         this.assetTypes = this.assetTypes.map((type) => {
             if (type.id === 'bank-account') {

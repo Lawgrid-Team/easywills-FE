@@ -35,7 +35,13 @@ body {
 
     @include mat.card-overrides(
         (
-          elevated-container-color: var(--easywills-dark-grey, #737373),
+            elevated-container-color: var(--easywills-dark-grey, #737373),
+        )
+    );
+
+    @include mat.select-overrides(
+        (
+            panel-background-color: white,
         )
     );
 
@@ -54,6 +60,15 @@ body {
     .mdc-text-field {
         background-color: #fdfdfd !important;
         border-radius: 14px !important;
+    }
+
+    // Mat-select placeholder styling to match mat-input
+    .mat-mdc-select-placeholder {
+        color: var(--Placeholder-text, #8a8989) !important;
+    }
+
+    .mat-mdc-select-value-text {
+        color: var(--Input-text, #444) !important;
     }
 }
 
@@ -82,4 +97,3 @@ body {
         color: #dcdcdc !important;
     }
 }
-
