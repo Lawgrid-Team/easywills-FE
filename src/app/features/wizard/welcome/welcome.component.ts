@@ -1,14 +1,17 @@
-import {Component, type OnInit} from '@angular/core';
-import {CommonModule, DatePipe} from '@angular/common';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {WillDataService} from '../../../core/services/Wizard/will-data.service';
-import {Beneficiary, WillData} from '../../../core/models/interfaces/will-data.interface';
-import {MatDividerModule} from '@angular/material/divider';
-import {AccountService} from '../../../core/services/Wizard/account.service';
-import {WillStateService} from '../../../shared/services/will-state.service';
-import {firstValueFrom, forkJoin, tap} from 'rxjs';
+import { Component, type OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { WillDataService } from '../../../core/services/Wizard/will-data.service';
+import {
+    Beneficiary,
+    WillData,
+} from '../../../core/models/interfaces/will-data.interface';
+import { MatDividerModule } from '@angular/material/divider';
+import { AccountService } from '../../../core/services/Wizard/account.service';
+import { WillStateService } from '../../../shared/services/will-state.service';
+import { firstValueFrom, forkJoin, tap } from 'rxjs';
 
 interface WillSection {
     id: string;
@@ -44,8 +47,8 @@ export class WelcomeComponent implements OnInit {
     user = {
         name: 'John Doe',
         email: 'johndoe@gmail.com',
-        avatar: '/svg/display-pic.svg'
-    }
+        avatar: '/svg/display-pic.svg',
+    };
     defaultAvatar = '/svg/display-pic.svg';
     willState: any = {};
     verified = false;
@@ -126,27 +129,27 @@ export class WelcomeComponent implements OnInit {
                 if (value) {
                     this.user = value;
                     if (!this.user.avatar || this.user.avatar === '') {
-                        this.user.avatar = this.defaultAvatar
+                        this.user.avatar = this.defaultAvatar;
                     }
                 }
-            }
-        })
+            },
+        });
 
         this.willStateService.willState$.subscribe({
             next: (willState) => {
                 if (willState) {
                     this.willState = willState;
-                    if (willState.account.identityStatus === "SUCCESSFUL") {
-                        this.verified = true
+                    if (willState.account.identityStatus === 'SUCCESSFUL') {
+                        this.verified = true;
                     }
                 }
-            }
-        })
+            },
+        });
     }
 
     async checkWillStatus(): Promise<void> {
         // Use dummy data for now
-        const beneficiaries: Beneficiary[] = []
+        const beneficiaries: Beneficiary[] = [];
         const dummyWillData = {
             personalDetails: {
                 title: 'Mr.',
@@ -226,23 +229,25 @@ export class WelcomeComponent implements OnInit {
             },
         };
 
-        await firstValueFrom(forkJoin({
-            personalDetails: this.willDataService.getPersonalDetailsFromBE(),
-            assets: this.willDataService.getAssetInventoryFromBE(),
-            // estateDistribution: this.willDataService.getAssetDistribution()
-        }).pipe(
-            tap(({personalDetails, assets}: any) => {
-                dummyWillData.personalDetails = {
-                    ...dummyWillData.personalDetails,
-                    ...personalDetails
-                };
-                dummyWillData.assetInventory = {
-                    ...dummyWillData.assetInventory,
-                    ...assets
-                }
-            })
-        ));
-
+        await firstValueFrom(
+            forkJoin({
+                personalDetails:
+                    this.willDataService.getPersonalDetailsFromBE(),
+                assets: this.willDataService.getAssetInventoryFromBE(),
+                // estateDistribution: this.willDataService.getAssetDistribution()
+            }).pipe(
+                tap(({ personalDetails, assets }: any) => {
+                    dummyWillData.personalDetails = {
+                        ...dummyWillData.personalDetails,
+                        ...personalDetails,
+                    };
+                    dummyWillData.assetInventory = {
+                        ...dummyWillData.assetInventory,
+                        ...assets,
+                    };
+                })
+            )
+        );
 
         // Only update sections if user has started will (don't override hasStartedWill)
         if (this.hasStartedWill) {

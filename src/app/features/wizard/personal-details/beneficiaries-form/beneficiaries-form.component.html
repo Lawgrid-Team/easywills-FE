@@ -1,67 +1,129 @@
 <div>
     <div class="flex items-center mb-8">
-        <h2 class="text-3xl font-bold text-easywills-black">Other Beneficiaries</h2>
-        <mat-icon class="ml-2">help</mat-icon>
+        <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
+            Other Beneficiaries
+        </h2>
+        <div class="relative ml-2">
+            <mat-icon
+                class="cursor-pointer hover:text-easywills-blue transition-colors"
+                (click)="toggleInfoDialog()"
+            >
+                info_outline
+            </mat-icon>
+            <!-- Info Dialog Component positioned relative to icon -->
+            <app-info-dialog
+                [pages]="infoDialogData"
+                [isVisible]="isInfoDialogVisible"
+                (close)="isInfoDialogVisible = false"
+            >
+            </app-info-dialog>
+        </div>
     </div>
 
     <p class="text-easywills-dark-grey mb-6">
-        List additional individuals or organizations you'd like to include in your will. These could be extended family,
-        friends, or charities close to your heart.
+        List additional individuals or organizations you'd like to include in
+        your will. These could be extended family, friends, or charities close
+        to your heart.
     </p>
 
     <form (ngSubmit)="onSubmit()" class="space-y-6">
         <!-- Display existing beneficiaries -->
-        <mat-card *ngFor="let beneficiary of beneficiaries" class="bg-white p-4 rounded-md border border-border">
+        <mat-card
+            *ngFor="let beneficiary of beneficiaries"
+            class="bg-easywills-dark-grey text-white p-4 rounded-md"
+        >
             <div class="flex justify-between items-start">
-                <h3 class="text-xl font-semibold">
-                    {{beneficiary.firstName | titlecase}} {{beneficiary.lastName | titlecase}}
+                <h3 class="text-xl font-medium">
+                    {{ beneficiary.firstName | titlecase }}
+                    {{ beneficiary.lastName | titlecase }}
                 </h3>
-                <button type="button" mat-icon-button (click)="handleEditBeneficiary(beneficiary)"
-                    class="text-foreground">
+                <button
+                    type="button"
+                    mat-icon-button
+                    (click)="handleEditBeneficiary(beneficiary)"
+                    style="color: #efefef"
+                >
                     <mat-icon>edit</mat-icon>
                 </button>
             </div>
-            <p>{{beneficiary.relationship}}</p>
-            <p>Born {{beneficiary.dateOfBirth}}</p>
+            <p style="color: #d3d3d3">{{ beneficiary.relationship }}</p>
+            <p style="color: #d3d3d3">Born: {{ beneficiary.dateOfBirth }}</p>
         </mat-card>
 
-        <div *ngIf="isAddingBeneficiary" class="space-y-4">
-            <h3 class="text-xl font-semibold text-foreground">Add beneficiary</h3>
+        <div *ngIf="isAddingBeneficiary" class="space-y-6">
+            <h3 class="text-2xl font-semibold font-DM_Serif text-foreground">
+                Add beneficiary
+            </h3>
 
-            <form [formGroup]="beneficiaryForm">
+            <form [formGroup]="beneficiaryForm" class="space-y-6">
                 <div>
                     <label class="flex items-center mb-2">
-                        Is the beneficiary an individual or a charity organization?
-                        <mat-icon class="ml-2 text-sm">help</mat-icon>
+                        Is the beneficiary an individual or a charity
+                        organization?
+                        <mat-icon class="ml-2 text-sm">info_outline</mat-icon>
                     </label>
                     <mat-form-field appearance="outline" class="w-full">
                         <!-- <mat-label>Select type</mat-label> -->
                         <mat-select formControlName="type">
-                            <mat-option value="INDIVIDUAL">Individual</mat-option>
-                            <mat-option value="ORGANIZATION">Charity Organization</mat-option>
+                            <mat-option value="INDIVIDUAL"
+                                >Individual</mat-option
+                            >
+                            <mat-option value="ORGANIZATION"
+                                >Charity Organization</mat-option
+                            >
                         </mat-select>
                     </mat-form-field>
                 </div>
 
-                <ng-container *ngIf="beneficiaryForm.get('type')?.value === 'INDIVIDUAL'">
+                <ng-container
+                    *ngIf="beneficiaryForm.get('type')?.value === 'INDIVIDUAL'"
+                >
                     <div>
-                        <label class="block mb-2">What is the name of the individual?</label>
+                        <label class="block mb-2"
+                            >What is the name of the individual?</label
+                        >
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <mat-form-field appearance="outline">
                                 <!-- <mat-label>First name</mat-label> -->
-                                <input matInput formControlName="firstName" placeholder="First name">
-                                <mat-error *ngIf="beneficiaryForm.get('firstName')?.hasError('required')">
+                                <input
+                                    matInput
+                                    formControlName="firstName"
+                                    placeholder="First name"
+                                />
+                                <mat-error
+                                    *ngIf="
+                                        beneficiaryForm
+                                            .get('firstName')
+                                            ?.hasError('required')
+                                    "
+                                >
                                     First name is required
                                 </mat-error>
-                                <mat-error *ngIf="beneficiaryForm.get('firstName')?.hasError('minlength')">
+                                <mat-error
+                                    *ngIf="
+                                        beneficiaryForm
+                                            .get('firstName')
+                                            ?.hasError('minlength')
+                                    "
+                                >
                                     First name must be at least 2 characters
                                 </mat-error>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <!-- <mat-label>Last name</mat-label> -->
-                                <input matInput formControlName="lastName" placeholder="Last name">
-                                <mat-error *ngIf="beneficiaryForm.get('lastName')?.hasError('required')">
+                                <input
+                                    matInput
+                                    formControlName="lastName"
+                                    placeholder="Last name"
+                                />
+                                <mat-error
+                                    *ngIf="
+                                        beneficiaryForm
+                                            .get('lastName')
+                                            ?.hasError('required')
+                                    "
+                                >
                                     Last name is required
                                 </mat-error>
                             </mat-form-field>
@@ -71,66 +133,127 @@
                     <div>
                         <label class="flex items-center mb-2">
                             What is their relationship to you?
-                            <mat-icon class="ml-2 text-sm">help</mat-icon>
+                            <mat-icon class="ml-2 text-sm"
+                                >info_outline</mat-icon
+                            >
                         </label>
                         <mat-form-field appearance="outline" class="w-full">
                             <!-- <mat-label>Please select</mat-label> -->
-                            <mat-select formControlName="relationship">
-                                <mat-option *ngFor="let option of relationshipOptions" [value]="option.value">
-                                    {{option.viewValue}}
+                            <mat-select
+                                formControlName="relationship"
+                                placeholder="Please select"
+                            >
+                                <mat-option
+                                    *ngFor="let option of relationshipOptions"
+                                    [value]="option.value"
+                                >
+                                    {{ option.viewValue }}
                                 </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="beneficiaryForm.get('relationship')?.hasError('required')">
+                            <mat-error
+                                *ngIf="
+                                    beneficiaryForm
+                                        .get('relationship')
+                                        ?.hasError('required')
+                                "
+                            >
                                 Relationship is required
                             </mat-error>
                         </mat-form-field>
                     </div>
 
                     <div>
-                        <label class="block mb-2">What is their date of birth?</label>
+                        <label class="block mb-2"
+                            >What is their date of birth?</label
+                        >
                         <mat-form-field appearance="outline" class="w-full">
                             <!-- <mat-label>Date of birth</mat-label> -->
-                            <input matInput [matDatepicker]="birthPicker" formControlName="dateOfBirth">
-                            <mat-datepicker-toggle matIconSuffix [for]="birthPicker"></mat-datepicker-toggle>
+                            <input
+                                matInput
+                                [matDatepicker]="birthPicker"
+                                placeholder="MM/DD/YYYY"
+                                formControlName="dateOfBirth"
+                            />
+                            <mat-datepicker-toggle
+                                matIconSuffix
+                                [for]="birthPicker"
+                            ></mat-datepicker-toggle>
                             <mat-datepicker #birthPicker></mat-datepicker>
-                            <mat-error *ngIf="beneficiaryForm.get('dateOfBirth')?.hasError('required')">
+                            <mat-error
+                                *ngIf="
+                                    beneficiaryForm
+                                        .get('dateOfBirth')
+                                        ?.hasError('required')
+                                "
+                            >
                                 Date of birth is required
                             </mat-error>
                         </mat-form-field>
                     </div>
                 </ng-container>
 
-                <ng-container class="mb-2" *ngIf="beneficiaryForm.get('type')?.value === 'ORGANIZATION'">
+                <ng-container
+                    class="mb-2"
+                    *ngIf="
+                        beneficiaryForm.get('type')?.value === 'ORGANIZATION'
+                    "
+                >
                     <div>
-                        <label class="block mb-2">What is the name of the organization?</label>
+                        <label class="block mb-2"
+                            >What is the name of the organization?</label
+                        >
                         <mat-form-field appearance="outline" class="w-full">
                             <!-- <mat-label>Organization name</mat-label> -->
-                            <input matInput formControlName="firstName" placeholder="Organization name">
-                            <mat-error *ngIf="beneficiaryForm.get('firstName')?.hasError('required')">
+                            <input
+                                matInput
+                                formControlName="firstName"
+                                placeholder="Organization name"
+                            />
+                            <mat-error
+                                *ngIf="
+                                    beneficiaryForm
+                                        .get('firstName')
+                                        ?.hasError('required')
+                                "
+                            >
                                 Organization name is required
                             </mat-error>
                         </mat-form-field>
                     </div>
                 </ng-container>
 
-                <button type="button" mat-flat-button color="primary" (click)="handleSaveBeneficiary()" class="w-full">
-                    {{editingBeneficiaryId ? 'Update Beneficiary' : 'Add Beneficiary'}}
-                </button>
+                <div class="mt-6">
+                    <button
+                        type="button"
+                        mat-flat-button
+                        color="primary"
+                        (click)="handleSaveBeneficiary()"
+                        class="w-full"
+                    >
+                        {{
+                            editingBeneficiaryId
+                                ? "Update Beneficiary"
+                                : "Add Beneficiary"
+                        }}
+                    </button>
+                </div>
             </form>
-            <br>
+            <br />
         </div>
 
-        <button *ngIf="!isAddingBeneficiary" type="button" mat-flat-button color="primary"
-            (click)="handleAddBeneficiary()" class="w-full flex items-center justify-center">
+        <button
+            *ngIf="!isAddingBeneficiary"
+            type="button"
+            mat-flat-button
+            color="primary"
+            (click)="handleAddBeneficiary()"
+            class="w-full flex items-center justify-center"
+        >
             <mat-icon class="mr-2">add</mat-icon>
             Add beneficiary
         </button>
 
-        <div class="absolute bottom-24 right-8">
-            <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
-                <span class="mr-2">Need help?</span>
-                <mat-icon>help</mat-icon>
-            </div>
-        </div>
+        <!-- Help Box Component -->
+        <app-wizard-help-box [faqs]="helpFAQs"></app-wizard-help-box>
     </form>
 </div>

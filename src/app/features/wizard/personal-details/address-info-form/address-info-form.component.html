@@ -1,5 +1,5 @@
 <div>
-    <h2 class="text-3xl font-bold text-easywills-black font-DM_Serif mb-8">
+    <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif mb-8">
         Where do you live?
     </h2>
 
@@ -7,7 +7,7 @@
         <div>
             <label class="flex items-center mb-2">
                 What is your primary home address?
-                <mat-icon class="ml-2 text-sm">help</mat-icon>
+                <mat-icon class="ml-2 text-sm">info_outline</mat-icon>
             </label>
             <mat-form-field appearance="outline" class="w-full">
                 <input
@@ -15,22 +15,51 @@
                     formControlName="streetAddress"
                     placeholder="street number, unit number, street name"
                 />
-                <mat-error *ngIf="form.get('streetAddress')?.hasError('required')">
+                <mat-error
+                    *ngIf="form.get('streetAddress')?.hasError('required')"
+                >
                     Street address is required
                 </mat-error>
-                <mat-error *ngIf="form.get('streetAddress')?.hasError('minlength')">
+                <mat-error
+                    *ngIf="form.get('streetAddress')?.hasError('minlength')"
+                >
                     Street address must be at least 5 characters
                 </mat-error>
             </mat-form-field>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label class="block mb-2">Country of residence</label>
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-select
+                    formControlName="country"
+                    placeholder="Select Country"
+                >
+                    <mat-option
+                        *ngFor="let country of countries"
+                        [value]="country.value"
+                    >
+                        {{ country.viewValue }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('country')?.hasError('required')">
+                    Country is required
+                </mat-error>
+            </mat-form-field>
+        </div>
 
-             <div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
                 <label class="block mb-2">State/Province</label>
                 <mat-form-field appearance="outline" class="w-full">
-                    <mat-select formControlName="state">
-                        <mat-option *ngFor="let state of states" [value]="state.value">
+                    <mat-select
+                        formControlName="state"
+                        placeholder="Select State/Province"
+                    >
+                        <mat-option
+                            *ngFor="let state of states"
+                            [value]="state.value"
+                        >
                             {{ state.viewValue }}
                         </mat-option>
                     </mat-select>
@@ -43,8 +72,14 @@
             <div>
                 <label class="block mb-2">City</label>
                 <mat-form-field appearance="outline" class="w-full">
-                    <mat-select formControlName="city">
-                        <mat-option *ngFor="let city of cities" [value]="city.value">
+                    <mat-select
+                        formControlName="city"
+                        placeholder="Select City"
+                    >
+                        <mat-option
+                            *ngFor="let city of cities"
+                            [value]="city.value"
+                        >
                             {{ city.viewValue }}
                         </mat-option>
                     </mat-select>
@@ -53,28 +88,9 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-
         </div>
 
-        <div>
-            <label class="block mb-2">Country of resident</label>
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-select formControlName="country">
-                    <mat-option *ngFor="let country of countries" [value]="country.value">
-                        {{ country.viewValue }}
-                    </mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('country')?.hasError('required')">
-                    Country is required
-                </mat-error>
-            </mat-form-field>
-        </div>
-
-        <div class="absolute bottom-24 right-8">
-            <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
-                <span class="mr-2">Need help?</span>
-                <mat-icon>help</mat-icon>
-            </div>
-        </div>
+        <!-- Help Box Component -->
+        <app-wizard-help-box [faqs]="helpFAQs"></app-wizard-help-box>
     </form>
 </div>

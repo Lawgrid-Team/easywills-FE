@@ -1,42 +1,100 @@
-<div>
-    <div class="flex items-center mb-8">
-        <h2 class="text-3xl font-bold text-easywills-black">Schedule your Signing</h2>
-        <mat-icon class="ml-2">help</mat-icon>
+<div class="pb-32">
+    <div class="flex items-center mb-2">
+        <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
+            Schedule your Signing
+        </h2>
+        <mat-icon class="ml-2">info_outline</mat-icon>
     </div>
 
     <p class="text-easywills-dark-grey mb-6">
         You are required to assign date and time
     </p>
 
-    <!-- Testator (Read-only) -->
-    <div class="w-full p-3 border border-gray-300 rounded-md bg-gray-50 text-gray-800">
-        <label class="block text-sm text-gray-500 mb-1">Testator</label>
-        <div class="font-semibold text-lg">
-            {{ testatorName }}
+    <div>
+        <label class="block text-lg font-semibold mb-4 text-easywills-black">
+            Testator
+        </label>
+
+        <!-- Testator (Read-only) -->
+        <div
+            class="w-full p-3 border border-gray-300 rounded-md bg-gray-50 text-gray-800"
+        >
+            <div class="font-normal text-easywills-dark-grey text-lg">
+                {{ testatorName }}
+            </div>
         </div>
     </div>
 
-    <br>
-    <br>
+    <!-- Witnesses List -->
+    <div class="mt-8">
+        <label class="block text-lg font-semibold mb-4 text-easywills-black"
+            >Witnesses</label
+        >
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="space-y-6">
+        <div
+            *ngIf="witnesses && witnesses.length > 0; else noWitnesses"
+            class="space-y-3"
+        >
+            <div
+                *ngFor="let witness of witnesses"
+                class="p-3 border border-gray-300 rounded-md bg-gray-50"
+            >
+                <p class="font-semibold text-easywills-black">
+                    {{ witness.firstName }} {{ witness.lastName }}
+                </p>
+                <p class="text-easywills-dark-grey text-sm">
+                    {{ witness.relationship }}
+                </p>
+                <p class="text-easywills-dark-grey text-sm">
+                    {{ witness.phoneNumber }}
+                </p>
+                <p class="text-easywills-dark-grey text-sm">
+                    {{ witness.email }}
+                </p>
+            </div>
+        </div>
+
+        <ng-template #noWitnesses>
+            <p class="text-gray-500 italic">No witnesses found.</p>
+        </ng-template>
+    </div>
+
+    <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        class="mt-8 space-y-6"
+    >
         <div>
-            <label class="block mb-2">Choose Date and Time</label>
+            <label class="block text-lg font-semibold mb-4 text-easywills-black"
+                >Choose Date and Time</label
+            >
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Date Picker -->
                 <mat-form-field appearance="outline" class="w-full">
-                    <!-- <mat-label>Date of birth</mat-label>
-    <input matInput [matDatepicker]="birthPicker" formControlName="Date"> -->
-                    <input matInput [matDatepicker]="birthPicker" [min]="minDate" formControlName="date"
-                        placeholder="Choose a date" />
-                    <mat-datepicker-toggle matIconSuffix [for]="birthPicker"></mat-datepicker-toggle>
+                    <input
+                        matInput
+                        [matDatepicker]="birthPicker"
+                        [min]="minDate"
+                        formControlName="date"
+                        placeholder="Choose a date"
+                    />
+                    <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="birthPicker"
+                    ></mat-datepicker-toggle>
                     <mat-datepicker #birthPicker></mat-datepicker>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-select formControlName="time">
-                        <mat-option disabled value="">-- Select a time --</mat-option>
-                        <mat-option *ngFor="let option of timeOptions" [value]="option">
+                        <mat-option disabled value=""
+                            >-- Select a time --</mat-option
+                        >
+                        <mat-option
+                            *ngFor="let option of timeOptions"
+                            [value]="option"
+                        >
                             {{ option }}
                         </mat-option>
                     </mat-select>
@@ -44,29 +102,14 @@
             </div>
         </div>
 
-         <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Save</button>
-
-        <!-- Witnesses List -->
-        <div class="mt-6">
-            <label class="block text-lg font-semibold mb-4">Witnesses</label>
-
-            <div *ngIf="witnesses && witnesses.length > 0; else noWitnesses" class="space-y-3">
-                <div *ngFor="let witness of witnesses" class="p-3 border border-gray-300 rounded-md bg-gray-50">
-                    <p class="font-semibold text-gray-900">{{ witness.firstName }} {{ witness.lastName }}</p>
-                    <p class="text-gray-700 text-sm"> {{ witness.relationship }}</p>
-                    <p class="text-gray-700 text-sm"> {{ witness.phoneNumber }}</p>
-                    <p class="text-gray-700 text-sm"> {{ witness.email }}</p>
-                </div>
-            </div>
-
-            <ng-template #noWitnesses>
-                <p class="text-gray-500 italic">No witnesses found.</p>
-            </ng-template>
-        </div>
-
-
+        <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="form.invalid"
+            class="w-full mb-24"
+        >
+            Schedule
+        </button>
     </form>
-
-
-
 </div>

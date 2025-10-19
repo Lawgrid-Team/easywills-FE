@@ -1,9 +1,15 @@
 <div>
-    <h2 class="text-3xl font-bold text-easywills-black font-DM_Serif mb-8">Tell us about you.</h2>
+    <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif mb-8">
+        Tell us about you.
+    </h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
         <div>
-            <label class="text-easywills-black flex items-center mb-2" for="title">Select your title</label>
+            <label
+                class="text-easywills-black flex items-center mb-2"
+                for="title"
+                >Select your title</label
+            >
             <mat-form-field appearance="outline" class="w-full">
                 <!-- <mat-label>Select your title</mat-label> -->
                 <mat-select formControlName="title" placeholder="Title">
@@ -23,28 +29,44 @@
         <div>
             <label class="flex items-center mb-2 text-easywills-black">
                 What is your full legal name?
-                <mat-icon class="ml-2 text-sm">help</mat-icon>
+                <mat-icon class="ml-2 text-sm">info_outline</mat-icon>
             </label>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                 <mat-form-field appearance="outline">
                     <!-- <mat-label>First name</mat-label> -->
-                    <input matInput formControlName="firstName" placeholder="First name">
-                    <mat-error *ngIf="form.get('firstName')?.hasError('required')">
+                    <input
+                        matInput
+                        formControlName="firstName"
+                        placeholder="First name"
+                    />
+                    <mat-error
+                        *ngIf="form.get('firstName')?.hasError('required')"
+                    >
                         First name is required
                     </mat-error>
-                    <mat-error *ngIf="form.get('firstName')?.hasError('minlength')">
+                    <mat-error
+                        *ngIf="form.get('firstName')?.hasError('minlength')"
+                    >
                         First name must be at least 2 characters
                     </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                     <!-- <mat-label>Last name</mat-label> -->
-                    <input matInput formControlName="lastName" placeholder="Last name">
-                    <mat-error *ngIf="form.get('lastName')?.hasError('required')">
+                    <input
+                        matInput
+                        formControlName="lastName"
+                        placeholder="Last name"
+                    />
+                    <mat-error
+                        *ngIf="form.get('lastName')?.hasError('required')"
+                    >
                         Last name is required
                     </mat-error>
-                    <mat-error *ngIf="form.get('lastName')?.hasError('minlength')">
+                    <mat-error
+                        *ngIf="form.get('lastName')?.hasError('minlength')"
+                    >
                         Last name must be at least 2 characters
                     </mat-error>
                 </mat-form-field>
@@ -52,31 +74,38 @@
 
             <mat-form-field appearance="outline" class="w-full">
                 <!-- <mat-label>Other Given Name(s)</mat-label> -->
-                <input matInput formControlName="otherNames" placeholder="Other Given Name(s)">
+                <input
+                    matInput
+                    formControlName="otherNames"
+                    placeholder="Other Given Name(s)"
+                />
             </mat-form-field>
         </div>
 
         <div class="flex items-start space-x-2">
             <mat-checkbox color="primary" formControlName="hasUsedOtherNames">
-                I have used other names in the past (e.g Alias, Nickname, previously married, etc)?
+                I have used other names in the past (e.g Alias, Nickname,
+                previously married, etc)?
             </mat-checkbox>
         </div>
 
         <div *ngIf="form.get('hasUsedOtherNames')?.value">
             <mat-form-field appearance="outline" class="w-full">
                 <!-- <mat-label>Full name</mat-label> -->
-                <input matInput formControlName="otherFullName" placeholder="Full name">
-                <mat-error *ngIf="form.get('otherFullName')?.hasError('required')">
+                <input
+                    matInput
+                    formControlName="otherFullName"
+                    placeholder="Full name"
+                />
+                <mat-error
+                    *ngIf="form.get('otherFullName')?.hasError('required')"
+                >
                     Other full name is required
                 </mat-error>
             </mat-form-field>
         </div>
 
-        <div class="absolute bottom-24 right-8">
-            <div class="flex items-center border border-foreground rounded-md px-4 py-2 bg-white">
-                <span class="mr-2">Need help?</span>
-                <mat-icon>help</mat-icon>
-            </div>
-        </div>
+        <!-- Help Box Component -->
+        <app-wizard-help-box [faqs]="helpFAQs"></app-wizard-help-box>
     </form>
 </div>

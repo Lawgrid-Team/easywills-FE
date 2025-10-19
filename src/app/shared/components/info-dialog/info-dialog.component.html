@@ -1,0 +1,48 @@
+<div class="info-dialog-container">
+    <div class="info-dialog-box" *ngIf="isVisible">
+        <!-- Close button -->
+        <button class="info-dialog-close" (click)="closeDialog()" type="button">
+            <mat-icon>close</mat-icon>
+        </button>
+
+        <!-- Image at the top -->
+        <div class="info-dialog-image" *ngIf="data.imagePath">
+            <img [src]="data.imagePath" [alt]="data.title" />
+        </div>
+
+        <!-- Title -->
+        <h3 class="info-dialog-title">{{ data.title }}</h3>
+
+        <!-- Content -->
+        <div class="info-dialog-content">
+            {{ data.content }}
+        </div>
+
+        <!-- Pagination indicators and arrow -->
+        <div class="info-dialog-footer" *ngIf="hasMultiplePages">
+            <button
+                class="arrow-button left"
+                type="button"
+                (click)="previousPage()"
+                [disabled]="!canGoPrevious"
+            >
+                <mat-icon>west</mat-icon>
+            </button>
+            <div class="pagination-indicators">
+                <div
+                    class="indicator"
+                    *ngFor="let page of pages; let i = index"
+                    [class.active]="i === currentPageIndex"
+                ></div>
+            </div>
+            <button
+                class="arrow-button right"
+                type="button"
+                (click)="nextPage()"
+                [disabled]="!canGoNext"
+            >
+                <mat-icon>east</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

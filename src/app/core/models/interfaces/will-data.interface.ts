@@ -1,4 +1,8 @@
-import { AssetType, BeneficiaryAssignment, BeneficiaryShare } from "./asset.interface";
+import {
+    AssetType,
+    BeneficiaryAssignment,
+    BeneficiaryShare,
+} from './asset.interface';
 
 export interface Spouse {
     id: string;
@@ -81,8 +85,8 @@ export interface PersonalDetailsData {
     // hasWitnesses: boolean;
 }
 
- // Executor and witnesses
-export interface  ExecutorAndWitnessData {
+// Executor and witnesses
+export interface ExecutorAndWitnessData {
     executors: Executor[];
     hasExecutor: boolean;
     deletedExecutors?: string[]; // List of executors that have been removed
@@ -129,9 +133,8 @@ export interface EstateDistributionData {
 
     deletedExclusions?: string[]; // List of exclusions that have been removed
 
-    beneficiaries? : BeneficiaryShare[]
+    beneficiaries?: BeneficiaryShare[];
     assets?: AssetType[];
-
 }
 
 export interface WillData {

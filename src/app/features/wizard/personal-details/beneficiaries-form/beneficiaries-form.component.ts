@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {
+    ReactiveFormsModule,
+    FormsModule,
+    FormGroup,
+    FormBuilder,
+    Validators,
+} from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,7 +17,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { PersonalDetailsData, Beneficiary } from '../../../../core/models/interfaces/will-data.interface';
+import {
+    PersonalDetailsData,
+    Beneficiary,
+} from '../../../../core/models/interfaces/will-data.interface';
+import {
+    WizardHelpBoxComponent,
+    HelpFAQ,
+} from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
+import {
+    InfoDialogComponent,
+    InfoDialogData,
+} from '../../../../shared/components/info-dialog/info-dialog.component';
+import { InfoDialogService } from '../../../../shared/services/info-dialog.service';
 
 @Component({
     selector: 'app-beneficiaries-form',
@@ -28,6 +47,8 @@ import { PersonalDetailsData, Beneficiary } from '../../../../core/models/interf
         MatRadioModule,
         MatCardModule,
         CommonModule,
+        WizardHelpBoxComponent,
+        InfoDialogComponent,
     ],
     templateUrl: './beneficiaries-form.component.html',
     styleUrl: './beneficiaries-form.component.scss',
@@ -39,8 +60,13 @@ export class BeneficiariesFormComponent {
     @Output() setFormValidity = new EventEmitter<boolean>();
 
     beneficiaries: Beneficiary[] = [];
+    helpFAQs: HelpFAQ[] = [];
     isAddingBeneficiary = false;
     editingBeneficiaryId: string | null = null;
+
+    // Info dialog properties
+    isInfoDialogVisible = false;
+    infoDialogData!: InfoDialogData[];
 
     beneficiaryForm!: FormGroup;
 
@@ -52,9 +78,18 @@ export class BeneficiariesFormComponent {
         { value: 'other', viewValue: 'Other' },
     ];
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService,
+        private infoDialogService: InfoDialogService
+    ) {}
 
     ngOnInit(): void {
+        // Initialize help FAQs
+        this.helpFAQs = this.helpService.getFAQsForForm('beneficiaries');
+        // Initialize info dialog data
+        this.infoDialogData =
+            this.infoDialogService.getInfoForPage('beneficiaries');
         this.beneficiaries = this.data.beneficiaries || [];
 
         this.beneficiaryForm = this.fb.group({
@@ -135,5 +170,9 @@ export class BeneficiariesFormComponent {
     onSubmit(): void {
         this.updateData.emit({ beneficiaries: this.beneficiaries });
         this.next.emit();
+    }
+
+    toggleInfoDialog(): void {
+        this.isInfoDialogVisible = !this.isInfoDialogVisible;
     }
 }

@@ -21,6 +21,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
+import {
+    WizardHelpBoxComponent,
+    HelpFAQ,
+} from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
+import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
 
 @Component({
     selector: 'app-marital-status-form',
@@ -37,6 +42,7 @@ import { MatCardModule } from '@angular/material/card';
         MatRadioModule,
         MatCardModule,
         CommonModule,
+        WizardHelpBoxComponent,
     ],
     templateUrl: './marital-status-form.component.html',
     styleUrl: './marital-status-form.component.scss',
@@ -49,14 +55,21 @@ export class MaritalStatusFormComponent {
 
     isMarried = false;
     spouses: Spouse[] = [];
+    helpFAQs: HelpFAQ[] = [];
     isAddingSpouse = false;
     editingSpouseId: string | null = null;
 
     spouseForm!: FormGroup;
 
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private helpService: WizardHelpService
+    ) {}
 
     ngOnInit(): void {
+        // Initialize help FAQs
+        this.helpFAQs = this.helpService.getFAQsForForm('marital-status');
+
         this.isMarried = this.data.isMarried;
         this.spouses =
             this.data.spouses.length > 0 ? [...this.data.spouses] : [];
