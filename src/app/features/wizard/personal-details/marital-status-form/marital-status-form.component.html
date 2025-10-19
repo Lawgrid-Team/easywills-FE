@@ -52,9 +52,11 @@
                     </button>
                 </div>
                 <p style="color: #d3d3d3">Spouse</p>
-                <p style="color: #d3d3d3">Born: {{ spouse.dateOfBirth }}</p>
                 <p style="color: #d3d3d3">
-                    Married: {{ spouse.dateOfMarriage }}
+                    Born: {{ spouse.dateOfBirth | date : "mediumDate" }}
+                </p>
+                <p style="color: #d3d3d3">
+                    Married: {{ spouse.dateOfMarriage | date : "mediumDate" }}
                 </p>
             </mat-card>
 
