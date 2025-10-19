@@ -2,30 +2,18 @@
     <app-header></app-header>
 
     <main class="container mx-auto px-4 py-8 pt-16 pb-24">
-        <div
-            class="max-w-3xl mx-auto"
-            [class.w-full]="step === 0"
-            [class.max-w-3xl]="step !== 0"
-        >
+        <div class="max-w-3xl mx-auto" [class.w-full]="step === 0" [class.max-w-3xl]="step !== 0">
             <ng-container [ngSwitch]="step">
-                <app-validation-steps
-                    *ngSwitchCase="0"
-                    (next)="handleNext()"
-                    (setFormValidity)="setFormValidity($event)"
-                >
+                <app-validation-steps *ngSwitchCase="0" (next)="handleNext()"
+                    (setFormValidity)="setFormValidity($event)">
                 </app-validation-steps>
-                <app-verify-intro
-                    *ngSwitchCase="1"
-                    (setFormValidity)="setFormValidity($event)"
-                    (next)="handleNext()"
-                >
+                <app-verify-intro *ngSwitchCase="1" (setFormValidity)="setFormValidity($event)" (next)="handleNext()">
                 </app-verify-intro>
-                <app-verify-info
-                    *ngSwitchCase="2"
-                    (identitySaved)="handleIdentitySave($event)"
-                    (next)="handleNext()"
-                >
+                <app-verify-info *ngSwitchCase="2" (identitySaved)="handleIdentitySave($event)" (next)="handleNext()">
                 </app-verify-info>
+
+                <!-- QoreID SDK container (hidden) -->
+                <div id="qoreid-container" style="display:none;"></div>
             </ng-container>
         </div>
     </main>
@@ -42,12 +30,7 @@
      -->
     <!-- Only show footer starting from step 1 -->
 
-    <app-footer
-        *ngIf="step > 0"
-        [step]="step"
-        [isNextDisabled]="!isFormValid"
-        (back)="handleBack()"
-        (next)="handleNext()"
-    >
+    <app-footer *ngIf="step > 0" [step]="step" [isNextDisabled]="!isFormValid" (back)="handleBack()"
+        (next)="handleNext()">
     </app-footer>
 </div>

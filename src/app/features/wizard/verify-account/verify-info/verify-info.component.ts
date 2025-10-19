@@ -113,6 +113,7 @@ export class VerifyInfoComponent {
     }
 
     submit(): void {
+        console.log('Form submitted', this.form.value);
         if (this.form.valid) {
             const data: IdentityVerificationData = {
                 documentType: this.form.value.idType,
