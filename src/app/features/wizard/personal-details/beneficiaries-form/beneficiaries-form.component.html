@@ -3,7 +3,21 @@
         <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
             Other Beneficiaries
         </h2>
-        <mat-icon class="ml-2">info_outline</mat-icon>
+        <div class="relative ml-2">
+            <mat-icon
+                class="cursor-pointer hover:text-easywills-blue transition-colors"
+                (click)="toggleInfoDialog()"
+            >
+                info_outline
+            </mat-icon>
+            <!-- Info Dialog Component positioned relative to icon -->
+            <app-info-dialog
+                [pages]="infoDialogData"
+                [isVisible]="isInfoDialogVisible"
+                (close)="isInfoDialogVisible = false"
+            >
+            </app-info-dialog>
+        </div>
     </div>
 
     <p class="text-easywills-dark-grey mb-6">

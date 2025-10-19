@@ -26,6 +26,11 @@ import {
     HelpFAQ,
 } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
 import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
+import {
+    InfoDialogComponent,
+    InfoDialogData,
+} from '../../../../shared/components/info-dialog/info-dialog.component';
+import { InfoDialogService } from '../../../../shared/services/info-dialog.service';
 
 @Component({
     selector: 'app-beneficiaries-form',
@@ -43,6 +48,7 @@ import { WizardHelpService } from '../../../../shared/services/wizard-help.servi
         MatCardModule,
         CommonModule,
         WizardHelpBoxComponent,
+        InfoDialogComponent,
     ],
     templateUrl: './beneficiaries-form.component.html',
     styleUrl: './beneficiaries-form.component.scss',
@@ -58,6 +64,10 @@ export class BeneficiariesFormComponent {
     isAddingBeneficiary = false;
     editingBeneficiaryId: string | null = null;
 
+    // Info dialog properties
+    isInfoDialogVisible = false;
+    infoDialogData!: InfoDialogData[];
+
     beneficiaryForm!: FormGroup;
 
     relationshipOptions = [
@@ -70,12 +80,16 @@ export class BeneficiariesFormComponent {
 
     constructor(
         private fb: FormBuilder,
-        private helpService: WizardHelpService
+        private helpService: WizardHelpService,
+        private infoDialogService: InfoDialogService
     ) {}
 
     ngOnInit(): void {
         // Initialize help FAQs
         this.helpFAQs = this.helpService.getFAQsForForm('beneficiaries');
+        // Initialize info dialog data
+        this.infoDialogData =
+            this.infoDialogService.getInfoForPage('beneficiaries');
         this.beneficiaries = this.data.beneficiaries || [];
 
         this.beneficiaryForm = this.fb.group({
@@ -156,5 +170,9 @@ export class BeneficiariesFormComponent {
     onSubmit(): void {
         this.updateData.emit({ beneficiaries: this.beneficiaries });
         this.next.emit();
+    }
+
+    toggleInfoDialog(): void {
+        this.isInfoDialogVisible = !this.isInfoDialogVisible;
     }
 }
