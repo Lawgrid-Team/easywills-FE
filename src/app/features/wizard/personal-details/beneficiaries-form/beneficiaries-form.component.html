@@ -47,7 +47,9 @@
                 </button>
             </div>
             <p style="color: #d3d3d3">{{ beneficiary.relationship }}</p>
-            <p style="color: #d3d3d3">Born: {{ beneficiary.dateOfBirth }}</p>
+            <p style="color: #d3d3d3">
+                Born: {{ beneficiary.dateOfBirth | date : "mediumDate" }}
+            </p>
         </mat-card>
 
         <div *ngIf="isAddingBeneficiary" class="space-y-6">

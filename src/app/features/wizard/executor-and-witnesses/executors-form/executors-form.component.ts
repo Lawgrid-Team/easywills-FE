@@ -86,7 +86,10 @@ export class ExecutorsFormComponent {
             firstName: ['', [Validators.required, Validators.minLength(2)]],
             lastName: ['', [Validators.required, Validators.minLength(2)]],
             email: ['', [Validators.required, Validators.email]],
-            phoneNumber: ['', [Validators.required, Validators.minLength(10)]],
+            phoneNumber: [
+                '',
+                [Validators.required, Validators.pattern(/^\d{10,11}$/)],
+            ],
             type: ['', Validators.required],
             address: [''],
         });
