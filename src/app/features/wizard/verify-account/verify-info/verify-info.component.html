@@ -4,147 +4,74 @@
         Provide the necessary documents
     </h2>
     <p class="text-easywills-dark-grey mb-6">
-        Securely upload any necessary documents to ensure your will is
-        comprehensive and accurate.
+        Securely upload any necessary documents to ensure your will is comprehensive and accurate.
     </p>
 
     <!-- Document Type Selection -->
     <div class="flex gap-4">
-        <button
-            *ngFor="let doc of idTypes"
-            (mouseenter)="hoveredDocumentType = doc.name"
-            (mouseleave)="hoveredDocumentType = null"
-            [ngClass]="{
-                'border-2 border-primary bg-white':
-                    selectedDocumentType === doc.name,
-                'border border-gray-300 bg-gray-50':
-                    selectedDocumentType !== doc.name
-            }"
-            (click)="selectDocument(doc.name)"
-            class="relative px-4 py-6 rounded-md flex-1 text-center shadow-sm transition"
-        >
-            <!-- Top-right indicator -->
-            <!-- Hover State: Empty circle -->
-            <div
-                *ngIf="
-                    hoveredDocumentType === doc.name &&
-                    selectedDocumentType !== doc.name
-                "
-                class="absolute top-2 right-2 w-6 h-6 border-2 border-gray-400 rounded-full"
-            ></div>
+        <button *ngFor="let doc of idTypes" (mouseenter)="hoveredDocumentType = doc.name"
+            (mouseleave)="hoveredDocumentType = null" [ngClass]="{
+        'border-2 border-primary bg-white': selectedDocumentType === doc.value,
+        'border border-gray-300 bg-gray-50': selectedDocumentType !== doc.value
+      }" (click)="selectDocument(doc.value)"
+            class="relative px-4 py-6 rounded-md flex-1 text-center shadow-sm transition" type="button">
+            <!-- Hover circle -->
+            <div *ngIf="hoveredDocumentType === doc.name && selectedDocumentType !== doc.value"
+                class="absolute top-2 right-2 w-6 h-6 border-2 border-gray-400 rounded-full"></div>
 
-            <!-- Selected State: Black circle with checkmark -->
-            <div
-                *ngIf="selectedDocumentType === doc.name"
-                class="absolute top-2 right-2 bg-black rounded-full p-1 flex items-center justify-center z-10"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="3"
-                    stroke="white"
-                    class="w-4 h-4"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="m4.5 12.75 6 6 9-13.5"
-                    />
+            <!-- Selected circle -->
+            <div *ngIf="selectedDocumentType === doc.value"
+                class="absolute top-2 right-2 bg-black rounded-full p-1 flex items-center justify-center z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="white"
+                    class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                 </svg>
             </div>
 
-            <!-- Static ID Icons -->
+            <!-- Icon -->
             <div class="flex justify-center mb-2">
                 <ng-container [ngSwitch]="doc.icon">
-                    <!-- National ID -->
-                    <img
-                        *ngSwitchCase="'id-card'"
-                        src="svg/verify-identity/national-id.svg"
-                        alt="National ID"
-                        class="w-8 h-8"
-                    />
-                    <!-- Passport -->
-                    <img
-                        *ngSwitchCase="'passport'"
-                        src="svg/verify-identity/passport.svg"
-                        alt="Passport"
-                        class="w-8 h-8"
-                    />
-                    <!-- Driver License -->
-                    <img
-                        *ngSwitchCase="'license'"
-                        src="svg/verify-identity/drivers-license.svg"
-                        alt="Driver License"
-                        class="w-8 h-8"
-                    />
+                    <img *ngSwitchCase="'id-card'" src="svg/verify-identity/national-id.svg" alt="National ID"
+                        class="w-8 h-8" />
+                    <img *ngSwitchCase="'passport'" src="svg/verify-identity/passport.svg" alt="Passport"
+                        class="w-8 h-8" />
+                    <img *ngSwitchCase="'license'" src="svg/verify-identity/drivers-license.svg" alt="Driver License"
+                        class="w-8 h-8" />
                 </ng-container>
             </div>
 
-            <!-- Type Name -->
             <div class="text-gray-700 font-normal">{{ doc.name }}</div>
         </button>
     </div>
 
-    <!-- Conditional Inputs -->
-    <div *ngIf="selectedDocumentType" class="mt-6 space-y-4">
+    <!-- Reactive Form -->
+    <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="selectedDocumentType" class="mt-6 space-y-4">
         <label>What is the identification number?</label>
         <mat-form-field appearance="outline" class="w-full">
-            <input
-                matInput
-                formControlName="idNumber"
-                [placeholder]="getPlaceholderForSelectedType()"
-                [maxlength]="getMaxLengthForSelectedType()"
-                (input)="onIdNumberInput($event)"
-                [value]="getFormattedIdNumber()"
-            />
-            <mat-error
-                *ngIf="
-                    form.get('idNumber')?.invalid &&
-                    form.get('idNumber')?.touched
-                "
-            >
+            <input matInput formControlName="idNumber" [placeholder]="getPlaceholderForSelectedType()"
+                [maxlength]="getMaxLengthForSelectedType()" (input)="onIdNumberInput($event)"
+                [value]="getFormattedIdNumber()" />
+            <mat-error *ngIf="form.get('idNumber')?.invalid && form.get('idNumber')?.touched">
                 {{ getErrorMessageForSelectedType() }}
             </mat-error>
         </mat-form-field>
 
         <label>What is the expiry date?</label>
         <mat-form-field appearance="outline" class="w-full">
-            <input
-                matInput
-                [matDatepicker]="picker"
-                [min]="today"
-                formControlName="expiryDate"
-                placeholder="DD/MM/YYYY"
-            />
-            <mat-datepicker-toggle
-                matSuffix
-                [for]="picker"
-            ></mat-datepicker-toggle>
+            <input matInput [matDatepicker]="picker" [min]="today" formControlName="expiryDate"
+                placeholder="DD/MM/YYYY" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
 
-        <button
-            type="button"
-            class="w-full bg-easywills-black text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2"
-            (click)="submit()"
-        >
-            <!-- Added new SVG -->
-            <svg
-                width="19"
-                height="18"
-                viewBox="0 0 19 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
+        <button type="submit"
+            class="w-full bg-easywills-black text-white px-4 py-3 rounded-lg font-semibold flex items-center justify-center gap-2">
+            <svg width="19" height="18" viewBox="0 0 19 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M0.5 7H18.5M4.5 3V7H14.5V3C14.5 2.057 14.5 1.586 14.207 1.293C13.914 1 13.443 1 12.5 1H6.5C5.557 1 5.086 1 4.793 1.293C4.5 1.586 4.5 2.057 4.5 3Z"
-                    stroke="#FDFDFD"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                />
+                    stroke="#FDFDFD" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
             Verify
         </button>
-    </div>
+    </form>
 </div>

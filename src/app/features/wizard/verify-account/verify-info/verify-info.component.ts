@@ -41,9 +41,9 @@ export class VerifyInfoComponent {
     private rawIdNumber: string = '';
 
     idTypes = [
-        { name: 'National ID Card', icon: 'id-card' },
-        { name: 'National Passport', icon: 'passport' },
-        { name: "Driver's License", icon: 'license' },
+        { name: 'National ID', value: 'NATIONAL_ID', icon: 'id-card' },
+        { name: 'International Passport', value: 'PASSPORT', icon: 'passport' },
+        { name: "Driver's License", value: 'DRIVERS_LICENCE', icon: 'license' },
     ];
 
     // Nigerian ID Format configurations
@@ -113,11 +113,12 @@ export class VerifyInfoComponent {
     }
 
     submit(): void {
-        console.log('Form submitted', this.form.value);
+        //console.log('Form submitted', this.form.value);
         if (this.form.valid) {
             const data: IdentityVerificationData = {
                 documentType: this.form.value.idType,
-                idNumber: this.rawIdNumber, // Use raw unformatted value
+                idNumber: this.form.value.idNumber,
+                // idNumber: this.rawIdNumber, // Use raw unformatted value
                 expiryDate: this.form.value.expiryDate,
             };
             this.identitySaved.emit(data);
@@ -233,9 +234,9 @@ export class VerifyInfoComponent {
         }
     }
 
-    selectDocument(type: string): void {
-        this.selectedDocumentType = type;
-        this.form.patchValue({ idType: type, idNumber: '' }); // Clear ID number when switching types
-        this.rawIdNumber = ''; // Reset raw value
+    selectDocument(value: string): void {
+        this.selectedDocumentType = value;
+        this.form.patchValue({ idType: value, idNumber: '', expiryDate: '' });
+        this.rawIdNumber = '';
     }
 }

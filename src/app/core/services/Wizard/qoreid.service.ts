@@ -1,57 +1,7 @@
-// import { Injectable } from '@angular/core';
-// import { HttpClient } from '@angular/common/http';
-// import { firstValueFrom } from 'rxjs';
-// import { environment } from '../../../../environments/environment';
-
-// @Injectable({ providedIn: 'root' })
-// export class QoreidService {
-//     private baseURL = environment.API_URL;
-//     private sdkUrl = 'https://dashboard.qoreid.com/qoreid-sdk/qoreid.js';
-//     private sdkLoaded = false;
-
-//     constructor(private http: HttpClient) {}
-
-//     /** Load QoreID Web SDK dynamically */
-//     loadSdk(): Promise<void> {
-//         if (this.sdkLoaded || (window as any).QoreIDWebSdk)
-//             return Promise.resolve();
-//         return new Promise((resolve, reject) => {
-//             const script = document.createElement('script');
-//             script.src = this.sdkUrl;
-//             script.async = true;
-//             script.onload = () => {
-//                 this.sdkLoaded = true;
-//                 resolve();
-//             };
-//             script.onerror = (err) => reject(err);
-//             document.body.appendChild(script);
-//         });
-//     }
-
-//     /** Call backend /api/v1/identity/initialize */
-//     async initializeIdentity(data: {
-//         idNumber: string;
-//         type: string;
-//         expiryDate: string;
-//     }): Promise<any> {
-//         return await firstValueFrom(
-//             this.http.post(this.baseURL + '/api/v1/identity/initialize', data)
-//         );
-//     }
-
-//     /** Start QoreID verification */
-//     startVerification(): void {
-//         (window as any).QoreIdRegenerateSDK?.();
-//         const sdk = (window as any).QoreIDWebSdk;
-//         if (sdk) sdk.start();
-//         else console.warn('QoreIDWebSdk not available');
-//     }
-// }
-
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { ApiService } from '../../utils/api.service';
 
 declare global {
     interface Window {
@@ -63,22 +13,23 @@ declare global {
 @Injectable({ providedIn: 'root' })
 export class QoreidService {
     private baseURL = environment.API_URL;
-    private sdkUrl = 'https://dashboard.qoreid.com/qoreid-sdk/qoreid.js';
     private sdkLoaded = false;
 
-    constructor(private http: HttpClient) {}
+    private apiService = inject(ApiService);
 
-    /** Load QoreID SDK script only once */
+    constructor() {}
+
+    /** Load QoreID Web SDK once (from the official docs URL) */
     loadSdk(): Observable<void> {
         return new Observable((observer) => {
-            if (this.sdkLoaded || (window as any).QoreIDWebSdk) {
+            if (this.sdkLoaded || window.QoreIDWebSdk) {
                 observer.next();
                 observer.complete();
                 return;
             }
 
             const script = document.createElement('script');
-            script.src = this.sdkUrl;
+            script.src = 'https://dashboard.qoreid.com/qoreid-sdk/qoreid.js'; // per docs
             script.async = true;
             script.onload = () => {
                 this.sdkLoaded = true;
@@ -90,26 +41,24 @@ export class QoreidService {
         });
     }
 
-    /** POST call to backend to initialize QoreID identity */
+    /**
+     * Initialize identity verification session via your backend (documented).
+     * Your backend returns: clientId, flowId, reference, applicantData, identityData...
+     */
     initializeIdentity(payload: {
         idNumber: string;
         type: string;
         expiryDate: string;
     }): Observable<any> {
-        return this.http.post(
-            this.baseURL + '/api/v1/identity/initialize',
-            payload
-        );
+        const url = `${this.baseURL}api/v1/identity/initialize`;
+        return this.apiService.post(url, payload);
     }
 
-    /** Trigger QoreID verification popup */
+    /** Start QoreID verification modal */
     startVerification(): void {
         window.QoreIdRegenerateSDK?.();
         const sdk = window.QoreIDWebSdk;
-        if (sdk) {
-            sdk.start();
-        } else {
-            console.warn('QoreIDWebSdk not available.');
-        }
+        if (sdk) sdk.start();
+        else console.warn('QoreIDWebSdk not available.');
     }
 }

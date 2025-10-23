@@ -1,78 +1,85 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable } from '@angular/core';
-//import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 const TOKEN_KEY = 'easy-wills-token';
 const REFRESHTOKEN_KEY = 'easy-wills-refreshtoken';
 const USER_KEY = 'easy-wills-user';
 const USER_ROLE = 'userRole';
+
 @Injectable({
     providedIn: 'root',
 })
 export class CookiesStorageService {
-    constructor() {}
+    private isBrowser: boolean;
+
+    constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+        this.isBrowser = isPlatformBrowser(this.platformId);
+    }
+
+    private get storage(): Storage | null {
+        return this.isBrowser ? localStorage : null;
+    }
 
     public saveToken(token: string): void {
-        // Cookie.set(TOKEN_KEY, token);
-        localStorage.setItem(TOKEN_KEY, token);
+        if (!this.storage) return;
+
+        this.storage.setItem(TOKEN_KEY, token);
 
         const user = this.getUser();
         if (user) {
-            this.saveUser({ ...user, token: token });
+            this.saveUser({ ...user, token });
         }
     }
+
     public getToken(): string | null {
-        // Cookie.get(TOKEN_KEY)
-        return localStorage.getItem(TOKEN_KEY);
+        return this.storage ? this.storage.getItem(TOKEN_KEY) : null;
     }
+
     public saveRefreshToken(token: string): void {
-        localStorage.setItem(REFRESHTOKEN_KEY, token);
-        // Cookie.set(REFRESHTOKEN_KEY, token);
+        if (this.storage) {
+            this.storage.setItem(REFRESHTOKEN_KEY, token);
+        }
     }
+
     public getRefreshToken(): string | null {
-        // Cookie.get(REFRESHTOKEN_KEY);
-        return localStorage.getItem(REFRESHTOKEN_KEY);
+        return this.storage ? this.storage.getItem(REFRESHTOKEN_KEY) : null;
     }
 
     public saveUser(user: any): void {
-        // Cookie.set(USER_KEY, JSON.stringify(user));
-        localStorage.setItem(USER_ROLE, user.roles[0].authority);
-        localStorage.setItem(USER_KEY, JSON.stringify(user));
-    }
+        if (!this.storage) return;
 
-    public saveUserProfile(profile: any) {
-        localStorage.setItem('profile', JSON.stringify(profile));
-    }
-
-    public getUserProfile() {
-        const userProfile = localStorage.getItem('profile');
-        if (userProfile) {
-            return JSON.parse(userProfile);
+        if (user.roles?.[0]?.authority) {
+            this.storage.setItem(USER_ROLE, user.roles[0].authority);
         }
-        return null;
+        this.storage.setItem(USER_KEY, JSON.stringify(user));
+    }
+
+    public saveUserProfile(profile: any): void {
+        this.storage?.setItem('profile', JSON.stringify(profile));
+    }
+
+    public getUserProfile(): any {
+        const data = this.storage?.getItem('profile');
+        return data ? JSON.parse(data) : null;
     }
 
     public getUserRole(): string | null {
-        return localStorage.getItem(USER_ROLE);
+        return this.storage ? this.storage.getItem(USER_ROLE) : null;
     }
+
     public getUser(): any {
-        // const user = Cookie.get(USER_KEY);
-        const user = localStorage.getItem(USER_KEY);
-
-        if (user) {
-            return JSON.parse(user);
-        }
-        return null;
+        const data = this.storage?.getItem(USER_KEY);
+        return data ? JSON.parse(data) : null;
     }
 
-    public clearStorage() {
-        // Cookie.delete(TOKEN_KEY);
-        // Cookie.delete(REFRESHTOKEN_KEY);
-        // Cookie.delete(USER_KEY);
-        // Cookie.deleteAll('/');
-        localStorage.removeItem(TOKEN_KEY);
-        localStorage.removeItem(REFRESHTOKEN_KEY);
-        localStorage.removeItem(USER_KEY);
+    public clearStorage(): void {
+        if (!this.storage) return;
+        this.storage.removeItem(TOKEN_KEY);
+        this.storage.removeItem(REFRESHTOKEN_KEY);
+        this.storage.removeItem(USER_KEY);
+        this.storage.removeItem(USER_ROLE);
+        this.storage.removeItem('profile');
     }
 }
