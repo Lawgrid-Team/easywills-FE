@@ -13,9 +13,7 @@ const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
-const angularApp = new AngularNodeAppEngine({
-    bootstrap,
-});
+const angularApp = new AngularNodeAppEngine({ bootstrap });
 
 /**
  * Example Express Rest API endpoints can be defined here.
