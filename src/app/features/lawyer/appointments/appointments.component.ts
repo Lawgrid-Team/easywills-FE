@@ -164,6 +164,11 @@ export class AppointmentsComponent implements OnInit {
         this.setNextAppointment();
     }
 
+    uploadSignedWill(appointment: Appointment): void {
+        console.log('Upload signed will for:', appointment.clientName);
+        // Will be implemented later
+    }
+
     private calculateCounts(): void {
         this.upcomingCount = this.appointments.filter(
             (apt) => apt.status === 'upcoming'
