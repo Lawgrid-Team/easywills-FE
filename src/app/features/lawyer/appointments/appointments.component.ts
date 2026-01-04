@@ -136,6 +136,13 @@ export class AppointmentsComponent implements OnInit {
     }
 
     toggleAccordion(appointment: Appointment): void {
+        // Close all other accordions
+        this.appointments.forEach((apt) => {
+            if (apt.id !== appointment.id) {
+                apt.expanded = false;
+            }
+        });
+        // Toggle the clicked accordion
         appointment.expanded = !appointment.expanded;
     }
 
