@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 interface Appointment {
     id: number;
     clientName: string;
+    locationType: string; // e.g., "Client's Home", "Office", "Hospital"
     address: string;
     date: string;
     time: string;
@@ -39,6 +40,7 @@ export class AppointmentsComponent implements OnInit {
         {
             id: 1,
             clientName: 'John Smith',
+            locationType: "Client's Home",
             address: '123 Main St, New York, NY',
             date: 'Jan 15, 2026',
             time: '10:00 AM',
@@ -49,6 +51,7 @@ export class AppointmentsComponent implements OnInit {
         {
             id: 2,
             clientName: 'Sarah Johnson',
+            locationType: 'Office',
             address: '456 Park Ave, Brooklyn, NY',
             date: 'Jan 16, 2026',
             time: '2:30 PM',
@@ -59,6 +62,7 @@ export class AppointmentsComponent implements OnInit {
         {
             id: 3,
             clientName: 'Michael Brown',
+            locationType: 'Hospital',
             address: '789 Broadway, Manhattan, NY',
             date: 'Jan 18, 2026',
             time: '11:00 AM',
@@ -69,6 +73,7 @@ export class AppointmentsComponent implements OnInit {
         {
             id: 4,
             clientName: 'Emily Davis',
+            locationType: "Client's Home",
             address: '321 5th Ave, Queens, NY',
             date: 'Dec 20, 2025',
             time: '3:00 PM',
@@ -79,6 +84,7 @@ export class AppointmentsComponent implements OnInit {
         {
             id: 5,
             clientName: 'David Wilson',
+            locationType: 'Office',
             address: '654 Madison Ave, Bronx, NY',
             date: 'Dec 18, 2025',
             time: '1:00 PM',
