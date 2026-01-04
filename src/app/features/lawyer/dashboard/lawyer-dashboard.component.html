@@ -2,6 +2,22 @@
     <app-lawyer-sidebar></app-lawyer-sidebar>
     <main class="flex-1 overflow-y-auto">
         <div class="p-8">
+            <div
+                class="bg-white rounded-lg shadow-sm p-6 mb-6"
+                *ngIf="!hideHeader"
+            >
+                <app-header-widget
+                    [title]="headerTitle"
+                    [subtitle]="headerSubtitle"
+                    [userName]="userName"
+                    [userEmail]="userEmail"
+                    [userAvatarUrl]="userAvatarUrl"
+                    [hasUnreadNotifications]="hasUnreadNotifications"
+                    [showUpgradePlan]="false"
+                    [showUpgradeButton]="false"
+                    [showGoBackButton]="false"
+                ></app-header-widget>
+            </div>
             <router-outlet></router-outlet>
         </div>
     </main>
