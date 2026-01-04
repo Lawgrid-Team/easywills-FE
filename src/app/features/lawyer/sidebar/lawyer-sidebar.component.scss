@@ -1,0 +1,17 @@
+// Lawyer sidebar styles
+
+// Icon filters for different states
+.inactive-icon-filter {
+    filter: brightness(0) saturate(100%) invert(50%) sepia(0%) saturate(0%)
+        hue-rotate(0deg) brightness(95%) contrast(85%);
+}
+
+.active-icon-filter {
+    filter: brightness(0) saturate(100%) invert(35%) sepia(15%) saturate(1500%)
+        hue-rotate(190deg) brightness(95%) contrast(85%);
+}
+
+.hover-icon-filter {
+    filter: brightness(0) saturate(100%) invert(45%) sepia(25%) saturate(1200%)
+        hue-rotate(190deg) brightness(100%) contrast(90%);
+}
