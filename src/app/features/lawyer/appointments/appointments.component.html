@@ -1,6 +1,69 @@
 <div>
-    <!-- Appointments list will be implemented here -->
-    <p class="text-gray-500 italic">
-        Appointments functionality coming soon...
-    </p>
+    <!-- Tabs and Search Bar -->
+    <div class="flex justify-between items-center mb-6">
+        <!-- Tabs -->
+        <div class="flex gap-4">
+            <button
+                (click)="setActiveTab('upcoming')"
+                [class.active]="activeTab === 'upcoming'"
+                class="tab-button px-6 py-2 rounded-lg font-medium transition-colors"
+                [class.bg-white]="activeTab === 'upcoming'"
+                [class.text-black]="activeTab === 'upcoming'"
+                [class.bg-gray-100]="activeTab !== 'upcoming'"
+                [class.text-gray-600]="activeTab !== 'upcoming'"
+            >
+                Upcoming
+            </button>
+            <button
+                (click)="setActiveTab('completed')"
+                [class.active]="activeTab === 'completed'"
+                class="tab-button px-6 py-2 rounded-lg font-medium transition-colors"
+                [class.bg-white]="activeTab === 'completed'"
+                [class.text-black]="activeTab === 'completed'"
+                [class.bg-gray-100]="activeTab !== 'completed'"
+                [class.text-gray-600]="activeTab !== 'completed'"
+            >
+                Completed
+            </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative w-96">
+            <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                </svg>
+            </div>
+            <input
+                type="text"
+                [(ngModel)]="searchQuery"
+                (input)="onSearch()"
+                placeholder="Search by name, address or place"
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6982b5] focus:border-transparent"
+            />
+        </div>
+    </div>
+
+    <!-- Appointments Content -->
+    <div class="mt-8">
+        <p class="text-gray-500 italic">
+            {{
+                activeTab === "upcoming" ? "Upcoming" : "Completed"
+            }}
+            appointments will be displayed here...
+        </p>
+    </div>
 </div>

@@ -1,1 +1,14 @@
 // Appointments component styles
+
+.tab-button {
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        opacity: 0.9;
+    }
+
+    &.active {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
