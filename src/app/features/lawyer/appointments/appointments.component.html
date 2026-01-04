@@ -62,71 +62,142 @@
         <!-- Left Column - Appointments List (Takes more space) -->
         <div class="col-span-8">
             <div class="space-y-4">
-                <!-- Appointment Card Sample -->
+                <!-- Appointment Card Accordion -->
                 <div
                     *ngFor="let appointment of getFilteredAppointments()"
-                    class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow"
+                    class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
                 >
-                    <div class="flex items-start gap-4">
-                        <!-- Profile Picture / Initials Circle -->
-                        <div class="flex-shrink-0">
-                            <div
-                                *ngIf="!appointment.profilePicture"
-                                class="w-14 h-14 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-normal text-lg"
-                            >
-                                {{ getInitials(appointment.clientName) }}
+                    <!-- Collapsed View (Always Visible) -->
+                    <div
+                        class="p-6 cursor-pointer"
+                        (click)="toggleAccordion(appointment)"
+                    >
+                        <div class="flex items-start gap-4">
+                            <!-- Profile Picture / Initials Circle -->
+                            <div class="flex-shrink-0">
+                                <div
+                                    *ngIf="!appointment.profilePicture"
+                                    class="w-14 h-14 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-normal text-lg"
+                                >
+                                    {{ getInitials(appointment.clientName) }}
+                                </div>
+                                <img
+                                    *ngIf="appointment.profilePicture"
+                                    [src]="appointment.profilePicture"
+                                    [alt]="appointment.clientName"
+                                    class="w-14 h-14 rounded-full object-cover"
+                                />
                             </div>
-                            <img
-                                *ngIf="appointment.profilePicture"
-                                [src]="appointment.profilePicture"
-                                [alt]="appointment.clientName"
-                                class="w-14 h-14 rounded-full object-cover"
-                            />
-                        </div>
 
-                        <!-- Appointment Details -->
-                        <div class="flex-1">
-                            <div class="flex justify-between items-start">
-                                <div class="flex-1">
-                                    <h3
-                                        class="text-lg font-semibold text-gray-800"
-                                    >
-                                        {{ appointment.clientName }}
-                                    </h3>
-                                    <p class="text-sm text-gray-500 mt-1">
-                                        {{ appointment.address }}
-                                    </p>
-                                    <div class="flex items-center gap-4 mt-3">
-                                        <span class="text-sm text-gray-600">
-                                            <span class="font-medium"
-                                                >Date:</span
-                                            >
-                                            {{ appointment.date }}
+                            <!-- Appointment Details -->
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h3
+                                            class="text-lg font-semibold text-gray-800"
+                                        >
+                                            {{ appointment.clientName }}
+                                        </h3>
+                                        <p class="text-sm text-gray-500 mt-1">
+                                            {{ appointment.address }}
+                                        </p>
+                                        <div
+                                            class="flex items-center gap-4 mt-3"
+                                        >
+                                            <span class="text-sm text-gray-600">
+                                                <span class="font-medium"
+                                                    >Date:</span
+                                                >
+                                                {{ appointment.date }}
+                                            </span>
+                                            <span class="text-sm text-gray-600">
+                                                <span class="font-medium"
+                                                    >Time:</span
+                                                >
+                                                {{ appointment.time }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span
+                                            [class]="
+                                                appointment.status ===
+                                                'upcoming'
+                                                    ? 'bg-blue-100 text-blue-800'
+                                                    : 'bg-green-100 text-green-800'
+                                            "
+                                            class="px-3 py-1 rounded-full text-xs font-medium"
+                                        >
+                                            {{
+                                                appointment.status ===
+                                                "upcoming"
+                                                    ? "Upcoming"
+                                                    : "Completed"
+                                            }}
                                         </span>
-                                        <span class="text-sm text-gray-600">
-                                            <span class="font-medium"
-                                                >Time:</span
-                                            >
-                                            {{ appointment.time }}
-                                        </span>
+                                        <!-- Expand/Collapse Icon -->
+                                        <svg
+                                            class="w-5 h-5 text-gray-400 transition-transform"
+                                            [class.rotate-180]="
+                                                appointment.expanded
+                                            "
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M19 9l-7 7-7-7"
+                                            />
+                                        </svg>
                                     </div>
                                 </div>
-                                <div>
-                                    <span
-                                        [class]="
-                                            appointment.status === 'upcoming'
-                                                ? 'bg-blue-100 text-blue-800'
-                                                : 'bg-green-100 text-green-800'
-                                        "
-                                        class="px-3 py-1 rounded-full text-xs font-medium"
-                                    >
-                                        {{
-                                            appointment.status === "upcoming"
-                                                ? "Upcoming"
-                                                : "Completed"
-                                        }}
-                                    </span>
-                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expanded View (Conditional) -->
+                    <div
+                        *ngIf="appointment.expanded"
+                        class="px-6 pb-6 pt-0 border-t border-gray-100"
+                    >
+                        <div class="mt-4 space-y-4">
+                            <!-- Witnesses List -->
+                            <div
+                                *ngIf="
+                                    appointment.witnesses &&
+                                    appointment.witnesses.length > 0
+                                "
+                            >
+                                <p class="text-sm text-gray-600">
+                                    <span class="font-medium">Witnesses:</span>
+                                    {{ appointment.witnesses.join(", ") }}
+                                </p>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex gap-3">
+                                <button
+                                    (click)="
+                                        viewWill(appointment);
+                                        $event.stopPropagation()
+                                    "
+                                    class="px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                                >
+                                    View Will
+                                </button>
+                                <button
+                                    *ngIf="appointment.status === 'upcoming'"
+                                    (click)="
+                                        markAsComplete(appointment);
+                                        $event.stopPropagation()
+                                    "
+                                    class="px-4 py-2 bg-[#a6a6a6] text-white rounded-lg hover:bg-[#8f8f8f] transition-colors font-medium"
+                                >
+                                    Mark as Complete
+                                </button>
                             </div>
                         </div>
                     </div>
