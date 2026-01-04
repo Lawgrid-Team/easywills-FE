@@ -6,11 +6,13 @@
             <button
                 (click)="setActiveTab('upcoming')"
                 [class.active]="activeTab === 'upcoming'"
-                class="tab-button px-6 py-2 rounded-lg font-medium transition-colors"
+                class="tab-button px-6 py-2 rounded-lg font-medium transition-colors border"
                 [class.bg-white]="activeTab === 'upcoming'"
                 [class.text-black]="activeTab === 'upcoming'"
+                [class.border-gray-300]="activeTab === 'upcoming'"
                 [class.bg-gray-100]="activeTab !== 'upcoming'"
                 [class.text-gray-600]="activeTab !== 'upcoming'"
+                [class.border-transparent]="activeTab !== 'upcoming'"
             >
                 Upcoming
             </button>
