@@ -35,6 +35,13 @@ export const routes: Routes = [
             ).then((m) => m.CreateCodicilComponent),
     },
     {
+        path: 'lawyer',
+        loadChildren: () =>
+            import('./features/lawyer/lawyer.routes').then(
+                (m) => m.lawyerRoutes
+            ),
+    },
+    {
         path: '',
         loadChildren: () =>
             import('./features/web/web.routes').then((m) => m.routes),

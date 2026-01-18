@@ -51,7 +51,9 @@
                         <mat-icon>edit</mat-icon>
                     </button>
                 </div>
-                <p style="color: #d3d3d3">Born: {{ child.dateOfBirth }}</p>
+                <p style="color: #d3d3d3">
+                    Born: {{ child.dateOfBirth | date : "mediumDate" }}
+                </p>
                 <p style="color: #d3d3d3">Email: {{ child.email }}</p>
             </mat-card>
 

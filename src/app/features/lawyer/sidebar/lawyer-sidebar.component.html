@@ -1,0 +1,73 @@
+<aside
+    class="w-64 bg-white p-6 flex flex-col h-screen border-r border-gray-200"
+>
+    <div class="mb-8">
+        <img
+            src="/svg/easywill_logo.svg"
+            alt="easyWills Logo"
+            class="h-8 w-auto"
+        />
+    </div>
+
+    <nav class="flex-grow">
+        <ul>
+            <li *ngFor="let item of navItems" class="mb-2">
+                <a
+                    [routerLink]="item.link"
+                    routerLinkActive="bg-[#efefef] text-black font-semibold"
+                    #rla="routerLinkActive"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="flex items-center p-3 rounded-lg text-[#717171] hover:bg-gray-100 hover:text-[#6982b5] transition-colors duration-150 group"
+                >
+                    <img
+                        [src]="item.icon"
+                        alt=""
+                        class="mr-3 h-5 w-5"
+                        [class.active-icon-filter]="rla.isActive"
+                        [class.inactive-icon-filter]="!rla.isActive"
+                        [class.group-hover:hover-icon-filter]="!rla.isActive"
+                    />
+                    <span
+                        [class.text-black]="rla.isActive"
+                        [class.text-[#717171]]="!rla.isActive"
+                        [class.group-hover:text-[#6982b5]]="!rla.isActive"
+                    >
+                        {{ item.label }}
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div>
+        <ul>
+            <li *ngFor="let item of utilityItems" class="mb-2">
+                <a
+                    *ngIf="!item.action"
+                    [routerLink]="item.link"
+                    routerLinkActive="bg-[#efefef] text-[#6982b5] font-semibold"
+                    class="flex items-center p-3 rounded-lg text-[#717171] hover:bg-gray-100 hover:text-[#6982b5] transition-colors duration-150 group"
+                >
+                    <img
+                        [src]="item.icon"
+                        alt=""
+                        class="mr-3 h-5 w-5 inactive-icon-filter group-hover:hover-icon-filter"
+                    />
+                    <span>{{ item.label }}</span>
+                </a>
+                <button
+                    *ngIf="item.action"
+                    (click)="item.action()"
+                    class="flex items-center p-3 rounded-lg text-[#717171] hover:bg-gray-100 hover:text-[#6982b5] transition-colors duration-150 group w-full text-left"
+                >
+                    <img
+                        [src]="item.icon"
+                        alt=""
+                        class="mr-3 h-5 w-5 inactive-icon-filter group-hover:hover-icon-filter"
+                    />
+                    <span>{{ item.label }}</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</aside>

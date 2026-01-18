@@ -18,7 +18,7 @@ import { NotificationService } from '../../../core/utils/notification.service';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'app-login',
+    selector: 'app-lawyer-login',
     standalone: true,
     imports: [
         MatFormFieldModule,
@@ -30,10 +30,10 @@ import { Router } from '@angular/router';
         ReactiveFormsModule,
         RouterModule,
     ],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss',
+    templateUrl: './lawyer-login.component.html',
+    styleUrl: './lawyer-login.component.scss',
 })
-export class LoginComponent implements OnInit {
+export class LawyerLoginComponent implements OnInit {
     form!: FormGroup;
     hide = signal(true);
 
@@ -62,29 +62,10 @@ export class LoginComponent implements OnInit {
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const userRole = res.roles[0].authority;
                     //console.log(res, 'res');
-
-                    switch (userRole) {
-                        case 'USER':
-                            this.router.navigate(['/wiz'], {
-                                replaceUrl: true,
-                            });
-                            break;
-                        case 'ADMIN':
-                            this.router.navigate(['/dashboard'], {
-                                replaceUrl: true,
-                            });
-                            break;
-                        case 'PARTNER_ADMIN':
-                            this.router.navigate(['/lawyer'], {
-                                replaceUrl: true,
-                            });
-                            break;
-                        default:
-                            this.router.navigate(['/wiz'], {
-                                replaceUrl: true,
-                            });
-                    }
-                    //this.router.navigate(['/wiz'], { replaceUrl: true });
+                    // Navigate to lawyer dashboard instead of wizard
+                    this.router.navigate(['/lawyer/dashboard'], {
+                        replaceUrl: true,
+                    });
                 },
                 error: (err: any) => {
                     this.notification.showError(err.error.message);

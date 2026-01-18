@@ -24,6 +24,7 @@ import {
 import { WizardHelpBoxComponent } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
 import { HelpFAQ } from '../../../../shared/components/wizard-help-box/wizard-help-box.component';
 import { WizardHelpService } from '../../../../shared/services/wizard-help.service';
+import { NotificationService } from '../../../../core/utils/notification.service';
 
 @Component({
     selector: 'app-witnesses-form',
@@ -59,6 +60,10 @@ export class WitnessesFormComponent {
 
     witnessForm!: FormGroup;
 
+    get hasMinimumWitnesses(): boolean {
+        return this.witnesses.length >= 2;
+    }
+
     relationshipOptions = [
         { value: 'FRIEND', viewValue: 'Friend' },
         { value: 'RELATIVE', viewValue: 'Relative' },
@@ -69,7 +74,8 @@ export class WitnessesFormComponent {
 
     constructor(
         private fb: FormBuilder,
-        private helpService: WizardHelpService
+        private helpService: WizardHelpService,
+        private notificationService: NotificationService
     ) {}
 
     ngOnInit(): void {
@@ -83,13 +89,13 @@ export class WitnessesFormComponent {
             email: ['', [Validators.required, Validators.email]],
             phoneNumber: [
                 '',
-                [Validators.required, Validators.pattern(/^\d{10}$/)],
+                [Validators.required, Validators.pattern(/^\d{10,11}$/)],
             ],
             relationship: ['', Validators.required],
         });
 
-        // Initial form validity
-        this.setFormValidity.emit(true);
+        // Initial form validity - check if we have at least 2 witnesses
+        this.setFormValidity.emit(this.hasMinimumWitnesses);
     }
 
     handleSaveWitness(): void {
@@ -110,6 +116,7 @@ export class WitnessesFormComponent {
             }
 
             this.updateData.emit({ witnesses: this.witnesses });
+            this.setFormValidity.emit(this.hasMinimumWitnesses);
             this.witnessForm.reset({ type: 'individual' });
             this.isAddingWitness = false;
             this.editingWitnessId = null;
@@ -134,7 +141,7 @@ export class WitnessesFormComponent {
     removeWitness(witness: Witness): void {
         this.witnesses = this.witnesses.filter((w) => w.id !== witness.id);
         this.updateData.emit({ witnesses: this.witnesses });
-        this.setFormValidity.emit(true);
+        this.setFormValidity.emit(this.hasMinimumWitnesses);
     }
 
     handleAddWitness(): void {
@@ -144,6 +151,14 @@ export class WitnessesFormComponent {
     }
 
     onSubmit(): void {
+        // Check if at least 2 witnesses are added
+        if (this.witnesses.length < 2) {
+            this.notificationService.showError(
+                'Please add at least 2 witnesses to continue'
+            );
+            return;
+        }
+
         this.updateData.emit({ witnesses: this.witnesses });
         this.next.emit();
     }

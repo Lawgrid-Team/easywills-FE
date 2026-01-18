@@ -1,8 +1,8 @@
 <div>
-    <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif">
+    <h2 class="text-4xl font-bold text-easywills-black font-DM_Serif mb-4">
         Assign your Executor(s)
     </h2>
-    <label class="text-easywills-black flex items-center mb-2" for="title"
+    <label class="text-easywills-dark-grey mb-6" for="title"
         >Select one of the options below to proceed</label
     >
     <form (ngSubmit)="onSubmit()" class="space-y-6">
@@ -215,16 +215,17 @@
                                             ?.hasError('required')
                                     "
                                 >
-                                    Email is required
+                                    Phone number is required
                                 </mat-error>
                                 <mat-error
                                     *ngIf="
                                         executorForm
-                                            .get('email')
-                                            ?.hasError('email')
+                                            .get('phoneNumber')
+                                            ?.hasError('pattern')
                                     "
                                 >
-                                    Please enter a valid phone number
+                                    Please enter a valid phone number (10-11
+                                    digits)
                                 </mat-error>
                             </mat-form-field>
                         </div>
@@ -330,16 +331,17 @@
                                             ?.hasError('required')
                                     "
                                 >
-                                    Email is required
+                                    Phone number is required
                                 </mat-error>
                                 <mat-error
                                     *ngIf="
                                         executorForm
-                                            .get('email')
-                                            ?.hasError('email')
+                                            .get('phoneNumber')
+                                            ?.hasError('pattern')
                                     "
                                 >
-                                    Please enter a valid phone number
+                                    Please enter a valid phone number (10-11
+                                    digits)
                                 </mat-error>
                             </mat-form-field>
                         </div>
