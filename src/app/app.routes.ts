@@ -9,7 +9,7 @@ export const routes: Routes = [
     },
     {
         path: 'wiz',
-        //canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         loadChildren: () =>
             import('./features/wizard/wizard.routes').then((m) => m.routes),
     },
