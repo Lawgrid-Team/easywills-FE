@@ -1,0 +1,102 @@
+<div
+    class="min-h-screen p-8 w-full gap-24 sm:gap-y-0 grid grid-cols-1 lg:grid-cols-2 items-center justify-center"
+>
+    <div class="bg-gray-100 rounded-lg w-full min-h-full p-10">
+        <div class="flex justify-items-start">
+            <img src="svg/easywill_logo.svg" alt="EasyWill Logo" class="w-24" />
+        </div>
+
+        <div
+            class="flex flex-col px-14 py-28 gap-9 min-h-full items-center justify-center"
+        >
+            <img src="svg/lawyer-login.svg" alt="EasyWill Logo" />
+        </div>
+    </div>
+
+    <div class="w-full mx-auto py-20 px-16">
+        <p class="text-center mb-6 text-3xl normal text-easywills-black">
+            <b>Log In</b>
+        </p>
+
+        <div class="flex justify-center">
+            <p class="text-easywills-dark-grey mb-6 mt-3">
+                Welcome back! Login to access your appointments
+            </p>
+        </div>
+        <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="field">
+                <label for="name">Email</label>
+                <mat-form-field>
+                    <!-- <mat-label>Full name</mat-label> -->
+                    <input
+                        formControlName="username"
+                        matInput
+                        placeholder="Enter Email"
+                    />
+                    @if (form.get('username')?.hasError('required')) {
+                    <mat-error>Email is required</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <mat-form-field>
+                    <input
+                        formControlName="password"
+                        type="password"
+                        matInput
+                        placeholder="Enter Password"
+                        [type]="hide() ? 'password' : 'text'"
+                    />
+                    <button
+                        type="button"
+                        mat-icon-button
+                        matSuffix
+                        (click)="clickEvent($event)"
+                        [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide()"
+                    >
+                        <mat-icon>{{
+                            hide() ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                    </button>
+                    @if (form.get('password')?.hasError('required')) {
+                    <mat-error>Password is required</mat-error>
+                    }
+                    <!-- <mat-hint style="font-size: x-small;">Must be a minimum of 8 combined characters, number & symbol</mat-hint> -->
+                </mat-form-field>
+            </div>
+            <br />
+            <div>
+                <button
+                    [disabled]="form.invalid"
+                    style="width: 100%"
+                    mat-flat-button
+                    type="submit"
+                >
+                    Log In
+                </button>
+            </div>
+        </form>
+
+        <div class="flex justify-center mt-4">
+            <a
+                class="text-easywills-dark-grey underline"
+                [routerLink]="['/lawyer/forgot-password']"
+                >Forgot your password?</a
+            >
+        </div>
+
+        <div>
+            <p class="text-center text-easywills-dark-grey mt-5">
+                Don't have an account?
+                <a
+                    class="text-easywills-blue hover:text-easywills-colour-1"
+                    href="mailto:support@easywills.com"
+                    >Sign Up</a
+                >
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,332 @@
+<div>
+    <!-- Tabs and Search Bar -->
+    <div class="flex justify-between items-center mb-6">
+        <!-- Tabs -->
+        <div class="flex gap-4">
+            <button
+                (click)="setActiveTab('upcoming')"
+                [class.active]="activeTab === 'upcoming'"
+                class="tab-button px-6 py-2 rounded-lg font-medium transition-colors border"
+                [class.bg-white]="activeTab === 'upcoming'"
+                [class.text-black]="activeTab === 'upcoming'"
+                [class.border-gray-300]="activeTab === 'upcoming'"
+                [class.bg-gray-100]="activeTab !== 'upcoming'"
+                [class.text-gray-600]="activeTab !== 'upcoming'"
+                [class.border-transparent]="activeTab !== 'upcoming'"
+            >
+                Upcoming
+            </button>
+            <button
+                (click)="setActiveTab('completed')"
+                [class.active]="activeTab === 'completed'"
+                class="tab-button px-6 py-2 rounded-lg font-medium transition-colors"
+                [class.bg-white]="activeTab === 'completed'"
+                [class.text-black]="activeTab === 'completed'"
+                [class.bg-gray-100]="activeTab !== 'completed'"
+                [class.text-gray-600]="activeTab !== 'completed'"
+            >
+                Completed
+            </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative w-96">
+            <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                </svg>
+            </div>
+            <input
+                type="text"
+                [(ngModel)]="searchQuery"
+                (input)="onSearch()"
+                placeholder="Search by name, address or place"
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6982b5] focus:border-transparent"
+            />
+        </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="grid grid-cols-12 gap-6 mt-8">
+        <!-- Left Column - Appointments List (Takes more space) -->
+        <div class="col-span-8">
+            <div class="space-y-4">
+                <!-- Appointment Card Accordion -->
+                <div
+                    *ngFor="let appointment of getFilteredAppointments()"
+                    class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
+                >
+                    <!-- Collapsed View (Always Visible) -->
+                    <div
+                        class="p-6 cursor-pointer"
+                        (click)="toggleAccordion(appointment)"
+                    >
+                        <div class="flex items-start gap-4">
+                            <!-- Profile Picture / Initials Circle -->
+                            <div class="flex-shrink-0">
+                                <div
+                                    *ngIf="!appointment.profilePicture"
+                                    class="w-14 h-14 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-normal text-lg"
+                                >
+                                    {{ getInitials(appointment.clientName) }}
+                                </div>
+                                <img
+                                    *ngIf="appointment.profilePicture"
+                                    [src]="appointment.profilePicture"
+                                    [alt]="appointment.clientName"
+                                    class="w-14 h-14 rounded-full object-cover"
+                                />
+                            </div>
+
+                            <!-- Appointment Details -->
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h3
+                                            class="text-lg font-semibold text-gray-800"
+                                        >
+                                            {{ appointment.clientName }}
+                                        </h3>
+                                        <p class="text-sm text-gray-500 mt-1">
+                                            {{ appointment.locationType }} -
+                                            {{ appointment.address }}
+                                        </p>
+                                        <div
+                                            class="flex items-center gap-4 mt-3"
+                                        >
+                                            <span class="text-sm text-gray-600">
+                                                <span class="font-medium"
+                                                    >Date:</span
+                                                >
+                                                {{ appointment.date }}
+                                            </span>
+                                            <span class="text-sm text-gray-600">
+                                                <span class="font-medium"
+                                                    >Time:</span
+                                                >
+                                                {{ appointment.time }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <span
+                                            [class]="
+                                                appointment.status ===
+                                                'upcoming'
+                                                    ? 'bg-blue-100 text-blue-800'
+                                                    : 'bg-[#e1e1e1] text-gray-700'
+                                            "
+                                            class="px-3 py-1 rounded-full text-xs font-medium"
+                                        >
+                                            {{
+                                                appointment.status ===
+                                                "upcoming"
+                                                    ? "Upcoming"
+                                                    : "Completed"
+                                            }}
+                                        </span>
+                                        <!-- Expand/Collapse Icon -->
+                                        <svg
+                                            class="w-5 h-5 text-gray-400 transition-transform"
+                                            [class.rotate-180]="
+                                                appointment.expanded
+                                            "
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M19 9l-7 7-7-7"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expanded View (Conditional) -->
+                    <div
+                        *ngIf="appointment.expanded"
+                        class="px-6 pb-6 pt-0 border-t border-gray-100"
+                    >
+                        <div class="mt-4 space-y-4">
+                            <!-- Witnesses List -->
+                            <div
+                                *ngIf="
+                                    appointment.witnesses &&
+                                    appointment.witnesses.length > 0
+                                "
+                            >
+                                <p class="text-sm text-gray-600">
+                                    <span class="font-medium">Witnesses:</span>
+                                    {{ appointment.witnesses.join(", ") }}
+                                </p>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex gap-3">
+                                <button
+                                    (click)="
+                                        viewWill(appointment);
+                                        $event.stopPropagation()
+                                    "
+                                    class="px-4 py-2 bg-white text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                                >
+                                    View Will
+                                </button>
+                                <button
+                                    *ngIf="appointment.status === 'upcoming'"
+                                    (click)="
+                                        markAsComplete(appointment);
+                                        $event.stopPropagation()
+                                    "
+                                    class="px-4 py-2 bg-[#a6a6a6] text-white rounded-lg hover:bg-[#8f8f8f] transition-colors font-medium"
+                                >
+                                    Mark as Complete
+                                </button>
+                                <button
+                                    *ngIf="appointment.status === 'completed'"
+                                    (click)="
+                                        uploadSignedWill(appointment);
+                                        $event.stopPropagation()
+                                    "
+                                    class="px-4 py-2 bg-[#444444] text-white rounded-lg hover:bg-[#333333] transition-colors font-medium"
+                                >
+                                    Upload Signed Will
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div
+                    *ngIf="getFilteredAppointments().length === 0"
+                    class="text-center py-12 text-gray-500"
+                >
+                    <p class="italic">
+                        No
+                        {{
+                            activeTab === "upcoming" ? "upcoming" : "completed"
+                        }}
+                        appointments found.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column - Sidebar Widgets -->
+        <div class="col-span-4">
+            <div class="space-y-6">
+                <!-- Next Appointment Card -->
+                <div
+                    [class.bg-[#6982b5]]="nextAppointment"
+                    [class.bg-white]="!nextAppointment"
+                    class="rounded-lg shadow-sm p-6 border border-gray-200"
+                >
+                    <h3
+                        [class.text-white]="nextAppointment"
+                        [class.text-gray-800]="!nextAppointment"
+                        class="text-lg font-semibold mb-4"
+                    >
+                        {{
+                            nextAppointment
+                                ? "Next Appointment"
+                                : "No appointment"
+                        }}
+                    </h3>
+                    <div *ngIf="nextAppointment" class="space-y-2">
+                        <p class="font-medium text-white">
+                            {{ nextAppointment.clientName }}
+                        </p>
+                        <p class="text-sm text-white opacity-90">
+                            {{ nextAppointment.locationType }}
+                        </p>
+                        <div
+                            class="mt-3 pt-3 border-t border-white border-opacity-30"
+                        >
+                            <p class="text-sm text-white opacity-90">
+                                <span class="font-medium">Date:</span>
+                                {{ nextAppointment.date }}
+                            </p>
+                            <p class="text-sm text-white opacity-90">
+                                <span class="font-medium">Time:</span>
+                                {{ nextAppointment.time }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Filters Card -->
+                <div
+                    class="bg-white rounded-lg shadow-sm p-6 border border-gray-200"
+                >
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        Quick Filters
+                    </h3>
+                    <div class="space-y-3">
+                        <button
+                            (click)="setActiveTab('upcoming')"
+                            class="w-full flex justify-between items-center p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                            [class.bg-gray-50]="activeTab === 'upcoming'"
+                        >
+                            <span class="font-medium text-gray-700"
+                                >Upcoming</span
+                            >
+                            <span
+                                class="bg-[#e1e6f0] text-blue-800 px-2 py-1 rounded-full text-xs font-medium"
+                            >
+                                {{ upcomingCount }}
+                            </span>
+                        </button>
+                        <button
+                            (click)="setActiveTab('completed')"
+                            class="w-full flex justify-between items-center p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                            [class.bg-gray-50]="activeTab === 'completed'"
+                        >
+                            <span class="font-medium text-gray-700"
+                                >Completed</span
+                            >
+                            <span
+                                class="bg-[#e1e1e1] text-gray-700 px-2 py-1 rounded-full text-xs font-medium"
+                            >
+                                {{ completedCount }}
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tips Card -->
+                <div
+                    class="bg-white rounded-lg shadow-sm p-6 border border-gray-200"
+                >
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        Tips
+                    </h3>
+                    <div class="space-y-2 text-sm text-gray-600">
+                        <p>Review appointment details before the meeting</p>
+                        <p>Confirm client contact information</p>
+                        <p>Keep notes updated after each session</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
