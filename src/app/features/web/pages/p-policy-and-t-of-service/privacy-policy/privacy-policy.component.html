@@ -1,114 +1,114 @@
 <div class="container mx-auto px-4 py-12">
-  <h1 class="text-4xl font-bold text-[#32302f] mb-2">Privacy Policy</h1>
-  <p class="text-[#505050] mb-16">Last Updated: March 2025  </p>
+  <h1 class="text-4xl text-center text-[#32302f] mb-2">Privacy Policy</h1>
+  <p class="text-[#505050] text-center mb-16">Last Updated: March 2025  </p>
 
   <div class="grid grid-cols-1 md:grid-cols-12 gap-16">
-    <aside class="md:col-span-6 lg:col-span-5 pr-4">
+    <aside class="md:col-span-5 lg:col-span-5 pr-4">
       <div class="sticky top-8 w-full">
         <h2 class="text-lg font-medium mb-4">Table of contents</h2>
         <nav class="flex flex-col space-y-2">
           <button
             (click)="scrollToSection('introduction')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md font-medium w-full': true,
+              'text-left py-2 rounded-md font-medium w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'introduction',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'introduction'
             }"
           >
-            Introduction
+            1. Introduction
           </button>
           
           <button
             (click)="scrollToSection('information-collection')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-10 w-full': true,
+              'text-left py-2 rounded-md w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'information-collection',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'information-collection'
             }"
           >
-            Information We Collect
+            2. Information We Collect
           </button>
           
           <button
             (click)="scrollToSection('information-use')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-12 w-full': true,
+              'text-left py-2 rounded-md w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'information-use',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'information-use'
             }"
           >
-            How We Use Your Information
+            3. How We Use Your Information
           </button>
           
           <button
             (click)="scrollToSection('data-storage')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-14 w-full': true,
+              'text-left py-2 rounded-md w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'data-storage',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'data-storage'
             }"
           >
-            Data storage and security
+            4. Data storage and security
           </button>
 
           <button
             (click)="scrollToSection('information-sharing')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-16 w-full': true,
+              'text-left py-2 rounded-md w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'information-sharing',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'information-sharing'
             }"
           >
-            Sharing of Information
+            5. Sharing of Information
           </button>
 
           <button
             (click)="scrollToSection('access-control')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-18 w-full': true,
+              'text-left py-2 rounded-md w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'access-control',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'access-control'
             }"
           >
-            User Rights
+            6. User Rights
           </button>
 
           <button
             (click)="scrollToSection('cookies-and-tracking')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-20 w-full': true,
+              'text-left py-2 rounded-md w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'cookies-and-tracking',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'cookies-and-tracking'
             }"
           >
-            Cookies and Tracking Technologies
+            7. Cookies and Tracking Technologies
           </button>
 
           <button
             (click)="scrollToSection('ndpr-compliance')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-22 w-full': true,
+              'text-left py-2 rounded-md w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'ndpr-compliance',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'ndpr-compliance'
             }"
           >
-            Compliance with the Nigeria Data Protection Regulation (NDPR)
+            8. Compliance with the Nigeria Data Protection Regulation (NDPR)
           </button>
           <button
             (click)="scrollToSection('contact-us')"
             [ngClass]="{
-              'text-left py-2 px-4 rounded-md pl-24 w-full': true,
+              'text-left py-2 rounded-md w-full': true,
               'bg-[#efefef] text-[#505050]': activeSection === 'contact-us',
               'text-[#505050] hover:bg-gray-100': activeSection !== 'contact-us'
             }"
           >
-            Contact us
+            9. Contact us
           </button>
         </nav>
       </div>
     </aside>
 
-    <div class="md:col-span-6 lg:col-span-7 space-y-12">
+    <div class="md:col-span-7 lg:col-span-7 space-y-12">
       <section id="introduction">
         <h2 class="text-3xl strong text-[#32302f] mb-1">1. Introduction</h2>
         <p class="text-[#505050] pl-6 mb-1">
