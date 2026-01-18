@@ -62,7 +62,29 @@ export class LoginComponent implements OnInit {
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const userRole = res.roles[0].authority;
                     //console.log(res, 'res');
-                    this.router.navigate(['/wiz'], { replaceUrl: true });
+
+                    switch (userRole) {
+                        case 'USER':
+                            this.router.navigate(['/wiz'], {
+                                replaceUrl: true,
+                            });
+                            break;
+                        case 'ADMIN':
+                            this.router.navigate(['/dashboard'], {
+                                replaceUrl: true,
+                            });
+                            break;
+                        case 'PARTNER_ADMIN':
+                            this.router.navigate(['/lawyer'], {
+                                replaceUrl: true,
+                            });
+                            break;
+                        default:
+                            this.router.navigate(['/wiz'], {
+                                replaceUrl: true,
+                            });
+                    }
+                    //this.router.navigate(['/wiz'], { replaceUrl: true });
                 },
                 error: (err: any) => {
                     this.notification.showError(err.error.message);

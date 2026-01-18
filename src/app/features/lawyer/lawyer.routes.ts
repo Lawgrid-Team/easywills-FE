@@ -7,14 +7,14 @@ import { ProfileComponent } from './profile/profile.component';
 export const lawyerRoutes: Routes = [
     {
         path: '',
-        redirectTo: 'login',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
     },
-    {
-        path: 'login',
-        component: LawyerLoginComponent,
-        title: 'Lawyer Login',
-    },
+    // {
+    //     path: 'login',
+    //     component: LawyerLoginComponent,
+    //     title: 'Lawyer Login',
+    // },
     {
         path: 'dashboard',
         component: LawyerDashboardComponent,
