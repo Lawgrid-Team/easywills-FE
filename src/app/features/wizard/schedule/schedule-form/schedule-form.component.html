@@ -1,72 +1,208 @@
-<div>
-    <div class="flex items-center mb-8">
-        <h2 class="text-3xl font-bold text-easywills-black">Schedule your Signing</h2>
-        <mat-icon class="ml-2">help</mat-icon>
+<div class="max-w-3xl mx-auto px-6 pt-10 pb-10">
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-2">
+      <h2 class="text-3xl font-bold text-easywills-black">Schedule your Signing</h2>
+
+      <button type="button" (click)="openInfoDialog()" aria-label="Help">
+        <mat-icon class="text-gray-600">help</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <p class="text-easywills-dark-grey mb-8">
+    You are required to assign date and time
+  </p>
+
+  <div class="w-full p-4 border border-gray-200 rounded-lg bg-white text-gray-800">
+    <label class="block text-sm text-gray-500 mb-1">Testator</label>
+    <div class="font-medium text-gray-900">{{ testatorName }}</div>
+  </div>
+
+  <form [formGroup]="form" novalidate class="mt-8 space-y-7">
+    <!-- Date + time -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">Add date and time.</label>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <mat-form-field appearance="outline" class="w-full">
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [min]="minDate"
+            formControlName="date"
+            placeholder="Choose a date"
+          />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-select formControlName="time" placeholder="Select time">
+            <mat-option disabled value="">-- Select a time --</mat-option>
+            <mat-option *ngFor="let option of timeOptions" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
 
-    <p class="text-easywills-dark-grey mb-6">
-        You are required to assign date and time
-    </p>
+    <!-- Location -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-2">
+        Choose your location of appointment
+      </label>
 
-    <!-- Testator (Read-only) -->
-    <div class="w-full p-3 border border-gray-300 rounded-md bg-gray-50 text-gray-800">
-        <label class="block text-sm text-gray-500 mb-1">Testator</label>
-        <div class="font-semibold text-lg">
-            {{ testatorName }}
-        </div>
-    </div>
+      <div class="grid grid-cols-2 gap-4">
+        <!-- HOME -->
+        <button
+          type="button"
+          class="relative rounded-xl border bg-white p-5 transition"
+          [ngClass]="locationType === 'HOME'
+            ? 'border-[#2F2F2F] ring-2 ring-[#2F2F2F]/10'
+            : 'border-gray-200 hover:border-gray-300'"
+          (click)="setLocation('HOME')"
+        >
+          <span class="absolute right-3 top-3 w-4 h-4 rounded-full border flex items-center justify-center"
+                [ngClass]="locationType === 'HOME' ? 'border-[#2F2F2F]' : 'border-gray-300'">
+            <span class="w-2.5 h-2.5 rounded-full"
+                  [ngClass]="locationType === 'HOME' ? 'bg-[#2F2F2F]' : 'bg-transparent'"></span>
+          </span>
 
-    <br>
-    <br>
-
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="space-y-6">
-        <div>
-            <label class="block mb-2">Choose Date and Time</label>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Date Picker -->
-                <mat-form-field appearance="outline" class="w-full">
-                    <!-- <mat-label>Date of birth</mat-label>
-    <input matInput [matDatepicker]="birthPicker" formControlName="Date"> -->
-                    <input matInput [matDatepicker]="birthPicker" [min]="minDate" formControlName="date"
-                        placeholder="Choose a date" />
-                    <mat-datepicker-toggle matIconSuffix [for]="birthPicker"></mat-datepicker-toggle>
-                    <mat-datepicker #birthPicker></mat-datepicker>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-select formControlName="time">
-                        <mat-option disabled value="">-- Select a time --</mat-option>
-                        <mat-option *ngFor="let option of timeOptions" [value]="option">
-                            {{ option }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+          <div class="flex flex-col items-center gap-2">
+            <mat-icon class="text-gray-700">home</mat-icon>
+            <div class="text-sm text-gray-900 text-center leading-4">
+              My Home or<br />Office
             </div>
+          </div>
+        </button>
+
+        <!-- OFFICE -->
+        <button
+          type="button"
+          class="relative rounded-xl border bg-white p-5 transition"
+          [ngClass]="locationType === 'OFFICE'
+            ? 'border-[#2F2F2F] ring-2 ring-[#2F2F2F]/10'
+            : 'border-gray-200 hover:border-gray-300'"
+          (click)="setLocation('OFFICE')"
+        >
+          <span class="absolute right-3 top-3 w-4 h-4 rounded-full border flex items-center justify-center"
+                [ngClass]="locationType === 'OFFICE' ? 'border-[#2F2F2F]' : 'border-gray-300'">
+            <span class="w-2.5 h-2.5 rounded-full"
+                  [ngClass]="locationType === 'OFFICE' ? 'bg-[#2F2F2F]' : 'bg-transparent'"></span>
+          </span>
+
+          <div class="flex flex-col items-center gap-2">
+            <div class="w-6 h-6 rounded bg-gray-900 text-white flex items-center justify-center text-xs font-semibold">
+              W
+            </div>
+            <div class="text-sm text-gray-900 text-center leading-4">
+              Our Legal<br />Partner’s Offices
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <!-- HOME PANEL -->
+      <div *ngIf="locationType === 'HOME'" class="mt-5">
+        <label class="block text-xs font-medium text-gray-600 mb-2">Address</label>
+
+        <div class="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-gray-800">
+          {{ homeAddress || 'No address found in your personal details.' }}
         </div>
 
-         <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Save</button>
+        <mat-checkbox formControlName="addressConfirmed" class="mt-4 text-sm text-gray-700">
+          Confirm your home or office address
+        </mat-checkbox>
 
-        <!-- Witnesses List -->
-        <div class="mt-6">
-            <label class="block text-lg font-semibold mb-4">Witnesses</label>
+        <div
+            *ngIf="actionError"
+            class="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                {{ actionError }}
+        </div>
 
-            <div *ngIf="witnesses && witnesses.length > 0; else noWitnesses" class="space-y-3">
-                <div *ngFor="let witness of witnesses" class="p-3 border border-gray-300 rounded-md bg-gray-50">
-                    <p class="font-semibold text-gray-900">{{ witness.firstName }} {{ witness.lastName }}</p>
-                    <p class="text-gray-700 text-sm"> {{ witness.relationship }}</p>
-                    <p class="text-gray-700 text-sm"> {{ witness.phoneNumber }}</p>
-                    <p class="text-gray-700 text-sm"> {{ witness.email }}</p>
+
+        <button
+          mat-raised-button
+          class="mt-5 w-full !rounded-lg !bg-[#2F2F2F] !text-white"
+          type="button"
+          
+          (click)="confirmHomeAddress()"
+        >
+          Confirm Address
+        </button>
+      </div>
+
+      <!-- OFFICE PANEL -->
+      <div *ngIf="locationType === 'OFFICE'" class="mt-5">
+        <label class="block text-xs font-medium text-gray-600 mb-2">Select city/state</label>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-select formControlName="cityId" placeholder="Select">
+            <mat-option *ngFor="let c of cities" [value]="c.id">
+              {{ c.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="selectedCity" class="mt-4">
+          <div class="space-y-3 max-h-[220px] overflow-auto pr-1">
+            <button
+              type="button"
+              class="w-full text-left rounded-xl border bg-white p-4 transition relative"
+              *ngFor="let office of selectedCity.offices"
+              [ngClass]="selectedOfficeId === office.id
+                ? 'border-[#2F2F2F] ring-2 ring-[#2F2F2F]/10'
+                : 'border-gray-200 hover:border-gray-300'"
+              (click)="selectOffice(office.id)"
+            >
+              <div class="pr-10">
+                <div class="font-medium text-gray-900">{{ office.name }}</div>
+                <div class="text-xs text-gray-600 mt-1 leading-4">
+                  {{ office.addressLine1 }}
+                  <span *ngIf="office.addressLine2"> {{ office.addressLine2 }}</span>
                 </div>
-            </div>
+              </div>
 
-            <ng-template #noWitnesses>
-                <p class="text-gray-500 italic">No witnesses found.</p>
-            </ng-template>
+              <span class="absolute right-4 top-4 w-5 h-5 rounded-full border flex items-center justify-center"
+                    [ngClass]="selectedOfficeId === office.id ? 'border-[#2F2F2F]' : 'border-gray-300'">
+                <mat-icon *ngIf="selectedOfficeId === office.id"
+                          class="!text-[16px] !w-[16px] !h-[16px] text-gray-900">
+                  check
+                </mat-icon>
+              </span>
+            </button>
+          </div>
+
+          <button
+            mat-raised-button
+            class="mt-5 w-full !rounded-lg !bg-[#2F2F2F] !text-white"
+            type="button"
+            [disabled]="!canScheduleOffice"
+            (click)="scheduleOfficeAppointment()"
+          >
+            Schedule appointment
+          </button>
         </div>
+      </div>
+    </div>
 
+    <!-- Witnesses -->
+    <div class="mt-6">
+      <label class="block text-lg font-semibold mb-4">Witnesses</label>
 
-    </form>
+      <div *ngIf="witnesses && witnesses.length > 0; else noWitnesses" class="space-y-3">
+        <div *ngFor="let witness of witnesses" class="p-4 border border-gray-200 rounded-lg bg-white">
+          <p class="font-medium text-gray-900">{{ witness.firstName }} {{ witness.lastName }}</p>
+          <p class="text-gray-600 text-sm">{{ witness.relationship }}</p>
+          <p class="text-gray-600 text-sm">{{ witness.phoneNumber }}</p>
+          <p class="text-gray-600 text-sm">{{ witness.email }}</p>
+        </div>
+      </div>
 
-
-
+      <ng-template #noWitnesses>
+        <p class="text-gray-500 italic">No witnesses found.</p>
+      </ng-template>
+    </div>
+  </form>
 </div>

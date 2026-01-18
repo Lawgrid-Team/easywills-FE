@@ -1,42 +1,134 @@
-<div class="flex flex-col min-h-screen">
-  <main class="flex-1 container mx-auto px-4 py-12 max-w-4xl">
-    <h1 class="text-4xl font-bold text-center mb-2 text-black"> Cookies Policy </h1>
-    <p class="text-center text-gray-600 mb-8"> Updated: September 28, 2025</p>
-   <p class="text-gray-600 mb-10">
-        This Cookies Policy explains what Cookies are and how We use them. You should read this policy so you
-can understand what type of cookies We use, or the information We collect using Cookies and how that
-information is used.  <br><br>
-Cookies do not typically contain any information that personally identifies a user, but personal information
-that we store about You may be linked to the information stored in and obtained from Cookies. <br><br>
-We do not store sensitive personal information, such as mailing addresses, account passwords, etc. in the
-Cookies We use.
-      </p>
+<div class="container mx-auto px-4 py-12">
+  <h1 class="text-4xl text-center text-[#32302f] mb-2">easyWills Cookie Policy</h1>
+  <p class="text-[#505050] text-center mb-16">Last Updated: October 2025  </p>
 
+  <div class="md:col-span-5 lg:col-span-5 pr-4">
+    <aside>
+      <div>
+        <h2 class="text-lg font-medium mb-4">Table of contents</h2>
+        <nav>
+          <button>easyWills Cookie Policy</button>
+          <button>1. What are Cookies?</button>
+          <button>2. Types of Cookies We Use</button>
+          <button>3. Legal Basis for Processing (NDPR & GDPR)</button>
+          <button>4. User Rights under NDPR and GDPR</button>
+          <button>5. Third-Party Cookies & Services</button>
+          
+          
+        </nav>
+      </div>
+    </aside>
+    <div class="md:col-span-7 lg:col-span-7 space-y-12">
+      <section id="introduction">
+        <p class="text-[#505050] mb-1">
+          At easyWills (“we”, “our”, “us”), we are committed to protecting the confidentiality and integrity of your personal information, particularly because our services involve sensitive data related to wills, estates, family, and financial affairs.
+        </p>
+        <p class="text-[#505050] mb-1">
+          This Cookie Policy explains how we use cookies and similar technologies on our website (https://easywills.ng) (the “Site”). It complies with the Nigeria Data Protection Regulation (NDPR, 2019) and the European Union General Data Protection Regulation (GDPR, 2016/679).
+        </p>
+      </section>
+      <section id="cookies-defined">
+        <h2 class="text-3xl strong text-[#32302f] mb-1">2. What are Cookies?</h2>
+        <p class="text-[#505050] pl-6 mb-1">
+          Cookies are small text files that websites place on your device (computer, tablet, or mobile). They enable websites to function effectively, remember user preferences, enhance security, and provide analytics or targeted advertising.
+        </p>
+        <p class="text-[#505050] pl-6 mb-1">
+          For easyWills, cookies may process personal identifiers (such as IP address, browser type, login details) and usage data, which can be linked with the sensitive personal data you provide in the course of using our services.
+        </p>
+      </section>
+      <section id="cookies-defined">
+        <h2 class="text-3xl strong text-[#32302f] mb-1">3. Legal Basis for Processing (NDPR & GDPR)</h2>
+        <ul class="list-disc pl-12 space-y-1">
+          <li>Consent (Art. 6(1)(a) GDPR; NDPR Part 2.1(1)(a)) – required for analytics, functionality, and marketing cookies. Consent is always opt-in.</li>
+          <li>Legitimate Interest (Art. 6(1)(f) GDPR; NDPR Part 2.1(1)(d)) – for cookies strictly necessary to deliver secure services.</li>
+          <li>Contractual Necessity (Art. 6(1)(b) GDPR) – where cookies are essential for providing the online wills services you have requested.</li>
+        </ul>
+         <p class="text-[#505050] pl-6 mb-1">You may withdraw your consent at any time via our cookie banner or your browser settings. Withdrawal does not affect the lawfulness of processing carried out prior to withdrawal.</p> 
+      </section>
+      <section id="user-rights">
+        <h2 class="text-3xl strong text-[#32302f] mb-1">4. User Rights under NDPR and GDPR</h2>
+        <p class="text-[#505050] pl-6 mb-1">You have the right to:</p>
+        <ul class="list-disc pl-12 space-y-1">
+          <li>Be informed about how cookies process your data.</li>
+          <li>Access data linked to cookies that identify you.</li>
+          <li>Rectify inaccurate or incomplete cookie-linked data.</li>
+          <li>Erase data (“Right to be Forgotten”).</li>
+          <li>Restrict processing of cookie data in specific circumstances.</li>
+          <li>Object to non-essential cookies or profiling.</li>
+          <li>Data portability (GDPR Art. 20) for data collected with your consent.</li>
+          <li>Withdraw consent at any time.</li>
+        </ul> <br>
+        <p class="text-[#505050] pl-6 mb-1">Redress mechanisms:</p>
+        <ul class="list-disc pl-12 space-y-1">
+          <li>Nigerian residents may complain to the National Information Technology Development Agency (NITDA).</li>
+          <li>EU residents may complain to their local supervisory authority.</li>
+        </ul>
+      </section>
+      <section id="third-party-cookies">
+        <h2 class="text-3xl strong text-[#32302f] mb-1">5. Third-Party Cookies & Services</h2>
+        <p class="text-[#505050] pl-6 mb-1">We may use third parties to provide analytics or service enhancements. These include:</p>
+        <div class="pl-6">
+         <table class="w-3/4 border-collapse">
+          <thead>
+            <tr>
+              <th class="text-left p-2">Service</th>
+              <th class="text-left p-2">Purpose</th>
+              <th class="text-left p-2">Policy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of tableData">
+              <td class="p-2">{{ row.service }}</td>
+              <td class="p-2">{{ row.purpose }}</td>
+              <td class="p-2">
+                <a [href]="row.policy" target="_blank" class="text-blue-600 underline">
+                {{ row.policy }}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <p class="text-[#505050] pl-6 my-1">We do not sell or trade cookie data.</p>
+      </section>
+      <section>
+        <h2 class="text-3xl strong text-[#32302f] mb-1">6. Managing Cookies & Consent</h2>
+        <p class="text-[#505050] pl-6 my-1">When you visit the Site for the first time, you will see a cookie banner allowing you to:</p>
+        <ul class="list-disc pl-12 space-y-1">
+          <li>Accept All Cookies (essential + non-essential).</li>
+          <li>Reject Non-Essential Cookies (essential only).</li>
+          <li>Manage Preferences (choose categories).</li>
+        </ul>
+        <p class="text-[#505050] pl-6 my-3">You can also disable cookies in your browser. Note: blocking Strictly Necessary Cookies may prevent you from logging in, drafting, or finalizing wills on the Site.</p>
+      </section>
+      <section>
+        <h2 class="text-3xl strong text-[#32302f] mb-1">7. Data Security & Confidentiality</h2>
+        <p class="text-[#505050] pl-6 my-1">Because wills and estate planning involve highly sensitive information, all cookie-linked data is handled under the same security framework we apply to personal data, including:</p>
+        <ul class="list-disc pl-12 space-y-1">
+          <li>End-to-end encryption of sessions.</li>
+          <li>Data minimization (storing only what is necessary).</li>
+          <li>Access restricted to authorized staff and processors under strict contractual obligations.</li>
+        </ul>
+      </section>
+      <section>
+        <h2 class="text-3xl strong text-[#32302f] mb-1">8. Updates to this Policy</h2>
+          <p class="text-[#505050] pl-6 my-1">We may revise this Policy to reflect:</p>
+        <ul class="list-disc pl-12 space-y-1">
+          <li>Changes in technology,</li>
+          <li>Updates to NDPR, GDPR, or other laws,</li>
+          <li>Business practice changes.</li>
+        </ul>
+        <p class="text-[#505050] pl-6 my-3">Updates will be posted here with a new “Last Updated” date.</p>
+      </section>
+      <section>
+        <h2 class="text-3xl strong text-[#32302f] mb-1">9. Contact Us</h2>
+        <p class="text-[#505050] pl-6 my-1">For questions, complaints, or to exercise your rights:</p>
+        <p class="text-[#505050] pl-6 mt-3">easyWills – Adedamola Adesoye</p>
+        <p class="text-[#505050] pl-6 my-1">Email: <a href="mailto:admin@lawgrid.ng" class="text-blue-600 underline">admin&#64;lawgrid.ng</a></p>
+        <p class="text-[#505050] pl-6 my-1">Nigeria Address: House 37, Regal Seaview Estate, Lagos</p>
+        <p class="text-[#505050] pl-6 my-1">For EU residents: contact our appointed EU Representative at <a href="mailto:admin@lawgrid.ng" class="text-blue-600 underline">hi&#64;lawgrid.ng</a> </p>
+      </section>
+    </div>
 
-    <section class="mb-5">
-      <h2 class="text-2xl font-semibold mb-1 text-black">Interpretation and Definitions</h2>
-    </section>
-
-    <section class="mb-10">
-      <h3 class="text-xl font-semibold mb-1 text-black">Interpretation</h3>
-      <p class="mb-8">The words of which the initial letter is capitalized have meanings defined under the following conditions.
-The following definitions shall have the same meaning regardless of whether they appear in singular or in
-plural.</p>
-
-      <h3 class="text-xl font-semibold mb-1 text-black">Definitions</h3>
-      <p>For the purposes of this Cookies Policy:</p>
-      <ul class="list-disc pl-12 space-y-1">
-        <li><strong>Company</strong> (referred to as either "the Company", "We", "Us" or "Our" in this Cookies Policy) refers to Your Company Name, Address.</li>
-        <li><strong>Cookies</strong> means small files that are placed on Your computer, mobile device or any other device by a website, containing details of your browsing history on that website among its many uses.</li>
-        <li><strong>You</strong> means the individual accessing or using the Website, or a company, or other legal entity on behalf of which such individual is accessing or using the Website, as applicable.</li>
-      </ul> 
-    </section>
-
-
-    
-
-    
-
-    
-  </main>
+  </div>
 </div>
