@@ -1,18 +1,19 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {WillDataService} from './../../../../core/services/Wizard/will-data.service';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID} from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialog, MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
 
-import { PersonalDetailsData, Witness } from '../../../../core/models/interfaces/will-data.interface';
-import { WillDataService } from '../../../../core/services/Wizard/will-data.service';
+import {PersonalDetailsData, Witness} from '../../../../core/models/interfaces/will-data.interface';
+import {TimeUtils} from '../../../../shared/utils/time-utils';
 
 type LocationType = 'HOME' | 'OFFICE';
 
@@ -20,8 +21,8 @@ interface PartnerOfficeVm {
   id: string;
   addressId: number;
   name: string;
-  addressLine1: string;
-  addressLine2?: string;
+    state: string;
+    address: string;
 }
 interface CityVm {
   id: string;
@@ -67,14 +68,20 @@ export class ScheduleFormComponent implements OnInit {
 
   private readonly isBrowser: boolean;
 
-  private readonly TEST_HOME_ADDRESS =
-  '1234 Test Street, Ikeja, Lagos State, Nigeria';
-
   testatorName = '';
-  minDate: Date = new Date();
+    minDate: Date = (() => {
+        const now = new Date();
+        const fromNow24 = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const todayPlus2 = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
+        // Use the later of "today + 2 days" or "24 hours from now"
+        return fromNow24 > todayPlus2 ? fromNow24 : todayPlus2;
+    })();
 
-  locationType: LocationType | null = null; 
-  homeAddress = ''; 
+    locationType: LocationType | null = null;
+    homeAddress = '';
+    selectedCity: CityVm | null = null
+    offices: PartnerOfficeVm[] = []
 
   form!: FormGroup;
 
@@ -87,15 +94,15 @@ export class ScheduleFormComponent implements OnInit {
           id: 'eosiwill-hq',
           addressId: 576868688,
           name: 'EosiWill Headquarter',
-          addressLine1: '5400 Awolowo Road, Off Obafemi Isabu Crescent,',
-          addressLine2: 'Lagos State. L899N0',
+            address: '5400 Awolowo Road, Off Obafemi Isabu Crescent,',
+            state: 'lagos'
         },
         {
           id: 'ikeja',
           addressId: 5768683288,
           name: 'Ikeja Branch Office',
-          addressLine1: '18 Allen Avenue, Ikeja',
-          addressLine2: 'Lagos State.',
+            address: '18 Allen Avenue, Ikeja',
+            state: 'lagos'
         },
       ],
     },
@@ -107,40 +114,26 @@ export class ScheduleFormComponent implements OnInit {
           id: 'abuja-central',
           addressId:574568688,
           name: 'Central Business District Office',
-          addressLine1: 'Plot 12, CBD',
-          addressLine2: 'Abuja',
+            address: 'Plot 12, CBD',
+            state: 'abuja'
         },
       ],
     },
   ];
 
   timeOptions: string[] = [
-    '06:00 AM','06:30 AM','07:00 AM','07:30 AM',
-    '08:00 AM','08:30 AM','09:00 AM','09:30 AM',
+      // '06:00 AM','06:30 AM','07:00 AM','07:30 AM',
+      // '08:00 AM','08:30 AM','09:00 AM','09:30 AM',
     '10:00 AM','10:30 AM','11:00 AM','11:30 AM',
     '12:00 PM','12:30 PM','01:00 PM','01:30 PM',
     '02:00 PM','02:30 PM','03:00 PM','03:30 PM',
     '04:00 PM','04:30 PM','05:00 PM','05:30 PM',
-    '06:00 PM','06:30 PM','07:00 PM','07:30 PM',
-    '08:00 PM','08:30 PM','09:00 PM','09:30 PM',
-    '10:00 PM','10:30 PM','11:00 PM','11:30 PM'
+      // '06:00 PM','06:30 PM','07:00 PM','07:30 PM',
+      // '08:00 PM','08:30 PM','09:00 PM','09:30 PM',
+      // '10:00 PM','10:30 PM','11:00 PM','11:30 PM'
   ];
 
-  // format time string to API expected object
-formatTimeForApi(timeLabel: string) {
-  const m = (timeLabel ?? '').trim().match(/^(\d{1,2}):(\d{2})\s*([AP]M)$/i);
-  if (!m) throw new Error(`Invalid time: "${timeLabel}"`);
-
-  let h = +m[1], min = +m[2];
-  const mer = m[3].toUpperCase();
-
-  if (mer === 'PM' && h !== 12) h += 12;
-  if (mer === 'AM' && h === 12) h = 0;
-
-  return { hour: h, minute: min, second: 0, nano: 0 };
-}
-
-
+    partnerAvailableTimeSlots = [];
 
   constructor(
     private fb: FormBuilder,
@@ -160,29 +153,8 @@ formatTimeForApi(timeLabel: string) {
       addressConfirmed: [false],
       cityId: [''],
       officeId: [''],
+        address: ['']
     });
-
-    // hard-coded witnesses for testing
-    if (!this.witnesses || this.witnesses.length === 0) {
-      this.witnesses = [
-        {
-          id: 'w1',
-          firstName: 'Alice',
-          lastName: 'Smith',
-          email: 'alice@example.com',
-          phoneNumber: '123-456-7890',
-          relationship: 'Friend',
-        },
-        {
-          id: 'w2',
-          firstName: 'Bob',
-          lastName: 'Johnson',
-          email: 'bob@example.com',
-          phoneNumber: '987-654-3210',
-          relationship: 'Cousin',
-        },
-      ];
-    }
 
     this.showInfoOnFirstLoad();
 
@@ -195,6 +167,23 @@ formatTimeForApi(timeLabel: string) {
     this.form.get('cityId')?.valueChanges.subscribe(() => {
       this.form.get('officeId')?.setValue('');
     });
+
+      // listen to date changes, needed for partner, to get the partner's availability for the selected date
+      this.form.get('date')?.valueChanges.subscribe(() => {
+          const date = new Date(this.form.get('date')?.value)
+          if (this.form.get('officeId')?.value) {
+              this.getPartnerAvailabilitySlot(this.form.get('officeId')?.value, TimeUtils.getDate_ISO(date))
+          }
+
+      })
+      //listen to partner office changes to get availalbility for the newly selected partner
+      this.form.get('officeId')?.valueChanges.subscribe(() => {
+          const date = new Date(this.form.get('date')?.value)
+          if (this.form.get('date')?.value) {
+              this.getPartnerAvailabilitySlot(this.form.get('officeId')?.value, TimeUtils.getDate_ISO(date))
+          }
+
+      })
   }
 
   private buildFullAddress(): string {
@@ -205,41 +194,50 @@ formatTimeForApi(timeLabel: string) {
     return [street, city, state, country].filter(Boolean).join(', ');
   }
 
-  //setLocation(type: LocationType) {
-  //  this.locationType = type;
 
-   // if (type === 'HOME') {
-   //   this.homeAddress = this.buildFullAddress();
-   //   this.form.get('cityId')?.setValue('');
-   //   this.form.get('officeId')?.setValue('');
-   // } else {
-    //  this.homeAddress = '';
-    //  this.form.get('addressConfirmed')?.setValue(false);
-   // }
-  //}
-
-  //Fixed address for testing
   setLocation(type: LocationType) {
   this.locationType = type;
 
   if (type === 'HOME') {
-    // Hard-coded address for testing
-    this.homeAddress = this.TEST_HOME_ADDRESS;
+      this.form.get('address')?.setValue(this.buildFullAddress());
 
     // clear office fields
     this.form.get('cityId')?.setValue('');
     this.form.get('officeId')?.setValue('');
   } else {
-    this.homeAddress = '';
+      this.form.get('address')?.setValue('');
     this.form.get('addressConfirmed')?.setValue(false);
   }
 }
 
+    async onCitySelected(cityId: any) {
+        this.form.get('officeId')?.setValue('');
+        try {
+            const partners: any[] = await this.willdataService.getLegalPartnersByState(cityId);
 
-  get selectedCity(): CityVm | null {
-    const cityId = this.form.get('cityId')?.value;
-    return this.cities.find((c) => c.id === cityId) ?? null;
-  }
+            this.offices = (partners ?? []).map(p => ({
+                id: p.addressId,
+                addressId: p.addressId,
+                name: p.organizationName ?? p.name ?? '',
+                state: p.state,
+                address: p.address ?? '',
+            }));
+
+            // keep selectedCity in sync if it exists in the local cities list
+            this.selectedCity = this.cities.find(c => c.id === cityId) ?? null;
+        } catch (err) {
+            console.error('Failed to load partner offices', err);
+            this.offices = [];
+            this.selectedCity = null;
+        }
+
+    }
+
+
+    async getPartnerAvailabilitySlot(officeId: any, date: any) {
+        this.partnerAvailableTimeSlots = (await this.willdataService.getLegalPartnerAvailabilitySlot(officeId, date))
+            .map((t: string) => TimeUtils.get24HoursTime(t))
+    }
 
   get selectedOfficeId(): string | null {
     return this.form.get('officeId')?.value || null;
@@ -247,6 +245,8 @@ formatTimeForApi(timeLabel: string) {
 
   selectOffice(id: string) {
     this.form.get('officeId')?.setValue(id);
+      console.log(id);
+
   }
 
   get canConfirmHome(): boolean {
@@ -296,72 +296,66 @@ formatTimeForApi(timeLabel: string) {
     return;
   }
 
-  if (!this.homeAddress || this.homeAddress.trim().length < 5) {
-    this.actionError = 'No valid address was found in your personal details.';
+     if (!this.form.get('address')?.value || this.form.get('address')?.value?.trim().length < 5) {
+         this.actionError = 'Please enter a valid address';
     return;
   }
 
-  
+
   this.emitSubmittedPayload();
-  this.openSuccessDialog();
+//   this.openSuccessDialog();
 }
 
   actionError: string | null = null;
 
-  private getSelectedOfficeAddressId(): number | null {
-    const city = this.selectedCity;
-    const officeId = String(this.form.get('officeId')?.value ?? '');
-    const office = city?.offices.find(o => o.id === officeId);
-    return office?.addressId ?? null;
-  }
+//   private getSelectedOfficeAddressId(): number | null {
+//     const city = this.selectedCity;
+//     const officeId = String(this.form.get('officeId')?.value ?? '');
+//     const office = city?.offices.find(o => o.id === officeId);
+//     return office?.addressId ?? null;
+//   }
 
 
 
   scheduleOfficeAppointment() {
     if (!this.canScheduleOffice) return;
+
     this.emitSubmittedPayload();
     //this.openSuccessDialog();
   }
 
   private emitSubmittedPayload() {
   const dateVal = this.form.get('date')?.value;
-  const timeVal = this.form.get('time')?.value as string | null; 
+      const address = this.form.get('address')?.value;
+      const timeVal = this.form.get('time')?.value as string | null;
+      const addressId = this.form.get('officeId')?.value; // selected office addressId
 
   if (!dateVal || !timeVal) {
     this.actionError = 'Please select a date and time.';
     return;
   }
 
-  let apiTime: { hour: number; minute: number; second: number; nano: number };
-  try {
-    apiTime = this.formatTimeForApi(timeVal); 
-  } catch {
-    this.actionError = 'Invalid time selected. Please pick a time from the list.';
-    return;
-  }
-
   const dateStr =
     dateVal instanceof Date
-      ? `${dateVal.getFullYear()}-${String(dateVal.getMonth() + 1).padStart(2, '0')}-${String(dateVal.getDate()).padStart(2, '0')}`
+        ? TimeUtils.getDate_ISO(dateVal)
       : String(dateVal);
 
- 
-  const addressId =
-    this.locationType === 'HOME'
-      ? 9007199254740991 // test home addressId for now (replace with real)
-      : this.getSelectedOfficeAddressId(); // selected office addressId
-
-  if (!addressId) { 
-    this.actionError = 'Please select an office.';
+      if (!address && !addressId) {
+          this.actionError = 'Please select an office';
     return;
   }
 
   // emit API-shaped payload
-  const payload = {
-    addressId: Number(addressId), 
+      const payload: any = {
     date: dateStr,
-    time: apiTime,
+          time: timeVal,
   };
+
+      if (addressId) {
+          payload['addressId'] = addressId
+      } else {
+          payload['address'] = address
+      }
 
   // this.scheduleRequested.emit(payload);
   this.submitted.emit(payload as any);
@@ -395,8 +389,8 @@ formatTimeForApi(timeLabel: string) {
 
     ref.afterClosed().subscribe((result) => {
       if (result === 'dashboard') {
-       
-        window.location.href = '/dashboard';
+
+          window.location.href = '/dashboard';
       }
     });
   }
