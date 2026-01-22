@@ -25,14 +25,13 @@ export class LawyerService {
         upcoming: this.upcomingAppointments,
         completed: this.completedAppointments
     });
-    appointmentData$: Observable<AppointmentData> = this.appointmentSubject.asObservable();
 
     constructor() {
     }
 
     getMyFirmInfo(): Observable<any> {
         return this.apiService
-            .post<any>(this.baseURL + routes.myFirmInfo)
+            .get<any>(this.baseURL + routes.myFirmInfo)
 
     }
 
