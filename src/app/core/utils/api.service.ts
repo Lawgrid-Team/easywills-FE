@@ -1,13 +1,7 @@
-import {
-    HttpClient,
-    HttpErrorResponse,
-    HttpHeaders,
-    HttpParams,
-} from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { catchError, map, Observable, throwError } from 'rxjs';
-import { CookiesStorageService } from './cookies-storage.service';
-import { log } from 'console';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams,} from '@angular/common/http';
+import {inject, Injectable} from '@angular/core';
+import {catchError, map, Observable, throwError} from 'rxjs';
+import {CookiesStorageService} from './cookies-storage.service';
 
 @Injectable({
     providedIn: 'root',
@@ -120,11 +114,13 @@ export class ApiService {
     };
     getPreview = <T = any>(
         route: string,
+        parameters?: Object,
         options?: any
     ): Observable<T> => {
+        const query = route + this.formatQueryParams(parameters);
         return this.http
             .get<T>(
-                route,
+                query,
                 options || {
                     headers: new HttpHeaders(this.headers),
                     responseType: 'arraybuffer'

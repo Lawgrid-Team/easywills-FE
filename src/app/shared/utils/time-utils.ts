@@ -29,7 +29,7 @@ export class TimeUtils {
      * @param time
      * @returns
      */
-    public static get24HoursTime(time: string): string {
+    public static get12HoursTime(time: string): string {
         const [hourStr, min] = time.split(':');
         let hour = parseInt(hourStr, 10);
         const ampm = hour >= 12 ? 'PM' : 'AM';
