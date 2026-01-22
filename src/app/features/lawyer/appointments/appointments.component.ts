@@ -38,6 +38,7 @@ export class AppointmentsComponent implements OnInit {
     nextAppointment: Appointment | null = null;
     upcomingCount = 0;
     completedCount = 0;
+    pendingWillUploadCount = 0;
 
     previewAppointment?: Appointment
 
@@ -164,10 +165,29 @@ export class AppointmentsComponent implements OnInit {
     }
 
     uploadSignedWill(appointment: Appointment): void {
-        console.log(appointment);
+        // Create a temporary file input to pick the signed will from local system
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/pdf,image/*';
 
-        console.log('Upload signed will for:', appointment.clientName);
-        // Will be implemented later
+        input.onchange = () => {
+            const file = input.files && input.files[0];
+            if (!file) return;
+
+            this.lawyerService.uploadWill(appointment.id, file).subscribe({
+                next: () => {
+                    appointment.willUploaded = true;
+                    this.notification.showSuccess('Signed will uploaded successfully');
+                },
+                error: (err) => {
+                    const message = err?.error?.message || 'Failed to upload signed will';
+                    this.notification.showError(message);
+                },
+            });
+        };
+
+        // trigger the file dialog
+        input.click();
     }
 
     private calculateCounts(): void {
@@ -177,6 +197,9 @@ export class AppointmentsComponent implements OnInit {
         this.completedCount = this.appointments.filter(
             (apt) => apt.status === 'completed'
         ).length;
+        this.pendingWillUploadCount = this.appointments.filter(
+            (apt) => apt.status === 'completed' && !apt.willUploaded
+        ).length
     }
 
     private setNextAppointment(): void {

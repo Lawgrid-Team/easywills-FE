@@ -9,7 +9,8 @@ const routes = {
     myFirmInfo: 'api/v1/partners/me',
     myFirmAppointments: 'api/v1/partners/appointments',
     previewWill: 'api/v1/wills/partner/preview',
-    markAppointmentCompleted: 'api/v1/partners/appointments/mark-completed'
+    markAppointmentCompleted: 'api/v1/partners/appointments/mark-completed',
+    uploadSignedWill: 'api/v1/wills/partner/upload-signed-will'
 }
 
 @Injectable({
@@ -92,9 +93,6 @@ export class LawyerService {
                             else if (element.type == "TESTATOR")
                                 appointment.clientName = element.name
                         });
-
-                        // console.log(appointment);
-
                         return appointment
                     })
                 })
@@ -106,12 +104,19 @@ export class LawyerService {
     markAppointmentCompleted(appointmentId: number): Observable<Appointment> {
         return this.apiService
             .post<any>(this.baseURL + routes.markAppointmentCompleted + "?appointmentId=" + appointmentId)
-            .pipe(
-                map((data: any) => {
-                    console.log(data);
-                    return data
-                })
-            )
+    }
+
+    uploadWill(appointmentId: number, media: File | Blob): Observable<any> {
+        const formData = new FormData();
+        formData.append('appointmentId', String(appointmentId));
+        // Try to preserve filename if it's a File
+        if (media instanceof File) {
+            formData.append('file', media, media.name);
+        } else {
+            formData.append('file', media);
+        }
+
+        return this.apiService.postFile<any>(this.baseURL + routes.uploadSignedWill, formData)
     }
 
 }

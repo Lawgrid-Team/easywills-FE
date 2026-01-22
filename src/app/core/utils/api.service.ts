@@ -21,8 +21,10 @@ export class ApiService {
         };
     }
     private get fileHeaders() {
+        const token = this.getToken();
         return {
             enctype: 'multipart/form-data',
+            ...(token ? {Authorization: `Bearer ${token}`} : {})
         };
     }
     private logRoutes(

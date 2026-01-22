@@ -15,7 +15,8 @@
                 class="tab-button px-6 py-2 rounded-lg font-medium transition-colors"
                     [class.bg-gray-100]="activeTab !== 'completed'" [class.bg-white]="activeTab === 'completed'"
                     [class.text-black]="activeTab === 'completed'" [class.text-gray-600]="activeTab !== 'completed'">
-                Completed
+                Completed <span *ngIf="pendingWillUploadCount !== 0"
+                                class="pendingWillUploadTag">({{ pendingWillUploadCount }})</span>
             </button>
         </div>
 
@@ -91,6 +92,9 @@
                                                     ? "Upcoming"
                                                     : "Completed"
                                             }}
+                                            <span
+                                                *ngIf="appointment.status === 'completed' && !appointment.willUploaded"
+                                                class="pendingWillUploadTag"> * </span>
                                         </span>
                                         <!-- Expand/Collapse Icon -->
                                         <svg [class.rotate-180]="
