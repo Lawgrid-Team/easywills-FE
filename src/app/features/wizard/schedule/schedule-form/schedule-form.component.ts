@@ -236,7 +236,7 @@ export class ScheduleFormComponent implements OnInit {
 
     async getPartnerAvailabilitySlot(officeId: any, date: any) {
         this.partnerAvailableTimeSlots = (await this.willdataService.getLegalPartnerAvailabilitySlot(officeId, date))
-            .map((t: string) => TimeUtils.get24HoursTime(t))
+            .map((t: string) => TimeUtils.get12HoursTime(t))
     }
 
   get selectedOfficeId(): string | null {

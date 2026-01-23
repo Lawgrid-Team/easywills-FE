@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { AccountService } from '../../../core/services/Wizard/account.service';
+import {Component} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {AccountService} from '../../../core/services/Wizard/account.service';
+import {LawyerService} from '../../../core/services/lawyer.service';
 
 @Component({
     selector: 'app-profile',
@@ -29,7 +30,10 @@ export class ProfileComponent {
         emailNotifications: true,
     };
 
-    constructor(private accountService: AccountService) {}
+    constructor(private accountService: AccountService,
+                private lawyerService: LawyerService
+    ) {
+    }
 
     ngOnInit(): void {
         this.accountService.getUserProfile();
@@ -39,5 +43,13 @@ export class ProfileComponent {
                 this.user = { ...this.user, ...value };
             },
         });
+
+        this.lawyerService.getMyFirmInfo().subscribe({
+            next: (data: any) => {
+                console.log(data);
+                this.user.lawFirm = data.organizationName
+
+            }
+        })
     }
 }
