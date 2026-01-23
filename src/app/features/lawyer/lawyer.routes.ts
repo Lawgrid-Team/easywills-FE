@@ -1,8 +1,6 @@
-import { Routes } from '@angular/router';
-import { LawyerLoginComponent } from './login/lawyer-login.component';
-import { LawyerDashboardComponent } from './dashboard/lawyer-dashboard.component';
-import { AppointmentsComponent } from './appointments/appointments.component';
-import { ProfileComponent } from './profile/profile.component';
+import {Routes} from '@angular/router';
+import {LawyerDashboardComponent} from './dashboard/lawyer-dashboard.component';
+import {ProfileComponent} from './profile/profile.component';
 
 export const lawyerRoutes: Routes = [
     {
@@ -22,12 +20,18 @@ export const lawyerRoutes: Routes = [
         children: [
             {
                 path: '',
-                redirectTo: 'appointments',
+                loadComponent: () =>
+                    import(
+                        './appointments/appointments.component'
+                        ).then((m) => m.AppointmentsComponent),
                 pathMatch: 'full',
             },
             {
                 path: 'appointments',
-                component: AppointmentsComponent,
+                loadComponent: () =>
+                    import(
+                        './appointments/appointments.component'
+                        ).then((m) => m.AppointmentsComponent),
                 title: 'Appointments',
             },
             {
@@ -35,6 +39,13 @@ export const lawyerRoutes: Routes = [
                 component: ProfileComponent,
                 title: 'Profile',
             },
+            {
+                path: "appointments",
+                loadComponent: () =>
+                    import(
+                        './appointments/appointments.component'
+                        ).then((m) => m.AppointmentsComponent),
+            }
         ],
     },
 ];

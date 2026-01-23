@@ -1,22 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
+import {APP_ID, Component, inject, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatIconModule} from '@angular/material/icon';
+import {Appointment} from '../../../core/models/interfaces/lawyer.interface';
+import {LawyerService} from '../../../core/services/lawyer.service';
+import {firstValueFrom, forkJoin, Observable, tap} from 'rxjs';
+import {TimeUtils} from '../../../shared/utils/time-utils';
+import {PdfViewerModule} from 'ng2-pdf-viewer';
+import {PDFPreviewComponent} from '../../../shared/components/pdf-preview/pdf-preview.component';
+import {NotificationService} from '../../../core/utils/notification.service';
 
-interface Appointment {
-    id: number;
-    clientName: string;
-    locationType: string; // e.g., "Client's Home", "Office", "Hospital"
-    address: string;
-    date: string;
-    time: string;
-    status: 'upcoming' | 'completed';
-    profilePicture?: string; // Optional profile picture URL
-    witnesses?: string[]; // List of witnesses
-    expanded?: boolean; // Track expansion state
-}
 
 @Component({
     selector: 'app-appointments',
@@ -27,6 +22,8 @@ interface Appointment {
         MatFormFieldModule,
         MatInputModule,
         MatIconModule,
+        PdfViewerModule,
+        PDFPreviewComponent
     ],
     templateUrl: './appointments.component.html',
     styleUrls: ['./appointments.component.scss'],
@@ -36,73 +33,63 @@ export class AppointmentsComponent implements OnInit {
     searchQuery = '';
 
     // Sample appointments data
-    appointments: Appointment[] = [
-        {
-            id: 1,
-            clientName: 'John Smith',
-            locationType: "Client's Home",
-            address: '123 Main St, New York, NY',
-            date: 'Jan 15, 2026',
-            time: '10:00 AM',
-            status: 'upcoming',
-            witnesses: ['Jane Doe', 'Robert Johnson', 'Mary Williams'],
-            expanded: false,
-        },
-        {
-            id: 2,
-            clientName: 'Sarah Johnson',
-            locationType: 'Office',
-            address: '456 Park Ave, Brooklyn, NY',
-            date: 'Jan 16, 2026',
-            time: '2:30 PM',
-            status: 'upcoming',
-            witnesses: ['Tom Brown', 'Lisa Davis'],
-            expanded: false,
-        },
-        {
-            id: 3,
-            clientName: 'Michael Brown',
-            locationType: 'Hospital',
-            address: '789 Broadway, Manhattan, NY',
-            date: 'Jan 18, 2026',
-            time: '11:00 AM',
-            status: 'upcoming',
-            witnesses: ['Alice Smith', 'David Wilson', 'Emma Taylor'],
-            expanded: false,
-        },
-        {
-            id: 4,
-            clientName: 'Emily Davis',
-            locationType: "Client's Home",
-            address: '321 5th Ave, Queens, NY',
-            date: 'Dec 20, 2025',
-            time: '3:00 PM',
-            status: 'completed',
-            witnesses: ['John Miller', 'Sarah Anderson'],
-            expanded: false,
-        },
-        {
-            id: 5,
-            clientName: 'David Wilson',
-            locationType: 'Office',
-            address: '654 Madison Ave, Bronx, NY',
-            date: 'Dec 18, 2025',
-            time: '1:00 PM',
-            status: 'completed',
-            witnesses: ['Nancy White', 'Kevin Martinez'],
-            expanded: false,
-        },
-    ];
+    appointments: Appointment[] = [];
 
     nextAppointment: Appointment | null = null;
     upcomingCount = 0;
     completedCount = 0;
+    pendingWillUploadCount = 0;
 
-    constructor() {}
+    previewAppointment?: Appointment
 
-    ngOnInit(): void {
-        this.calculateCounts();
-        this.setNextAppointment();
+    isWillViewOpen = false;
+    originalPdfData: Uint8Array | null = null;
+
+    pdfSrc: Uint8Array | null = null;
+    modalPdfSrc: Uint8Array | null = null;
+
+    isBrowser: boolean;
+    pdfError = false;
+    modalPdfError = false;
+
+    zoom = 1.0;
+    modalZoom = 0.9;
+    currentPage = 1;
+    totalPages = 0;
+    totalPagesModal = 0;
+
+    isModalOpen = false;
+
+    // platformId: string;
+    // appId: string;
+
+    notification = inject(NotificationService);
+
+    constructor(private lawyerService: LawyerService,
+                @Inject(PLATFORM_ID) platformId: string,
+                @Inject(APP_ID) appId: string
+    ) {
+        // this.platformId = platformId;
+        // this.appId = appId;
+        this.isBrowser = isPlatformBrowser(platformId);
+
+    }
+
+    async ngOnInit(): Promise<void> {
+        await firstValueFrom(
+            forkJoin({
+                upcoming: this.lawyerService.getMyFirmUpcomingAppointments(),
+                completed: this.lawyerService.getMyFirmCompletedAppointments()
+            }).pipe(
+                tap(({upcoming, completed}: { upcoming: Appointment[]; completed: Appointment[] }) => {
+                    this.appointments.push(...upcoming);
+                    this.appointments.push(...completed)
+                    this.calculateCounts();
+                    this.setNextAppointment();
+
+                })
+            )
+        );
     }
 
     setActiveTab(tab: 'upcoming' | 'completed'): void {
@@ -133,12 +120,18 @@ export class AppointmentsComponent implements OnInit {
     }
 
     getInitials(name: string): string {
+        if (!name)
+            return ""
         return name
             .split(' ')
             .map((n) => n[0])
             .join('')
             .toUpperCase()
             .slice(0, 2); // Take only first 2 initials
+    }
+
+    formatTime(time: string): string {
+        return TimeUtils.get12HoursTime(time)
     }
 
     toggleAccordion(appointment: Appointment): void {
@@ -153,20 +146,48 @@ export class AppointmentsComponent implements OnInit {
     }
 
     viewWill(appointment: Appointment): void {
-        console.log('View will for:', appointment.clientName);
-        // Will be implemented later
+        this.isWillViewOpen = true;
+        this.previewAppointment = appointment
     }
 
     markAsComplete(appointment: Appointment): void {
-        console.log('Mark as complete:', appointment.clientName);
-        appointment.status = 'completed';
-        this.calculateCounts();
-        this.setNextAppointment();
+        this.lawyerService.markAppointmentCompleted(appointment.id)
+            .subscribe({
+                next: () => {
+                    appointment.status = 'completed';
+                    this.calculateCounts();
+                    this.setNextAppointment();
+                },
+                error: (err) => {
+                    this.notification.showError(err.error.message);
+                },
+            })
     }
 
     uploadSignedWill(appointment: Appointment): void {
-        console.log('Upload signed will for:', appointment.clientName);
-        // Will be implemented later
+        // Create a temporary file input to pick the signed will from local system
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/pdf,image/*';
+
+        input.onchange = () => {
+            const file = input.files && input.files[0];
+            if (!file) return;
+
+            this.lawyerService.uploadWill(appointment.id, file).subscribe({
+                next: () => {
+                    appointment.willUploaded = true;
+                    this.notification.showSuccess('Signed will uploaded successfully');
+                },
+                error: (err) => {
+                    const message = err?.error?.message || 'Failed to upload signed will';
+                    this.notification.showError(message);
+                },
+            });
+        };
+
+        // trigger the file dialog
+        input.click();
     }
 
     private calculateCounts(): void {
@@ -176,6 +197,9 @@ export class AppointmentsComponent implements OnInit {
         this.completedCount = this.appointments.filter(
             (apt) => apt.status === 'completed'
         ).length;
+        this.pendingWillUploadCount = this.appointments.filter(
+            (apt) => apt.status === 'completed' && !apt.willUploaded
+        ).length
     }
 
     private setNextAppointment(): void {
@@ -188,4 +212,14 @@ export class AppointmentsComponent implements OnInit {
 
         this.nextAppointment = upcoming.length > 0 ? upcoming[0] : null;
     }
+
+    closeWillViewModal(): void {
+        this.isWillViewOpen = false;
+    }
+
+    onRequestPreview(): Observable<any> {
+        return this.lawyerService.previewWill(this.previewAppointment?.id as unknown as number)
+    }
+
+
 }

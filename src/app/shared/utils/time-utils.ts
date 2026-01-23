@@ -25,6 +25,23 @@ export class TimeUtils {
     }
 
     /**
+     *
+     * @param time
+     * @returns
+     */
+    public static get12HoursTime(time: string): string {
+        const [hourStr, min] = time.split(':');
+        let hour = parseInt(hourStr, 10);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        hour = hour % 12 || 12;
+        return `${hour}:${min} ${ampm}`;
+    }
+
+    public static getDate_ISO(date: Date): string {
+        return date.toISOString().split('T')[0]
+    }
+
+    /**
      * Formats a past time difference in seconds to a readable string.
      *
      * @param seconds Number of seconds in the past
