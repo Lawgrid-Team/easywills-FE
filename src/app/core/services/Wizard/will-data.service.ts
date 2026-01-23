@@ -1,33 +1,22 @@
-import { inject, Injectable } from '@angular/core';
-import { ApiService } from '../../utils/api.service';
-import { tap } from 'rxjs/operators';
-import {
-    BehaviorSubject,
-    type Observable,
-    firstValueFrom,
-    forkJoin,
-    map,
-} from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {ApiService} from '../../utils/api.service';
+import {tap} from 'rxjs/operators';
+import {BehaviorSubject, firstValueFrom, forkJoin, map, type Observable,} from 'rxjs';
 import type {
-    WillData,
-    PersonalDetailsData,
     AssetInventoryData,
-    EstateDistributionData,
-    ExecutorAndWitnessData,
-    IdentityVerificationData,
-    RealEstateProperty,
     BankAccount,
+    EstateDistributionData,
     Exclusion,
     Executor,
+    ExecutorAndWitnessData,
+    IdentityVerificationData,
+    PersonalDetailsData,
+    RealEstateProperty,
+    WillData,
     Witness,
 } from '../../models/interfaces/will-data.interface';
-import { environment } from '../../../../environments/environment';
-import {
-    BeneficiaryShare,
-    AssetType,
-    Asset,
-    BeneficiaryAssignment,
-} from '../../models/interfaces/asset.interface';
+import {environment} from '../../../../environments/environment';
+import {BeneficiaryAssignment,} from '../../models/interfaces/asset.interface';
 
 const routes = {
     draftWill: 'api/v1/wills',
@@ -49,6 +38,8 @@ const routes = {
     witnesses: 'api/v1/witnesses',
     updateWitnesses: 'api/v1/witnesses',
     previewWill: 'api/v1/wills/preview-draft',
+    partnersByState: 'api/v1/schedules/state',
+    partnerAvailabilitySlot: 'api/v1/schedules/{partnerId}/slots',
 };
 
 @Injectable({
@@ -757,5 +748,27 @@ export class WillDataService {
             assets,
             deletedIds: [],
         };
+    }
+
+    async getLegalPartnersByState(state: string): Promise<any> {
+        return await firstValueFrom(
+            this.apiService.get<any>(this.baseURL + routes.partnersByState, {state}).pipe(
+                // tap((response: any) => {
+                // })
+            )
+        );
+    }
+
+    async getLegalPartnerAvailabilitySlot(officeId: string, date: string): Promise<any> {
+        const url = this.baseURL + routes.partnerAvailabilitySlot.replace(
+            '{partnerId}',
+            officeId
+        );
+        return await firstValueFrom(
+            this.apiService.get<any>(url, {date}).pipe(
+                // tap((response: any) => {
+                // })
+            )
+        );
     }
 }

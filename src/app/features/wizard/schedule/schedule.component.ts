@@ -1,16 +1,16 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FooterComponent } from '../widget/footer/footer.component';
-import { HeaderComponent } from '../widget/header/header.component';
-import { ScheduleFormComponent } from './schedule-form/schedule-form.component';
-import { ScheduleIntroComponent } from './schedule-intro/schedule-intro.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { SuccessDialogComponent } from './success-dialog/success-dialog.component';
-import { Router } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
-import { PersonalDetailsData, Witness, ExecutorAndWitnessData } from '../../../core/models/interfaces/will-data.interface';
-import { WillDataService } from '../../../core/services/Wizard/will-data.service';
-import { NotificationService } from '../../../core/utils/notification.service';
+import {Component, inject} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FooterComponent} from '../widget/footer/footer.component';
+import {HeaderComponent} from '../widget/header/header.component';
+import {ScheduleFormComponent} from './schedule-form/schedule-form.component';
+import {ScheduleIntroComponent} from './schedule-intro/schedule-intro.component';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {SuccessDialogComponent} from './success-dialog/success-dialog.component';
+import {Router} from '@angular/router';
+import {MatIconModule} from '@angular/material/icon';
+import {PersonalDetailsData, Witness} from '../../../core/models/interfaces/will-data.interface';
+import {WillDataService} from '../../../core/services/Wizard/will-data.service';
+import {NotificationService} from '../../../core/utils/notification.service';
 
 @Component({
     selector: 'app-schedule',
@@ -26,15 +26,6 @@ import { NotificationService } from '../../../core/utils/notification.service';
     templateUrl: './schedule.component.html',
     styleUrl: './schedule.component.scss'
 })
-//export class ScheduleComponent {
-//step = 0;
-//data: PersonalDetailsData;
-//isFormValid = true;
-
-// personalDetails!: PersonalDetailsData;
-//executorAndWitnessData!: ExecutorAndWitnessData;
-//witnessList: Witness[] = [];
-
 
 
 export class ScheduleComponent {
@@ -43,8 +34,7 @@ export class ScheduleComponent {
     showSuccessPopup = false;
 
     personalDetails!: PersonalDetailsData;
-    executorAndWitnessData!: ExecutorAndWitnessData;
-    witnessList: Witness[] = [];
+    witnesses: Witness[] = [];
 
     private notification = inject(NotificationService);
     constructor(
@@ -59,8 +49,13 @@ export class ScheduleComponent {
                 this.personalDetails = data;
             }
         });
-        this.executorAndWitnessData = this.willDataService.getExecutorAndWitness();
-        this.witnessList = this.executorAndWitnessData.witnesses || [];
+
+        this.willDataService.getWitnesses().subscribe({
+            next: (data: any) => {
+                this.witnesses = data;
+            }
+        });
+
         this.isFormValid = true;
     }
 

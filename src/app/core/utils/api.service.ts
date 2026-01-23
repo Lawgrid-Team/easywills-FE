@@ -7,7 +7,6 @@ import {
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { CookiesStorageService } from './cookies-storage.service';
-import { log } from 'console';
 
 @Injectable({
     providedIn: 'root',
@@ -27,8 +26,10 @@ export class ApiService {
         };
     }
     private get fileHeaders() {
+        const token = this.getToken();
         return {
             enctype: 'multipart/form-data',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
         };
     }
     private logRoutes(
@@ -59,7 +60,7 @@ export class ApiService {
 
         return this.http.patch<T>(route, body, options).pipe(
             map((body: any) => body),
-            catchError(this.handleRequestError)
+            catchError(this.handleRequestError),
         );
     }
 
@@ -73,11 +74,11 @@ export class ApiService {
                 options || {
                     headers: new HttpHeaders(this.headers),
                     responseType: 'json',
-                }
+                },
             )
             .pipe(
                 map((body: any) => body),
-                catchError(this.handleRequestError)
+                catchError(this.handleRequestError),
             );
     }
 
@@ -101,7 +102,7 @@ export class ApiService {
     get = <T = any>(
         route: string,
         parameters?: Object,
-        options?: any
+        options?: any,
     ): Observable<T> => {
         // this.logRoutes('get', route, parameters);
         const query = route + this.formatQueryParams(parameters);
@@ -111,25 +112,30 @@ export class ApiService {
                 options || {
                     headers: new HttpHeaders(this.headers),
                     responseType: 'json',
-                }
+                },
             )
             .pipe(
                 map((body: any) => body),
-                catchError(this.handleRequestError)
+                catchError(this.handleRequestError),
             );
     };
-    getPreview = <T = any>(route: string, options?: any): Observable<T> => {
+    getPreview = <T = any>(
+        route: string,
+        parameters?: Object,
+        options?: any,
+    ): Observable<T> => {
+        const query = route + this.formatQueryParams(parameters);
         return this.http
             .get<T>(
-                route,
+                query,
                 options || {
                     headers: new HttpHeaders(this.headers),
                     responseType: 'arraybuffer',
-                }
+                },
             )
             .pipe(
                 map((body: any) => body),
-                catchError(this.handleRequestError)
+                catchError(this.handleRequestError),
             );
     };
 
@@ -137,7 +143,7 @@ export class ApiService {
     getFile(url: string) {
         return this.http.get(url, { responseType: 'blob' }).pipe(
             map((body: any) => body),
-            catchError(this.handleRequestError)
+            catchError(this.handleRequestError),
         );
     }
 
@@ -153,7 +159,7 @@ export class ApiService {
             })
             .pipe(
                 map((body: any) => body),
-                catchError(this.handleRequestError)
+                catchError(this.handleRequestError),
             );
     }
 
@@ -168,11 +174,11 @@ export class ApiService {
                         'Content-Type': 'application/json',
                     }),
                     responseType: 'json',
-                }
+                },
             )
             .pipe(
                 map((body: any) => body),
-                catchError(this.handleRequestError)
+                catchError(this.handleRequestError),
             );
     };
 }

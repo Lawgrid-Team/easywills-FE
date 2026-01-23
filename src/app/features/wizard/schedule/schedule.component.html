@@ -10,7 +10,7 @@
         <app-schedule-form
           *ngSwitchCase="1"
           [data]="personalDetails"
-          [witnesses]="executorAndWitnessData.witnesses"
+          [witnesses]="witnesses"
           (submitted)="handleFormSubmit($event)"
           (setFormValidity)="setFormValidity($event)"
         ></app-schedule-form>
@@ -18,7 +18,7 @@
     </div>
 
     <!-- ✅ Confirmation popup overlays -->
-    
+
 
   </main>
 
