@@ -1,21 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Component, OnInit, signal, inject } from '@angular/core';
-import {
-    FormBuilder,
-    FormGroup,
-    FormsModule,
-    ReactiveFormsModule,
-    Validators,
-} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { RouterModule } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { NotificationService } from '../../../core/utils/notification.service';
-import { Router } from '@angular/router';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {Router, RouterModule} from '@angular/router';
+import {AuthService} from '../../../core/services/auth.service';
+import {NotificationService} from '../../../core/utils/notification.service';
+import {WillStateService} from '../../../shared/services/will-state.service';
 
 @Component({
     selector: 'app-login',
@@ -46,7 +40,10 @@ export class LoginComponent implements OnInit {
     public notification = inject(NotificationService);
     public router = inject(Router);
 
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder,
+                private willStateService: WillStateService
+    ) {
+    }
 
     ngOnInit(): void {
         this.form = this.fb.group({
@@ -65,8 +62,21 @@ export class LoginComponent implements OnInit {
 
                     switch (userRole) {
                         case 'USER':
-                            this.router.navigate(['/wiz'], {
-                                replaceUrl: true,
+                            this.willStateService.getWillState();
+                            this.willStateService.willState$.subscribe({
+                                next: (willState) => {
+                                    if (willState) {
+                                        if (willState.status === "completed" || (willState.stages && willState.stages.includes('SCHEDULE'))) {
+                                            this.router.navigate(['/dashboard'], {
+                                                replaceUrl: true,
+                                            });
+                                        } else {
+                                            this.router.navigate(['/wiz'], {
+                                                replaceUrl: true,
+                                            });
+                                        }
+                                    }
+                                },
                             });
                             break;
                         case 'ADMIN':
