@@ -43,7 +43,7 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-24 py-8">
+    <main class="container mx-auto px-24 py-8 pb-32">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <div class="max-w-xl pt-16">
                 <!-- New user welcome -->
@@ -610,7 +610,8 @@
                                             >
                                                 No assets have been added yet.
                                             </p>
-                                            <button *ngIf="section.enableEdit"
+                                            <button
+                                                *ngIf="section.enableEdit"
                                                 (click)="
                                                     onUpdateSection(section.id)
                                                 "
@@ -622,7 +623,10 @@
                                                 >
                                                 Add Assets
                                             </button>
-                                            <span *ngIf="!section.enableEdit" class="enableEdit">
+                                            <span
+                                                *ngIf="!section.enableEdit"
+                                                class="enableEdit"
+                                            >
                                                 {{ section.enableEditMessage }}
                                             </span>
                                         </div>
@@ -632,26 +636,170 @@
                                 <!-- Estate Distribution Section -->
                                 <div *ngSwitchCase="'distribution'">
                                     <div class="pt-4">
-                                        <div class="mt-4 space-y-3 text-sm">
+                                        <div
+                                            *ngIf="
+                                                getDistributionData(
+                                                    section
+                                                ) as distributionData;
+                                                else noDistributionData
+                                            "
+                                            class="mt-4 space-y-3 text-sm"
+                                        >
                                             <div class="flex justify-between">
                                                 <span class="text-gray-500"
                                                     >Dependents:</span
                                                 >
                                                 <span
                                                     class="font-medium text-gray-800"
-                                                    >No</span
+                                                    >{{
+                                                        distributionData.hasDependents
+                                                            ? "Yes"
+                                                            : "No"
+                                                    }}</span
                                                 >
                                             </div>
+
+                                            <!-- Beneficiary cards -->
+                                            <div
+                                                *ngIf="
+                                                    distributionData.beneficiaries &&
+                                                    distributionData
+                                                        .beneficiaries.length >
+                                                        0
+                                                "
+                                                class="mt-4 space-y-4"
+                                            >
+                                                <div
+                                                    *ngFor="
+                                                        let beneficiary of distributionData.beneficiaries
+                                                    "
+                                                    class="bg-[#737373] rounded-md p-4 text-white"
+                                                >
+                                                    <div
+                                                        class="flex justify-between items-center"
+                                                    >
+                                                        <div>
+                                                            <p
+                                                                class="text-sm opacity-80"
+                                                            >
+                                                                Dependant's name
+                                                            </p>
+                                                            <p
+                                                                class="font-medium"
+                                                            >
+                                                                {{
+                                                                    beneficiary.firstName
+                                                                }}
+                                                                {{
+                                                                    beneficiary.lastName
+                                                                }}
+                                                            </p>
+                                                            <p
+                                                                class="text-sm mt-1"
+                                                            >
+                                                                Born
+                                                                {{
+                                                                    beneficiary.dateOfBirth
+                                                                        | date
+                                                                            : "dd/MM/yyyy"
+                                                                }}
+                                                            </p>
+                                                        </div>
+                                                        <div
+                                                            *ngIf="
+                                                                beneficiary.share >
+                                                                0
+                                                            "
+                                                            class="bg-white px-3 py-2 rounded text-center min-w-[60px]"
+                                                        >
+                                                            <span
+                                                                class="text-gray-800 font-medium"
+                                                                >{{
+                                                                    beneficiary.share
+                                                                }}%</span
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="flex justify-between">
                                                 <span class="text-gray-500"
                                                     >Exclusion:</span
                                                 >
                                                 <span
                                                     class="font-medium text-gray-800"
-                                                    >No</span
+                                                    >{{
+                                                        distributionData.hasExclusions
+                                                            ? "Yes"
+                                                            : "No"
+                                                    }}</span
                                                 >
                                             </div>
+
+                                            <!-- Exclusion cards -->
+                                            <div
+                                                *ngIf="
+                                                    distributionData.exclusions &&
+                                                    distributionData.exclusions
+                                                        .length > 0
+                                                "
+                                                class="mt-4 space-y-4"
+                                            >
+                                                <div
+                                                    *ngFor="
+                                                        let exclusion of distributionData.exclusions
+                                                    "
+                                                    class="bg-[#efefef] rounded-md p-4 text-gray-800"
+                                                >
+                                                    <h5
+                                                        class="font-medium text-lg"
+                                                    >
+                                                        {{ exclusion.name }}
+                                                    </h5>
+                                                    <p
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{
+                                                            exclusion.relationship
+                                                        }}
+                                                    </p>
+                                                    <p
+                                                        *ngIf="exclusion.reason"
+                                                        class="text-sm text-gray-600 mt-2"
+                                                    >
+                                                        {{ exclusion.reason }}
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        <ng-template #noDistributionData>
+                                            <div class="mt-4 space-y-3 text-sm">
+                                                <div
+                                                    class="flex justify-between"
+                                                >
+                                                    <span class="text-gray-500"
+                                                        >Dependents:</span
+                                                    >
+                                                    <span
+                                                        class="font-medium text-gray-800"
+                                                        >No data yet</span
+                                                    >
+                                                </div>
+                                                <div
+                                                    class="flex justify-between"
+                                                >
+                                                    <span class="text-gray-500"
+                                                        >Exclusion:</span
+                                                    >
+                                                    <span
+                                                        class="font-medium text-gray-800"
+                                                        >No data yet</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        </ng-template>
 
                                         <!-- Horizontal border line -->
                                         <div
@@ -667,18 +815,21 @@
                                         >
                                             <button
                                                 *ngIf="section.enableEdit"
-                                                class="bg-[#444444] text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors flex items-center gap-2"
                                                 (click)="
                                                     onUpdateSection(section.id)
                                                 "
+                                                class="flex items-center gap-2 text-gray-600 underline bg-transparent border-none cursor-pointer"
                                             >
-                                                Continue writing my will
-                                                <mat-icon class="text-white"
-                                                    >arrow_forward</mat-icon
+                                                <mat-icon class="w-4 h-4"
+                                                    >edit</mat-icon
                                                 >
+                                                <span>Update section</span>
                                             </button>
 
-                                            <span *ngIf="!section.enableEdit" class="enableEdit">
+                                            <span
+                                                *ngIf="!section.enableEdit"
+                                                class="enableEdit"
+                                            >
                                                 {{ section.enableEditMessage }}
                                             </span>
                                         </div>
@@ -688,9 +839,141 @@
                                 <!-- Executor & Witnesses Section -->
                                 <div *ngSwitchCase="'executor'">
                                     <div class="pt-4">
+                                        <!-- Executor & Witnesses Content -->
+                                        <div
+                                            *ngIf="
+                                                getExecutorData(
+                                                    section
+                                                ) as executorData;
+                                                else noExecutorData
+                                            "
+                                            class="p-4"
+                                        >
+                                            <!-- Executor cards -->
+                                            <div
+                                                *ngIf="
+                                                    executorData.executors &&
+                                                    executorData.executors
+                                                        .length > 0
+                                                "
+                                            >
+                                                <h5
+                                                    class="text-sm text-gray-500 mb-2"
+                                                >
+                                                    Executor{{
+                                                        executorData.executors
+                                                            .length > 1
+                                                            ? "s"
+                                                            : ""
+                                                    }}
+                                                </h5>
+                                                <div
+                                                    *ngFor="
+                                                        let executor of executorData.executors
+                                                    "
+                                                    class="bg-[#efefef] rounded-md p-4 text-gray-800 mb-4"
+                                                >
+                                                    <h5
+                                                        class="font-medium text-lg"
+                                                    >
+                                                        {{ executor.firstName }}
+                                                        {{ executor.lastName }}
+                                                    </h5>
+                                                    <p
+                                                        *ngIf="
+                                                            executor.relationship
+                                                        "
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{
+                                                            executor.relationship
+                                                        }}
+                                                    </p>
+                                                    <p
+                                                        *ngIf="executor.email"
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{ executor.email }}
+                                                    </p>
+                                                    <p
+                                                        *ngIf="executor.phone"
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{ executor.phone }}
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Witness cards -->
+                                            <div
+                                                *ngIf="
+                                                    executorData.witnesses &&
+                                                    executorData.witnesses
+                                                        .length > 0
+                                                "
+                                            >
+                                                <h5
+                                                    class="text-sm text-gray-500 mb-2"
+                                                >
+                                                    Witness{{
+                                                        executorData.witnesses
+                                                            .length > 1
+                                                            ? "es"
+                                                            : ""
+                                                    }}
+                                                </h5>
+                                                <div
+                                                    *ngFor="
+                                                        let witness of executorData.witnesses
+                                                    "
+                                                    class="bg-[#efefef] rounded-md p-4 text-gray-800 mb-4"
+                                                >
+                                                    <h5
+                                                        class="font-medium text-lg"
+                                                    >
+                                                        {{ witness.firstName }}
+                                                        {{ witness.lastName }}
+                                                    </h5>
+                                                    <p
+                                                        *ngIf="
+                                                            witness.relationship
+                                                        "
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{
+                                                            witness.relationship
+                                                        }}
+                                                    </p>
+                                                    <p
+                                                        *ngIf="witness.email"
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{ witness.email }}
+                                                    </p>
+                                                    <p
+                                                        *ngIf="witness.phone"
+                                                        class="text-sm text-gray-600"
+                                                    >
+                                                        {{ witness.phone }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <ng-template #noExecutorData>
+                                            <div class="p-4">
+                                                <p
+                                                    class="text-sm text-gray-500"
+                                                >
+                                                    No executor or witness data
+                                                    yet
+                                                </p>
+                                            </div>
+                                        </ng-template>
+
                                         <!-- Horizontal border line -->
                                         <div
-                                            class="w-full flex justify-center mt-6"
+                                            class="w-full flex justify-center mt-2"
                                         >
                                             <div
                                                 class="w-1/2 h-px bg-[#efefef]"
@@ -700,19 +983,23 @@
                                         <div
                                             class="w-full flex justify-center mt-6"
                                         >
-                                            <button *ngIf="section.enableEdit"
-                                                class="bg-[#444444] text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors flex items-center gap-2"
+                                            <button
+                                                *ngIf="section.enableEdit"
                                                 (click)="
                                                     onUpdateSection(section.id)
                                                 "
+                                                class="flex items-center gap-2 text-gray-600 underline bg-transparent border-none cursor-pointer"
                                             >
-                                                Continue writing my will
-                                                <mat-icon class="text-white"
-                                                    >arrow_forward</mat-icon
+                                                <mat-icon class="w-4 h-4"
+                                                    >edit</mat-icon
                                                 >
+                                                <span>Update section</span>
                                             </button>
 
-                                            <span *ngIf="!section.enableEdit" class="enableEdit">
+                                            <span
+                                                *ngIf="!section.enableEdit"
+                                                class="enableEdit"
+                                            >
                                                 {{ section.enableEditMessage }}
                                             </span>
                                         </div>
