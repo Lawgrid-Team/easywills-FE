@@ -610,7 +610,7 @@
                                             >
                                                 No assets have been added yet.
                                             </p>
-                                            <button
+                                            <button *ngIf="section.enableEdit"
                                                 (click)="
                                                     onUpdateSection(section.id)
                                                 "
@@ -622,6 +622,9 @@
                                                 >
                                                 Add Assets
                                             </button>
+                                            <span *ngIf="!section.enableEdit" class="enableEdit">
+                                                {{ section.enableEditMessage }}
+                                            </span>
                                         </div>
                                     </ng-template>
                                 </div>
@@ -663,6 +666,7 @@
                                             class="w-full flex justify-center mt-6"
                                         >
                                             <button
+                                                *ngIf="section.enableEdit"
                                                 class="bg-[#444444] text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors flex items-center gap-2"
                                                 (click)="
                                                     onUpdateSection(section.id)
@@ -673,6 +677,10 @@
                                                     >arrow_forward</mat-icon
                                                 >
                                             </button>
+
+                                            <span *ngIf="!section.enableEdit" class="enableEdit">
+                                                {{ section.enableEditMessage }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -692,7 +700,7 @@
                                         <div
                                             class="w-full flex justify-center mt-6"
                                         >
-                                            <button
+                                            <button *ngIf="section.enableEdit"
                                                 class="bg-[#444444] text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors flex items-center gap-2"
                                                 (click)="
                                                     onUpdateSection(section.id)
@@ -703,6 +711,10 @@
                                                     >arrow_forward</mat-icon
                                                 >
                                             </button>
+
+                                            <span *ngIf="!section.enableEdit" class="enableEdit">
+                                                {{ section.enableEditMessage }}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

@@ -1,19 +1,18 @@
-import { Component, type OnInit } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { WillDataService } from '../../../core/services/Wizard/will-data.service';
-import {
-    Beneficiary,
-    WillData,
-} from '../../../core/models/interfaces/will-data.interface';
-import { MatDividerModule } from '@angular/material/divider';
-import { AccountService } from '../../../core/services/Wizard/account.service';
-import { WillStateService } from '../../../shared/services/will-state.service';
-import { firstValueFrom, forkJoin, tap } from 'rxjs';
+import {Component, type OnInit} from '@angular/core';
+import {CommonModule, DatePipe} from '@angular/common';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
+import {WillDataService} from '../../../core/services/Wizard/will-data.service';
+import {Beneficiary, WillData,} from '../../../core/models/interfaces/will-data.interface';
+import {MatDividerModule} from '@angular/material/divider';
+import {AccountService} from '../../../core/services/Wizard/account.service';
+import {WillStateService} from '../../../shared/services/will-state.service';
+import {firstValueFrom, forkJoin, tap} from 'rxjs';
 
 interface WillSection {
+    enableEdit?: boolean;
+    enableEditMessage?: string;
     id: string;
     title: string;
     description: string;
@@ -25,6 +24,20 @@ interface WillSection {
     returningUserTitle?: string;
     returningUserDescription?: string;
 }
+
+const WillStage = {
+    PROFILE: 'PROFILE',
+    BENEFICIARIES: 'BENEFICIARIES',
+    ASSETS: 'ASSETS',
+    DISTRIBUTION: 'DISTRIBUTION',
+    EXCLUSIONS: 'EXCLUSIONS',
+    EXECUTORS: 'EXECUTORS',
+    WITNESSES: 'WITNESSES',
+    SCHEDULE: 'SCHEDULE',
+    SIGNATURE: 'SIGNATURE',
+} as const;
+
+type WillStageType = typeof WillStage[keyof typeof WillStage];
 
 @Component({
     selector: 'app-welcome',
@@ -51,6 +64,7 @@ export class WelcomeComponent implements OnInit {
     };
     defaultAvatar = '/svg/display-pic.svg';
     willState: any = {};
+    willStages: WillStageType[] = []
     verified = false;
 
     willSections: WillSection[] = [
@@ -77,6 +91,7 @@ export class WelcomeComponent implements OnInit {
             stepNumber: 2,
             expanded: false,
             completed: false,
+            enableEditMessage: 'Complete the Personal Details section to add assets'
         },
         {
             id: 'distribution',
@@ -89,6 +104,7 @@ export class WelcomeComponent implements OnInit {
             stepNumber: 3,
             expanded: false,
             completed: false,
+            enableEditMessage: 'Complete the Asset listing section to share your asset'
         },
         {
             id: 'executor',
@@ -101,6 +117,7 @@ export class WelcomeComponent implements OnInit {
             stepNumber: 4,
             expanded: false,
             completed: false,
+            enableEditMessage: 'Complete the Estate Distribution section to add executor and witnesses'
         },
     ];
 
@@ -113,6 +130,8 @@ export class WelcomeComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.accountService.getUserProfile();
+        this.willStateService.getWillState();
         this.route.queryParams.subscribe((params) => {
             if (params['continue'] === 'true') {
                 this.hasStartedWill = true;
@@ -121,8 +140,6 @@ export class WelcomeComponent implements OnInit {
                 this.hasStartedWill = false;
             }
         });
-        this.accountService.getUserProfile();
-        this.willStateService.getWillState();
 
         this.accountService.userData$.subscribe({
             next: (value) => {
@@ -142,6 +159,9 @@ export class WelcomeComponent implements OnInit {
                     if (willState.account.identityStatus === 'SUCCESSFUL') {
                         this.verified = true;
                     }
+                    if (willState.stages)
+                        this.willStages = willState.stages;
+                    this.validateSectionStage()
                 }
             },
         });
@@ -303,6 +323,26 @@ export class WelcomeComponent implements OnInit {
                 (willData.executorAndWitness.executors.length > 0 ||
                     willData.executorAndWitness.witnesses.length > 0);
             executorSection.data = willData.executorAndWitness;
+        }
+    }
+
+    validateSectionStage(): void {
+        const assetsSection = this.willSections.find((s) => s.id === 'assets');
+        if (assetsSection) {
+            assetsSection.enableEdit = this.willStages.includes(WillStage.PROFILE) && this.willStages.includes(WillStage.BENEFICIARIES)
+        }
+        const distributionSection = this.willSections.find(
+            (s) => s.id === 'distribution'
+        );
+        if (distributionSection) {
+            distributionSection.enableEdit = this.willStages.includes(WillStage.ASSETS)
+
+        }
+        const executorSection = this.willSections.find(
+            (s) => s.id === 'executor'
+        );
+        if (executorSection) {
+            executorSection.enableEdit = this.willStages.includes(WillStage.DISTRIBUTION)
         }
     }
 

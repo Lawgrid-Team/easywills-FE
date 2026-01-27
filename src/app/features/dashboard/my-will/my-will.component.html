@@ -1,10 +1,9 @@
 <app-your-will-widget [lastUpdated]="lastUpdated" [status]="willStatus">
 </app-your-will-widget>
-
 <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
     <div class="lg:col-span-1">
         <app-quick-actions-widget
-            *ngIf="willStatus === 'inProgress'"
+            *ngIf="willStatus === 'inProgress' || willStatus === 'scheduled'"
         ></app-quick-actions-widget>
         <app-create-codicils-widget
             *ngIf="willStatus === 'completed'"
