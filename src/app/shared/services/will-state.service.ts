@@ -15,8 +15,8 @@ export class WillStateService {
     private willStateSubject = new BehaviorSubject<any>(null);
     public willState$ = this.willStateSubject.asObservable();
 
-    private isWillCompletedSubject = new BehaviorSubject<boolean>(false);
-    public isWillCompleted$ = this.isWillCompletedSubject.asObservable();
+    // private isWillCompletedSubject = new BehaviorSubject<boolean>(false);
+    // public isWillCompleted$ = this.isWillCompletedSubject.asObservable();
 
     private currentPlanSubject = new BehaviorSubject<string>('Free');
     public currentPlan$ = this.currentPlanSubject.asObservable();
@@ -24,23 +24,10 @@ export class WillStateService {
     constructor(
         private apiService: ApiService
     ) {
-        // Update plan when will completion status changes
-        this.isWillCompleted$.subscribe((completed) => {
-            this.currentPlanSubject.next(completed ? 'Legacy+' : 'Free');
-        });
+
     }
 
-    setWillCompleted(completed: boolean): void {
-        this.isWillCompletedSubject.next(completed);
-    }
 
-    getWillCompleted(): boolean {
-        return this.isWillCompletedSubject.value;
-    }
-
-    getWillStatus(): 'inProgress' | 'completed' {
-        return this.isWillCompletedSubject.value ? 'completed' : 'inProgress';
-    }
 
     getWillState() {
         if (this.willStateSubject.value == null) {
@@ -54,13 +41,23 @@ export class WillStateService {
             .get<any>(this.baseURL + routes.willStatus)
             .pipe(
                tap((response) => {
-                   this.setWillCompleted(response.status === 'SIGNED')
+                   //    this.setWillCompleted(response.status === 'SIGNED')
                     this.currentPlanSubject.next(response.account.plan)
                 }),
                 map((response) => {
+                    let status = '';
+                    if (response.status === null) {
+                        status = 'notStarted'
+                    } else if (response.status === 'SIGNED') {
+                        status = "completed"
+                    } else if (response.status === 'DRAFT' && response.stages && response.stages.includes('SCHEDULE')) {
+                        status = 'scheduled'
+                    } else {
+                        status = 'inProgress'
+                    }
                     const willState = {
                         ...response,
-                        status: response.status === null ? 'notStarted' : (response.status === 'SIGNED' ? 'completed' : 'inProgress'),
+                        status: status,
                         account: {
                             ...response.account,
                             planText: response.account.plan === 'FREE' ? 'Free' : response.account.plan === 'LEGACY' ? 'Legacy'

@@ -10,7 +10,7 @@
                         'bg-green-100 text-[#045137]': status === 'completed'
                     }"
                 >
-                    {{ status === "inProgress" ? "In progress" : "Completed" }}
+                    {{ status === "inProgress" ? "In progress" : status === "scheduled" ? "Scheduled" : "Completed" }}
                 </span>
             </div>
             <p class="text-sm text-gray-500">Last updated: {{ lastUpdated }}</p>

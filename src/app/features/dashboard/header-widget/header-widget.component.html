@@ -20,8 +20,7 @@
         <div class="text-center" *ngIf="showUpgradePlan">
             <span class="bg-[#6982b5] text-white text-s px-10 py-1 rounded-lg">
                 <span *ngIf="badgeText">{{ badgeText }}</span>
-                <span *ngIf="!badgeText && !isWillCompleted">Free</span>
-                <span *ngIf="!badgeText && isWillCompleted">Legacy+</span>
+                <span *ngIf="!badgeText">{{ plan }}</span>
             </span>
             <a
                 *ngIf="showUpgradeButton"

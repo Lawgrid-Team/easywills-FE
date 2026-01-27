@@ -42,30 +42,45 @@ export class DashboardComponent implements OnInit, OnDestroy {
     showUpgradePlan = true;
     showUpgradeButton = true;
     badgeText = '';
+    plan = 'Free'
 
     constructor(
         private willStateService: WillStateService,
         private accountService: AccountService,
         private router: Router,
         private activatedRoute: ActivatedRoute
-    ) {}
+    ) {
+    }
 
     ngOnInit(): void {
 
         this.willStateService.getWillState();
         this.accountService.getUserProfile();
 
-        this.accountService.userData$.subscribe({
-            next: (value) => {
-                if (value) {
-                    this.userName = value.name;
-                    this.userEmail = value.email;
-                    if (value.avatar) {
-                        this.userAvatarUrl = value.avatar
+        this.subscriptions.add(
+            this.willStateService.willState$.subscribe({
+                next: (value) => {
+                    if (value) {
+                        this.plan = value.account.planText
+                        this.isWillCompleted = value.status === 'completed' ? true : false;
                     }
                 }
-            }
-        })
+            })
+        );
+
+        this.subscriptions.add(
+            this.accountService.userData$.subscribe({
+                next: (value) => {
+                    if (value) {
+                        this.userName = value.name;
+                        this.userEmail = value.email;
+                        if (value.avatar) {
+                            this.userAvatarUrl = value.avatar
+                        }
+                    }
+                }
+            })
+        );
 
         // this.willStateService.willState$
         //     .subscribe({
@@ -77,11 +92,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         //         },
         //     })
 
-        this.subscriptions.add(
-            this.willStateService.isWillCompleted$.subscribe((completed) => {
-                this.isWillCompleted = completed;
-            })
-        );
 
         this.subscriptions.add(
             this.router.events

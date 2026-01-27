@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
                             this.willStateService.willState$.subscribe({
                                 next: (willState) => {
                                     if (willState) {
-                                        if (willState.status === "completed" || (willState.stages && willState.stages.includes('SCHEDULE'))) {
+                                        if (willState.stages && willState.stages.length > 0) {
                                             this.router.navigate(['/dashboard'], {
                                                 replaceUrl: true,
                                             });
