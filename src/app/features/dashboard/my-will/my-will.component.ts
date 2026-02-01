@@ -25,7 +25,7 @@ export class MyWillComponent implements OnInit, OnDestroy {
 
     // State managed by WillStateService - initialized by service subscription
     isWillCompleted!: boolean; // Using definite assignment assertion since it's set in ngOnInit
-    willStatus: 'inProgress' | 'completed' = 'inProgress';
+    willStatus: 'inProgress' | 'completed' | 'scheduled' = 'inProgress';
     lastUpdated = ''
 
     recentActivities: Activity[] = [
@@ -56,9 +56,9 @@ export class MyWillComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         // Subscribe to will completion status changes
         this.subscriptions.add(
-            this.willStateService.isWillCompleted$.subscribe((completed) => {
-                this.isWillCompleted = completed;
-                this.willStatus = completed ? 'completed' : 'inProgress';
+            this.willStateService.willState$.subscribe((state) => {
+                this.isWillCompleted = state.status == 'completed' ? true : false;
+                this.willStatus = state.status;
             })
         );
 

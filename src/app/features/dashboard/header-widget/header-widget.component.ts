@@ -22,6 +22,8 @@ export class HeaderWidgetComponent {
     @Input() showUpgradePlan = true;
     @Input() showUpgradeButton = true;
     @Input() badgeText = 'Free'; // New property to control badge text
+    @Input() plan = 'Free'; // New property to control badge text
+
 
     @Output() goBack = new EventEmitter<void>();
 
