@@ -25,12 +25,12 @@ export class QuickActionsWidgetComponent {
         {
             text: 'Add/Edit Assets',
             icon: '/svg/icon-edit-assets.svg',
-            link: '/wiz/will/assets',
+            link: '/wiz/will/asset-inventory',
         },
         {
             text: 'Manage Beneficiaries',
             icon: '/svg/icon-manage-beneficiaries.svg',
-            link: '/wiz/will/beneficiaries',
+            link: '/wiz/will/personal-details',
         },
         {
             text: 'Preview A4 Will',
