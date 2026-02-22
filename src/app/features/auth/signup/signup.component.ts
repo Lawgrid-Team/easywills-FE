@@ -111,9 +111,17 @@ export class SignupComponent implements OnInit {
         console.log(this.form.value, 'form value');
         this.authService.register(this.form.value).subscribe({
             next: (res) => {
-                if (res.status === 200 || res.status === 201) {
+                // if (res.status === 200 || res.status === 201) {
+                //     this.notification.showSuccess(
+                //         'Account created successfully, check your email to verify your account',
+                //     );
+                //     this.router.navigate(['/auth/login']);
+                // }
+
+                if (res) {
                     this.notification.showSuccess(
-                        'Account created successfully, check your email to verify your account',
+                        res.message ||
+                            'Account created successfully, check your email to verify your account',
                     );
                     this.router.navigate(['/auth/login']);
                 }
