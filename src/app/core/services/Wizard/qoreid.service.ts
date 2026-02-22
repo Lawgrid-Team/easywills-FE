@@ -81,7 +81,7 @@ export class QoreIdService {
     initializeIdentity(
         request: InitializeIdentityRequest,
     ): Observable<InitializeIdentityResponse> {
-        console.log('Calling /api/v1/identity/initialize with:', request);
+        console.log('Calling api/v1/identity/initialize with:', request);
         return this.apiService.post<InitializeIdentityResponse>(
             `${this.baseURL}v1/identity/initialize`,
             request,
@@ -287,7 +287,7 @@ export class QoreIdService {
      * Format date for API (YYYY-MM-DD)
      */
     formatDateForApi(date: Date | string): string {
-        console.log('Formatting date for API:', date);
+        //console.log('Formatting date for API:', date);
         if (!date) return '';
 
         const dateObj = date instanceof Date ? date : new Date(date);

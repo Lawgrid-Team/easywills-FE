@@ -267,7 +267,7 @@ export class VerifyInfoComponent implements OnInit, OnDestroy {
             ),
         };
 
-        console.log('Request:', request);
+        // console.log('Request:', request);
 
         this.qoreIdService
             .initializeIdentity(request)
