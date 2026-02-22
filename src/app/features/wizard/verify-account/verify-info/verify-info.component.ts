@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Output,
+    OnInit,
+    OnDestroy,
+    CUSTOM_ELEMENTS_SCHEMA,
+    ChangeDetectorRef,
+} from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
@@ -11,8 +19,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
 import { MatNativeDateModule } from '@angular/material/core';
+import { Subject, takeUntil } from 'rxjs';
 import { IdentityVerificationData } from '../../../../core/models/interfaces/will-data.interface';
-//import { WillDataService } from '../../../core/services/Wizard/will-data.service';
+import {
+    QoreIDConfig,
+    QoreIdService,
+    QoreIDVerificationResult,
+} from '../../../../core/services/Wizard/qoreid.service';
 
 @Component({
     selector: 'app-verify-info',
@@ -26,10 +39,11 @@ import { IdentityVerificationData } from '../../../../core/models/interfaces/wil
         MatIconModule,
         MatNativeDateModule,
     ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     templateUrl: './verify-info.component.html',
     styleUrl: './verify-info.component.scss',
 })
-export class VerifyInfoComponent {
+export class VerifyInfoComponent implements OnInit, OnDestroy {
     @Output() identitySaved = new EventEmitter<IdentityVerificationData>();
     @Output() next = new EventEmitter<void>();
     @Output() setFormValidity = new EventEmitter<boolean>();
@@ -39,6 +53,37 @@ export class VerifyInfoComponent {
     selectedDocumentType: string | null = null;
     hoveredDocumentType: string | null = null;
     private rawIdNumber: string = '';
+    private destroy$ = new Subject<void>();
+
+    // Verification state
+    isVerifying = false;
+    verificationStatus: 'idle' | 'verifying' | 'success' | 'error' = 'idle';
+    verificationMessage = '';
+
+    // QoreID Configuration - populated from API response
+    qoreIdConfig: QoreIDConfig = {
+        clientId: '',
+        flowId: '',
+        customerReference: '',
+        applicantData: {
+            firstname: '',
+            lastname: '',
+            email: '',
+        },
+        identityData: {
+            lastname: '',
+            idNumber: '',
+        },
+    };
+
+    // Template binding getters
+    get applicantDataJson(): string {
+        return JSON.stringify(this.qoreIdConfig.applicantData);
+    }
+
+    get identityDataJson(): string {
+        return JSON.stringify(this.qoreIdConfig.identityData);
+    }
 
     idTypes = [
         { name: 'National ID Card', icon: 'id-card' },
@@ -46,7 +91,6 @@ export class VerifyInfoComponent {
         { name: "Driver's License", icon: 'license' },
     ];
 
-    // Nigerian ID Format configurations
     private idFormats = {
         'National ID Card': {
             placeholder: '12345678901',
@@ -91,7 +135,11 @@ export class VerifyInfoComponent {
         },
     };
 
-    constructor(private fb: FormBuilder) {
+    constructor(
+        private fb: FormBuilder,
+        private qoreIdService: QoreIdService,
+        private cdr: ChangeDetectorRef,
+    ) {
         this.form = this.fb.group({
             idType: [null, Validators.required],
             idNumber: ['', Validators.required],
@@ -105,26 +153,177 @@ export class VerifyInfoComponent {
 
     ngOnInit(): void {
         this.setFormValidity.emit(false);
+
+        // Setup QoreID handlers
+        this.qoreIdService.setupGlobalHandlers();
+
+        // Subscribe to verification results
+        this.qoreIdService
+            .getVerificationResult()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((result) => {
+                if (result) {
+                    this.handleVerificationResult(result);
+                }
+            });
     }
 
-    onFileSelected(event: Event): void {
-        const file = (event.target as HTMLInputElement).files?.[0];
-        this.form.patchValue({ file });
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+        this.qoreIdService.cleanupGlobalHandlers();
+        this.qoreIdService.resetVerification();
     }
 
-    submit(): void {
+    /**
+     * Handle verification result from QoreID
+     */
+    private handleVerificationResult(result: QoreIDVerificationResult): void {
+        this.isVerifying = false;
+        this.enableFormControls();
+
+        switch (result.status) {
+            case 'submitted':
+                this.verificationStatus = 'success';
+                this.verificationMessage = 'Verification successful!';
+                this.cdr.detectChanges();
+
+                setTimeout(() => {
+                    this.proceedAfterVerification();
+                }, 1500);
+                break;
+
+            case 'error':
+                this.verificationStatus = 'error';
+                this.verificationMessage =
+                    'Verification failed. Please try again.';
+                this.cdr.detectChanges();
+                break;
+
+            case 'closed':
+                this.verificationStatus = 'idle';
+                this.verificationMessage = 'Verification was cancelled.';
+                this.cdr.detectChanges();
+                break;
+        }
+    }
+
+    /**
+     * Proceed after successful verification
+     */
+    private proceedAfterVerification(): void {
         if (this.form.valid) {
             const data: IdentityVerificationData = {
                 documentType: this.form.value.idType,
-                idNumber: this.rawIdNumber, // Use raw unformatted value
+                idNumber: this.rawIdNumber,
                 expiryDate: this.form.value.expiryDate,
+                verificationStatus: 'verified',
+                verifiedAt: new Date(),
+                qoreIdReference: this.qoreIdConfig.customerReference,
             };
             this.identitySaved.emit(data);
             this.next.emit();
         }
     }
 
-    // Nigerian ID Format Methods
+    private disableFormControls(): void {
+        this.form.get('idNumber')?.disable();
+        this.form.get('expiryDate')?.disable();
+    }
+
+    private enableFormControls(): void {
+        this.form.get('idNumber')?.enable();
+        this.form.get('expiryDate')?.enable();
+    }
+
+    submit(): void {
+        if (!this.form.valid || this.isVerifying) {
+            this.form.markAllAsTouched();
+            return;
+        }
+
+        console.log('=== Starting Identity Verification ===');
+
+        this.isVerifying = true;
+        this.verificationStatus = 'verifying';
+        this.verificationMessage = 'Initializing verification...';
+        this.disableFormControls();
+
+        if (!this.selectedDocumentType) {
+            this.handleError('Please select a document type');
+            return;
+        }
+
+        // Use getRawValue() to get all values including disabled controls
+        const formValues = this.form.getRawValue();
+
+        const request = {
+            idNumber: this.rawIdNumber,
+            type: this.qoreIdService.mapDocumentTypeToApiType(
+                this.selectedDocumentType,
+            ),
+            expiryDate: this.qoreIdService.formatDateForApi(
+                formValues.expiryDate,
+            ),
+        };
+
+        console.log('Request:', request);
+
+        this.qoreIdService
+            .initializeIdentity(request)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (response) => {
+                    console.log('API Response:', response);
+
+                    this.qoreIdConfig =
+                        this.qoreIdService.configureFromApiResponse(response);
+                    this.verificationMessage = 'Starting verification...';
+                    this.cdr.detectChanges();
+
+                    setTimeout(() => {
+                        this.startVerification();
+                    }, 200);
+                },
+                error: (error) => {
+                    console.error('API Error:', error);
+                    this.handleError(
+                        error.error?.message ||
+                            'Failed to initialize verification. Please try again.',
+                    );
+                },
+            });
+    }
+
+    /**
+     * Start QoreID verification
+     */
+    private async startVerification(): Promise<void> {
+        try {
+            const started = await this.qoreIdService.startVerification();
+
+            if (started) {
+                this.verificationMessage = 'Verification in progress...';
+                this.cdr.detectChanges();
+            }
+        } catch (error) {
+            this.handleError(`Verification error: ${error}`);
+        }
+    }
+
+    /**
+     * Handle errors
+     */
+    private handleError(message: string): void {
+        this.isVerifying = false;
+        this.verificationStatus = 'error';
+        this.verificationMessage = message;
+        this.enableFormControls();
+        this.cdr.detectChanges();
+    }
+
+    // ============== Form Helper Methods ==============
+
     getPlaceholderForSelectedType(): string {
         if (
             !this.selectedDocumentType ||
@@ -186,19 +385,12 @@ export class VerifyInfoComponent {
             ];
         const formattedValue = formatter.format(rawValue);
 
-        // Store raw value for validation
         this.rawIdNumber = formattedValue;
-
-        // Update form control
         this.form.patchValue(
             { idNumber: formattedValue },
-            { emitEvent: false }
+            { emitEvent: false },
         );
-
-        // Set input value
         input.value = formattedValue;
-
-        // Validate format
         this.validateIdNumber(formattedValue);
     }
 
@@ -224,17 +416,17 @@ export class VerifyInfoComponent {
 
         const idControl = this.form.get('idNumber');
         if (idControl) {
-            if (isValid) {
-                idControl.setErrors(null);
-            } else {
-                idControl.setErrors({ pattern: true });
-            }
+            idControl.setErrors(isValid ? null : { pattern: true });
         }
     }
 
     selectDocument(type: string): void {
+        if (this.isVerifying) return;
+
         this.selectedDocumentType = type;
-        this.form.patchValue({ idType: type, idNumber: '' }); // Clear ID number when switching types
-        this.rawIdNumber = ''; // Reset raw value
+        this.form.patchValue({ idType: type, idNumber: '' });
+        this.rawIdNumber = '';
+        this.verificationStatus = 'idle';
+        this.verificationMessage = '';
     }
 }

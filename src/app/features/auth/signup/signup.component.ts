@@ -48,7 +48,7 @@ export class SignupComponent implements OnInit {
         private fb: FormBuilder,
         private authService: AuthService,
         private router: Router,
-        private notification: NotificationService
+        private notification: NotificationService,
     ) {}
 
     clickEvent(event: MouseEvent) {
@@ -72,7 +72,7 @@ export class SignupComponent implements OnInit {
                         Validators.required,
                         Validators.minLength(8),
                         Validators.pattern(
-                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+                            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
                         ),
                     ],
                 ],
@@ -80,7 +80,7 @@ export class SignupComponent implements OnInit {
                 confirmPassword: ['', Validators.required],
                 terms: [false, Validators.requiredTrue],
             },
-            { validator: this.checkPasswords.bind(this) }
+            { validator: this.checkPasswords.bind(this) },
         );
 
         // set passwordValid to true if password and confirmPassword are valid
@@ -111,13 +111,12 @@ export class SignupComponent implements OnInit {
         console.log(this.form.value, 'form value');
         this.authService.register(this.form.value).subscribe({
             next: (res) => {
-                if (res.status === 200) {
+                if (res.status === 200 || res.status === 201) {
                     this.notification.showSuccess(
-                        'Account Created Successfully'
+                        'Account created successfully, check your email to verify your account',
                     );
                     this.router.navigate(['/auth/login']);
                 }
-                //console.log(res);
             },
             error: (err) => {
                 this.notification.showError(err.error.message);
