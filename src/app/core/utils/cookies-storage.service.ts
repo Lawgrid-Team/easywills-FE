@@ -1,51 +1,59 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable } from '@angular/core';
-//import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 const TOKEN_KEY = 'easy-wills-token';
 const REFRESHTOKEN_KEY = 'easy-wills-refreshtoken';
 const USER_KEY = 'easy-wills-user';
 const USER_ROLE = 'userRole';
+
 @Injectable({
     providedIn: 'root',
 })
 export class CookiesStorageService {
-    constructor() {}
+    private platformId = inject(PLATFORM_ID);
+
+    private get isBrowser(): boolean {
+        return isPlatformBrowser(this.platformId);
+    }
 
     public saveToken(token: string): void {
-        // Cookie.set(TOKEN_KEY, token);
-        localStorage.setItem(TOKEN_KEY, token);
+        if (!this.isBrowser) return;
 
+        localStorage.setItem(TOKEN_KEY, token);
         const user = this.getUser();
         if (user) {
             this.saveUser({ ...user, token: token });
         }
     }
+
     public getToken(): string | null {
-        // Cookie.get(TOKEN_KEY)
+        if (!this.isBrowser) return null;
         return localStorage.getItem(TOKEN_KEY);
     }
+
     public saveRefreshToken(token: string): void {
+        if (!this.isBrowser) return;
         localStorage.setItem(REFRESHTOKEN_KEY, token);
-        // Cookie.set(REFRESHTOKEN_KEY, token);
     }
+
     public getRefreshToken(): string | null {
-        // Cookie.get(REFRESHTOKEN_KEY);
+        if (!this.isBrowser) return null;
         return localStorage.getItem(REFRESHTOKEN_KEY);
     }
 
     public saveUser(user: any): void {
-        // Cookie.set(USER_KEY, JSON.stringify(user));
+        if (!this.isBrowser) return;
         localStorage.setItem(USER_ROLE, user.roles[0].authority);
         localStorage.setItem(USER_KEY, JSON.stringify(user));
     }
 
-    public saveUserProfile(profile: any) {
+    public saveUserProfile(profile: any): void {
+        if (!this.isBrowser) return;
         localStorage.setItem('profile', JSON.stringify(profile));
     }
 
-    public getUserProfile() {
+    public getUserProfile(): any {
+        if (!this.isBrowser) return null;
         const userProfile = localStorage.getItem('profile');
         if (userProfile) {
             return JSON.parse(userProfile);
@@ -54,23 +62,21 @@ export class CookiesStorageService {
     }
 
     public getUserRole(): string | null {
+        if (!this.isBrowser) return null;
         return localStorage.getItem(USER_ROLE);
     }
-    public getUser(): any {
-        // const user = Cookie.get(USER_KEY);
-        const user = localStorage.getItem(USER_KEY);
 
+    public getUser(): any {
+        if (!this.isBrowser) return null;
+        const user = localStorage.getItem(USER_KEY);
         if (user) {
             return JSON.parse(user);
         }
         return null;
     }
 
-    public clearStorage() {
-        // Cookie.delete(TOKEN_KEY);
-        // Cookie.delete(REFRESHTOKEN_KEY);
-        // Cookie.delete(USER_KEY);
-        // Cookie.deleteAll('/');
+    public clearStorage(): void {
+        if (!this.isBrowser) return;
         localStorage.removeItem(TOKEN_KEY);
         localStorage.removeItem(REFRESHTOKEN_KEY);
         localStorage.removeItem(USER_KEY);

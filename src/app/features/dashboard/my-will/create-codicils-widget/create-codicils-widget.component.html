@@ -1,7 +1,7 @@
 <div
     class="bg-codicils rounded-xl p-6 text-white shadow-sm h-full flex flex-col"
     style="
-        background-image: url('/svg/codicils-bg.svg');
+        background-image: url(&quot;/svg/codicils-bg.svg&quot;);
         background-size: cover;
         background-position: center;
     "
@@ -14,6 +14,7 @@
         <a
             *ngFor="let action of codicilActions"
             [routerLink]="action.link"
+            [fragment]="action.fragment"
             class="flex items-center bg-white text-gray-800 p-4 rounded-3xl hover:bg-gray-50 transition duration-150 ease-in-out shadow cursor-pointer"
         >
             <img
