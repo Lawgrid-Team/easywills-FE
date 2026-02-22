@@ -6,6 +6,7 @@ interface CodicilAction {
     text: string;
     icon: string;
     link: string;
+    fragment?: string;
 }
 
 @Component({
@@ -21,21 +22,25 @@ export class CreateCodicilsWidgetComponent {
             text: 'Personal information',
             icon: '/svg/icon-edit-user.svg',
             link: '/create-codicil',
+            fragment: 'personal-details',
         },
         {
             text: 'Beneficiaries',
             icon: '/svg/icon-users.svg',
             link: '/create-codicil',
+            fragment: 'personal-details',
         },
         {
             text: 'Estate Distribution',
             icon: '/svg/icon-home.svg',
             link: '/create-codicil',
+            fragment: 'distribution',
         },
         {
             text: 'Executors & Witnesses',
             icon: '/svg/icon-list-doc.svg',
             link: '/create-codicil',
+            fragment: 'executor',
         },
     ];
 
