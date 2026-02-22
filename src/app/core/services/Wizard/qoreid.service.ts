@@ -7,7 +7,7 @@ import { ApiService } from '../../utils/api.service';
 
 export interface InitializeIdentityRequest {
     idNumber: string;
-    type: 'NIN' | 'PASSPORT' | 'DRIVERS_LICENSE';
+    type: 'NATIONAL_ID' | 'PASSPORT' | 'DRIVERS_LICENSE';
     expiryDate: string; // Format: 'YYYY-MM-DD'
 }
 
@@ -83,7 +83,7 @@ export class QoreIdService {
     ): Observable<InitializeIdentityResponse> {
         console.log('Calling api/v1/identity/initialize with:', request);
         return this.apiService.post<InitializeIdentityResponse>(
-            `${this.baseURL}v1/identity/initialize`,
+            `${this.baseURL}api/v1/identity/initialize`,
             request,
         );
     }
@@ -303,13 +303,15 @@ export class QoreIdService {
      */
     mapDocumentTypeToApiType(
         documentType: string,
-    ): 'NIN' | 'PASSPORT' | 'DRIVERS_LICENSE' {
-        const typeMap: Record<string, 'NIN' | 'PASSPORT' | 'DRIVERS_LICENSE'> =
-            {
-                'National ID Card': 'NIN',
-                'National Passport': 'PASSPORT',
-                "Driver's License": 'DRIVERS_LICENSE',
-            };
-        return typeMap[documentType] || 'NIN';
+    ): 'NATIONAL_ID' | 'PASSPORT' | 'DRIVERS_LICENSE' {
+        const typeMap: Record<
+            string,
+            'NATIONAL_ID' | 'PASSPORT' | 'DRIVERS_LICENSE'
+        > = {
+            'National ID Card': 'NATIONAL_ID',
+            'National Passport': 'PASSPORT',
+            "Driver's License": 'DRIVERS_LICENSE',
+        };
+        return typeMap[documentType] || 'NATIONAL_ID';
     }
 }

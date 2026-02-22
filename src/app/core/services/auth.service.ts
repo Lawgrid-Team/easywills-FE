@@ -51,7 +51,7 @@ export class AuthService {
 
     constructor() {
         this.userSubject = new BehaviorSubject<AuthUser>(
-            this.cookiesStorageService.getUser()!
+            this.cookiesStorageService.getUser()!,
         );
         this.user = this.userSubject.asObservable();
     }
@@ -66,12 +66,7 @@ export class AuthService {
         };
 
         const url = this.baseURL + `${routes.register}`;
-        return (
-            this.apiService
-                .post(url, payload)
-                //return this.http.post<any>(url, payload)
-                .pipe(map((res) => res))
-        );
+        return this.apiService.post(url, payload).pipe(map((res) => res));
     }
 
     login(userDetails: { username: string; password: string }) {
@@ -82,12 +77,12 @@ export class AuthService {
                     this.userSubject.next(user);
                     this.cookiesStorageService.clearStorage();
                     this.cookiesStorageService.saveRefreshToken(
-                        user.refreshToken
+                        user.refreshToken,
                     );
                     this.cookiesStorageService.saveToken(user.token);
                     this.cookiesStorageService.saveUser(user);
                     //this.saveUserProfile();
-                })
+                }),
             );
     }
 
@@ -103,7 +98,7 @@ export class AuthService {
 
     verifyToken(token: string) {
         return this.apiService.get(
-            this.baseURL + `${routes.verifyEmail}${token}`
+            this.baseURL + `${routes.verifyEmail}${token}`,
         );
     }
 
@@ -114,34 +109,33 @@ export class AuthService {
                     `${
                         routes.refreshToken
                     }${this.cookiesStorageService.getRefreshToken()}`,
-                null
+                null,
             )
             .pipe(
                 tap((user) => {
                     const { token } = user;
                     this.userSubject.next({ ...this.userValue, token: token });
-                })
+                }),
             );
     }
 
     forgotPassword(email: string) {
         return this.apiService.get<AppResponseModel<any>>(
-            this.baseURL + `${routes.forgotPassword}${email}`
+            this.baseURL + `${routes.forgotPassword}${email}`,
         );
     }
     resetPassword(payload: any) {
         return this.apiService.put<AppResponseModel<any>>(
             this.baseURL + routes.resetPassword,
-            payload
+            payload,
         );
     }
 
     logout() {
         return this.apiService
-            .post<AppResponseModel<any>>(
-                this.baseURL + `${routes.logout}`,
-                null
-            )
+            .post<
+                AppResponseModel<any>
+            >(this.baseURL + `${routes.logout}`, null)
             .subscribe({
                 next: (res) => {
                     this.notify.showSuccess(res.message);
