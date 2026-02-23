@@ -176,7 +176,9 @@ export class EstateDistributionComponent {
         if (this.originalData) {
             if(JSON.stringify(this.originalData.sharingAsAWhole) !== JSON.stringify(this.data.sharingAsAWhole) ||
                 JSON.stringify(this.originalData.beneficiaryShares) !== JSON.stringify(this.data.beneficiaryShares) ||
-                JSON.stringify(this.originalData.individualAssetAssignments) !== JSON.stringify(this.data.individualAssetAssignments)) {
+                JSON.stringify(this.originalData.individualAssetAssignments) !== JSON.stringify(this.data.individualAssetAssignments) ||
+                JSON.stringify(this.originalData.exclusions) !== JSON.stringify(this.data.exclusions)
+            ) {
             this.hasDataChanged = true;
             }
         }
