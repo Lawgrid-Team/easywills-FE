@@ -81,7 +81,7 @@ export class EstateDistributionComponent {
 
     constructor(
         private router: Router,
-        private willDataService: WillDataService
+        private willDataService: WillDataService,
     ) {
         this.data = this.willDataService.getEstateDistribution();
     }
@@ -95,7 +95,7 @@ export class EstateDistributionComponent {
                         this.willDataService.getAssetInventoryForDistribution(),
                     assetDistribution:
                         this.willDataService.getAssetDistribution(),
-                })
+                }),
             );
 
             this.loadingData = false;
@@ -136,7 +136,7 @@ export class EstateDistributionComponent {
 
             // Handle assets
             this.data.assets = this.extractAssetsForDistribution(
-                result.assetInventory
+                result.assetInventory,
             );
             this.willDataService.updateEstateDistribution({
                 assets: this.data.assets,
@@ -161,7 +161,7 @@ export class EstateDistributionComponent {
                 error: (error) => {
                     console.error(
                         'Error fetching estate distribution data:',
-                        error
+                        error,
                     );
                 },
             });
@@ -185,7 +185,9 @@ export class EstateDistributionComponent {
                 JSON.stringify(this.originalData.beneficiaryShares) !==
                     JSON.stringify(this.data.beneficiaryShares) ||
                 JSON.stringify(this.originalData.individualAssetAssignments) !==
-                    JSON.stringify(this.data.individualAssetAssignments)
+                    JSON.stringify(this.data.individualAssetAssignments) ||
+                JSON.stringify(this.originalData.exclusions) !==
+                    JSON.stringify(this.data.exclusions)
             ) {
                 this.hasDataChanged = true;
             }
@@ -204,7 +206,9 @@ export class EstateDistributionComponent {
                 // Reset change tracking after successful submission
                 this.hasDataChanged = false;
                 this.originalData = JSON.parse(
-                    JSON.stringify(this.willDataService.getEstateDistribution())
+                    JSON.stringify(
+                        this.willDataService.getEstateDistribution(),
+                    ),
                 );
             } else {
                 console.log('No changes detected, skipping submission');
@@ -216,7 +220,9 @@ export class EstateDistributionComponent {
                 // Reset change tracking after successful submission
                 this.hasDataChanged = false;
                 this.originalData = JSON.parse(
-                    JSON.stringify(this.willDataService.getEstateDistribution())
+                    JSON.stringify(
+                        this.willDataService.getEstateDistribution(),
+                    ),
                 );
             } else {
                 console.log('No changes detected, skipping submission');
