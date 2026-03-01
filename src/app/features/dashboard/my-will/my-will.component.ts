@@ -34,22 +34,22 @@ export class MyWillComponent implements OnInit, OnDestroy {
 
     recentActivities: Activity[] = [
         {
-            date: 'Feb 8, 2025',
+            date: 'Feb 8, 2026',
             time: '10:15 AM',
             description: 'Added a new beneficiary (John Doe)',
         },
         {
-            date: 'Feb 7, 2025',
+            date: 'Feb 7, 2026',
             time: '4:30 PM',
             description: 'Updated will document details',
         },
         {
-            date: 'Feb 6, 2025',
+            date: 'Feb 6, 2026',
             time: '9:00 AM',
             description: 'Uploaded signed will',
         },
         {
-            date: 'Feb 5, 2025',
+            date: 'Feb 5, 2026',
             time: '2:45 PM',
             description: 'Assigned witnesses to the will',
         },
