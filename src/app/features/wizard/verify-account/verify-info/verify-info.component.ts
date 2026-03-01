@@ -87,7 +87,7 @@ export class VerifyInfoComponent implements OnInit, OnDestroy {
 
     idTypes = [
         { name: 'National ID Card', icon: 'id-card' },
-        { name: 'National Passport', icon: 'passport' },
+        //{ name: 'National Passport', icon: 'passport' },
         { name: "Driver's License", icon: 'license' },
     ];
 
