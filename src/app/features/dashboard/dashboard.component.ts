@@ -1,13 +1,18 @@
-import {AccountService} from './../../core/services/Wizard/account.service';
-import {Component, type OnDestroy, type OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ActivatedRoute, NavigationEnd, Router, RouterOutlet,} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {filter} from 'rxjs/operators';
-import {SidebarComponent} from './sidebar/sidebar.component';
-import {HeaderWidgetComponent} from './header-widget/header-widget.component';
-import {WillStateService} from '../../shared/services/will-state.service';
-import {MyDocumentsComponent} from './my-documents/my-documents.component';
+import { AccountService } from './../../core/services/Wizard/account.service';
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+    ActivatedRoute,
+    NavigationEnd,
+    Router,
+    RouterOutlet,
+} from '@angular/router';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { HeaderWidgetComponent } from './header-widget/header-widget.component';
+import { WillStateService } from '../../shared/services/will-state.service';
+import { MyDocumentsComponent } from './my-documents/my-documents.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -42,18 +47,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     showUpgradePlan = true;
     showUpgradeButton = true;
     badgeText = '';
-    plan = 'Free'
+    plan = 'Free';
 
     constructor(
         private willStateService: WillStateService,
         private accountService: AccountService,
         private router: Router,
-        private activatedRoute: ActivatedRoute
-    ) {
-    }
+        private activatedRoute: ActivatedRoute,
+    ) {}
 
     ngOnInit(): void {
-
         this.willStateService.getWillState();
         this.accountService.getUserProfile();
 
@@ -61,25 +64,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.willStateService.willState$.subscribe({
                 next: (value) => {
                     if (value) {
-                        this.plan = value.account.planText
-                        this.isWillCompleted = value.status === 'completed' ? true : false;
+                        this.plan = value.account.planText;
+                        this.isWillCompleted =
+                            value.status === 'completed' ? true : false;
                     }
-                }
-            })
+                },
+            }),
         );
 
         this.subscriptions.add(
             this.accountService.userData$.subscribe({
                 next: (value) => {
                     if (value) {
+                        console.log(
+                            'User data updated in DashboardComponent:',
+                            value,
+                        );
                         this.userName = value.name;
                         this.userEmail = value.email;
                         if (value.avatar) {
-                            this.userAvatarUrl = value.avatar
+                            this.userAvatarUrl = value.avatar;
                         }
+                        this.updateHeader();
                     }
-                }
-            })
+                },
+            }),
         );
 
         // this.willStateService.willState$
@@ -92,16 +101,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
         //         },
         //     })
 
-
         this.subscriptions.add(
             this.router.events
                 .pipe(filter((event) => event instanceof NavigationEnd))
                 .subscribe(() => {
                     this.updateHeader();
-                })
+                }),
         );
 
-        this.updateHeader();
+        // this.updateHeader();
     }
 
     ngOnDestroy(): void {
@@ -111,12 +119,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     onActivate(component: any): void {
         this.childComponent = component;
+        this.childSub?.unsubscribe();
         if (component instanceof MyDocumentsComponent) {
             this.childSub = component.uploadingStateChange.subscribe(
                 (isUploading: boolean) => {
                     this.isUploadingInChild = isUploading;
                     this.updateHeader();
-                }
+                },
             );
 
             // Subscribe to viewing all state
@@ -125,8 +134,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     (isViewingAll: boolean) => {
                         this.isViewingAllInChild = isViewingAll;
                         this.updateHeader();
-                    }
-                )
+                    },
+                ),
             );
         }
     }
@@ -136,6 +145,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.childSub?.unsubscribe();
         this.isUploadingInChild = false;
         this.isViewingAllInChild = false;
+        this.updateHeader();
     }
 
     onGoBack(): void {
