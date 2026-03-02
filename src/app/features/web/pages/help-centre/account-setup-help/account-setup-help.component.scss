@@ -1,0 +1,134 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.help-page {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 20px 40px;
+}
+
+
+/* Back button */
+.help-page__top {
+  margin-bottom: 28px;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 1px solid #d6d6d6;
+  background: #fff;
+  border-radius: 12px; /* rounded corners like UI */
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #222;
+  cursor: pointer;
+
+  transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.btn-back:hover {
+  background: #f7f7f7;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.btn-back:active {
+  transform: translateY(1px);
+}
+
+.btn-back__chev {
+  font-size: 18px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+/* Header layout */
+.help-page__header {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr); /* ✅ prevents overflow/wrap issues */
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 28px;
+  width: 100%;
+}
+
+.help-page__content {
+  display: block;
+}
+
+/* Stack header: icon above title */
+.help-page__header--stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* keep left aligned like your UI */
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+
+
+/* Single circle badge (NO outer circle) */
+.icon-badge--single {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+
+  background: #eef2f8; /* soft fill */
+  border: 1px solid rgba(210, 214, 220, 0.55);
+  color: #2e3a59;
+
+  display: grid;
+  place-items: center;
+
+  /* remove any ring/shadow */
+  box-shadow: none;
+}
+
+/* Text */
+.help-page__title {
+  //margin: 0 0 10px;
+  font-size: 42px !important;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  //margin: 0 0 14px; 
+  margin: 0 0 6px;
+  
+}
+
+.help-page__steps {
+  max-width: 760px;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.6;
+  display: grid;
+  gap: 14px; 
+}
+
+.step {
+  //margin: 0 0 12px;
+  margin: 0; 
+}
+
+.step__label {
+  font-weight: 0;
+}
+
+.step__desc {
+  color: #5a5a5a;
+}
+
+@media (max-width: 640px) {
+  .help-page__header {
+    grid-template-columns: 1fr;
+  }
+
+  .help-page__title {
+    font-size: 34px;
+  }
+}

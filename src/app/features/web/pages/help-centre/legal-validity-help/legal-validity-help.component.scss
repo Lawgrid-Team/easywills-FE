@@ -1,0 +1,107 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.help-page {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 20px 40px;
+}
+
+/* Back button */
+.help-page__top {
+  margin-bottom: 28px;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 1px solid #d6d6d6;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #222;
+  cursor: pointer;
+
+  transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.btn-back:hover {
+  background: #f7f7f7;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.btn-back:active {
+  transform: translateY(1px);
+}
+
+.btn-back__chev {
+  font-size: 18px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+/* Header */
+.help-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* Grey icon circle */
+.help-icon-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: #eef1f4;
+  border: 1px solid #e3e7ee;
+
+  display: grid;
+  place-items: center;
+
+  color: #3f5fb8; /* subtle blue like UI */
+}
+
+.help-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* Title + description */
+.help-title {
+  margin: 0;
+  font-size: 56px;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #2b2b2b;
+}
+
+.help-desc {
+  margin: 0;
+  max-width: 820px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #6a6a6a;
+}
+.help-fa-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+@media (max-width: 640px) {
+  .help-title {
+    font-size: 40px;
+  }
+
+  .help-desc {
+    font-size: 16px;
+  }
+}

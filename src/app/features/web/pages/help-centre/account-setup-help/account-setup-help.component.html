@@ -1,0 +1,82 @@
+<section class="help-page font-sans">
+  <!-- Top actions -->
+  <div class="help-page__top">
+    <button type="button" class="btn-back" (click)="goBack()">
+      <span class="btn-back__chev" aria-hidden="true">‹</span>
+      <span>Back to Help Centre</span>
+    </button>
+  </div>
+
+  <br>
+
+  <!-- Header -->
+  <header class="help-page__header--stack">
+  <!-- Single circle icon badge -->
+  <div class="icon-badge icon-badge--single" aria-hidden="true">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path d="M19 8v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <path d="M22 11h-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+    </svg>
+  </div>
+
+  <div class="help-page__content">
+    <h1 class="help-page__title">Account Setup</h1>
+
+    <div class="help-page__steps">
+      <p class="step">
+        <span class="step__label">Step 1:</span> Open the website <br />
+        <span class="step__desc">
+          From your homepage, look at the top navigation bar, and click on <strong>Write your will</strong>.
+        </span>
+      </p>
+
+      <p class="step">
+        <span class="step__label">Step 2:</span> Create an account and complete the onboarding process <br />
+        <span class="step__desc">
+          This process will lead you to the Will Wizard page, or you can exit and go to your dashboard.
+        </span>
+      </p>
+    </div>
+  </div>
+</header>
+
+  <!-- Screenshots -->
+  <div class="help-page__media">
+    <figure class="media-card">
+      <img
+        class="media-card__img"
+        [src]="images.signup"
+        alt="EasyWills signup screen showing account creation form"
+        loading="lazy"
+      />
+    </figure>
+    <br>
+
+    <figure class="media-card">
+      <img
+        class="media-card__img"
+        [src]="images.onboarding"
+        alt="EasyWills onboarding step 1 personal details screen"
+        loading="lazy"
+      />
+    </figure>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+</section>
