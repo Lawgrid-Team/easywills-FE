@@ -144,8 +144,19 @@ export interface WillData {
     executorAndWitness: ExecutorAndWitnessData;
 }
 
+// export interface IdentityVerificationData {
+//     documentType: string;
+//     idNumber: string;
+//     expiryDate: Date | string;
+//     verificationStatus : string;
+//     verifiedAt: Date | string;
+// }
+
 export interface IdentityVerificationData {
     documentType: string;
     idNumber: string;
     expiryDate: Date | string;
+    verificationStatus?: 'pending' | 'verified' | 'failed';
+    verifiedAt?: Date | string;
+    qoreIdReference?: string;
 }

@@ -129,12 +129,22 @@ export class CreateCodicilComponent implements OnInit {
         private route: ActivatedRoute,
         private willDataService: WillDataService,
         private datePipe: DatePipe,
-        private location: Location
+        private location: Location,
     ) {}
 
     ngOnInit(): void {
         // Always show as returning user since they're creating a codicil
         this.checkWillStatus();
+
+        // Listen for fragment changes to auto-expand sections
+        this.route.fragment.subscribe((fragment) => {
+            if (fragment) {
+                // Use setTimeout to ensure the DOM is ready
+                setTimeout(() => {
+                    this.toggleSection(fragment);
+                }, 100);
+            }
+        });
     }
 
     checkWillStatus(): void {
@@ -197,7 +207,7 @@ export class CreateCodicilComponent implements OnInit {
 
         // Update sections with data
         const personalDetailsSection = this.willSections.find(
-            (s) => s.id === 'personal-details'
+            (s) => s.id === 'personal-details',
         );
         if (personalDetailsSection) {
             personalDetailsSection.data = dummyWillData.personalDetails;
@@ -211,7 +221,7 @@ export class CreateCodicilComponent implements OnInit {
         }
 
         const distributionSection = this.willSections.find(
-            (s) => s.id === 'distribution'
+            (s) => s.id === 'distribution',
         );
         if (distributionSection) {
             distributionSection.completed = true;
@@ -259,10 +269,10 @@ export class CreateCodicilComponent implements OnInit {
 
     calculateCompletionPercentage(): void {
         const completedSections = this.willSections.filter(
-            (s) => s.completed
+            (s) => s.completed,
         ).length;
         this.completionPercentage = Math.round(
-            (completedSections / this.willSections.length) * 100
+            (completedSections / this.willSections.length) * 100,
         );
     }
 

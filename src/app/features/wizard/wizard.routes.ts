@@ -16,7 +16,7 @@ export const routes: Routes = [
                 path: 'welcome',
                 loadComponent: () =>
                     import('./welcome/welcome.component').then(
-                        (m) => m.WelcomeComponent
+                        (m) => m.WelcomeComponent,
                     ),
             },
             {
@@ -31,66 +31,65 @@ export const routes: Routes = [
                     {
                         path: 'personal-details',
                         loadComponent: () =>
-                            import(
-                                './personal-details/personal-details.component'
-                            ).then((m) => m.PersonalDetailsComponent),
+                            import('./personal-details/personal-details.component').then(
+                                (m) => m.PersonalDetailsComponent,
+                            ),
                     },
                     {
                         path: 'asset-inventory',
                         loadComponent: () =>
-                            import(
-                                './asset-inventory/asset-inventory.component'
-                            ).then((m) => m.AssetInventoryComponent),
+                            import('./asset-inventory/asset-inventory.component').then(
+                                (m) => m.AssetInventoryComponent,
+                            ),
                     },
                     {
                         path: 'estate-distribution',
                         loadComponent: () =>
-                            import(
-                                './estate-distribution/estate-distribution.component'
-                            ).then((m) => m.EstateDistributionComponent),
+                            import('./estate-distribution/estate-distribution.component').then(
+                                (m) => m.EstateDistributionComponent,
+                            ),
                     },
                     {
                         path: 'executor-and-witnesses',
                         loadComponent: () =>
-                            import(
-                                './executor-and-witnesses/executor-and-witnesses.component'
-                            ).then((m) => m.ExecutorAndWitnessesComponent),
+                            import('./executor-and-witnesses/executor-and-witnesses.component').then(
+                                (m) => m.ExecutorAndWitnessesComponent,
+                            ),
                     },
                     {
-
-                        path: "schedule",
+                        path: 'schedule',
                         loadComponent: () =>
-                            import(
-                                './schedule/schedule.component'
-                            ).then((m) => m.ScheduleComponent),
+                            import('./schedule/schedule.component').then(
+                                (m) => m.ScheduleComponent,
+                            ),
                     },
                     {
-                        path: "verify-account",
+                        path: 'verify-account',
                         loadComponent: () =>
-                            import(
-                                './verify-account/verify-account.component'
-                            ).then((m) => m.VerifyAccountComponent),
+                            import('./verify-account/verify-account.component').then(
+                                (m) => m.VerifyAccountComponent,
+                            ),
                     },
-                     {
-                        path: "upgrade",
+                    {
+                        path: 'upgrade',
                         loadComponent: () =>
-                            import(
-                                './upgrade/upgrade.component'
-                            ).then((m) => m.UpgradeComponent),
+                            import('./upgrade/upgrade.component').then(
+                                (m) => m.UpgradeComponent,
+                            ),
                     },
-                     {
-                        path: "upgrade/payment-callback",
+                    {
+                        path: 'upgrade/payment-callback',
                         loadComponent: () =>
-                            import(
-                                './upgrade/payment-callback/payment-callback.component'
-                            ).then((m) => m.PaymentCallbackComponent),
+                            import('./upgrade/payment-callback/payment-callback.component').then(
+                                (m) => m.PaymentCallbackComponent,
+                            ),
                     },
-                     {
+                    {
                         path: 'review-and-download',
                         loadComponent: () =>
-                            import(
-                                './review-and-download/review-and-download.component'
-                            ).then((m) => m.ReviewAndDownloadComponent),
+                            import('./review-and-download/review-and-download.component').then(
+                                (m) => m.ReviewAndDownloadComponent,
+                            ),
                     },
                 ],
             },

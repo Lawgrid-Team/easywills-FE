@@ -27,8 +27,10 @@ body {
             outlined-outline-color: #dedede,
             container-height: 1rem,
             container-vertical-padding: 0.8rem,
-            outlined-input-text-placeholder-color:
-                var(--Placeholder-text, #8a8989),
+            outlined-input-text-placeholder-color: var(
+                    --Placeholder-text,
+                    #8a8989
+                ),
             outlined-input-text-color: var(--Input-text, #444),
         )
     );
@@ -73,27 +75,35 @@ body {
 }
 
 // Toast Notification
-.notification-error {
-    background: #bc0000 !important;
-    color: #dcdcdc !important;
-    button {
-        background-color: rgba(255, 255, 255, 0.3) !important;
-        color: #dcdcdc !important;
+
+@mixin snackbar-theme($bg-color, $text-color, $button-color) {
+    --mdc-snackbar-container-color: #{$bg-color};
+    --mdc-snackbar-supporting-text-color: #{$text-color};
+    --mat-snack-bar-button-color: #{$button-color};
+
+    .mdc-snackbar__surface {
+        background-color: $bg-color !important;
+    }
+
+    .mdc-snackbar__label {
+        color: $text-color !important;
+    }
+
+    .mat-mdc-button {
+        color: $button-color !important;
     }
 }
+
+.notification-error,
+.bg-danger {
+    @include snackbar-theme(#f44336, #fff, #fff);
+}
+
 .notification-warning {
-    background: #eebe00 !important;
-    color: #dcdcdc !important;
-    button {
-        background-color: rgba(255, 255, 255, 0.3) !important;
-        color: dimgray !important;
-    }
+    @include snackbar-theme(#ff9800, #000, #000);
 }
-.notification-success {
-    background: #14780d !important;
-    color: #dcdcdc !important;
-    button {
-        background-color: rgba(255, 255, 255, 0.3) !important;
-        color: #dcdcdc !important;
-    }
+
+.notification-success,
+.bg-success {
+    @include snackbar-theme(#4caf50, #fff, #fff);
 }
