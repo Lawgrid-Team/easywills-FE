@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 export class FooterComponent {
     email: string = '';
 
+    currentYear = new Date().getFullYear();
+
     onSubscribe(): void {
         // Implement subscription logic here
         console.log('Subscribing with email:', this.email);

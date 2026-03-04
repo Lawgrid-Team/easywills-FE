@@ -1,0 +1,149 @@
+:host {
+  display: block;
+  width: 100%;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.help-page {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 20px 40px;
+}
+
+/* Back button */
+.help-page__top {
+  margin-bottom: 28px;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 1px solid #d6d6d6;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #222;
+  cursor: pointer;
+
+  transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.btn-back:hover {
+  background: #f7f7f7;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.btn-back:active {
+  transform: translateY(1px);
+}
+
+.btn-back__chev {
+  font-size: 18px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+/* Header (icon on top) */
+.help-page__header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.icon-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+
+  background: #eef1f4;              /* ✅ grey circle like UI */
+  border: 1px solid #e3e7ee;         /* subtle edge */
+  color: #111;
+
+  display: grid;
+  place-items: center;
+}
+
+/* Title + text */
+.help-page__title {
+  //margin: 0 0 10px;
+  font-size: 42px !important;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  //margin: 0 0 14px; 
+  margin: 0 0 6px;
+}
+
+.help-page__steps {
+  display: grid;
+  gap: 22px;
+  max-width: 860px;
+}
+
+.step__line {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.step__label {
+  font-weight: 800;
+  font-size: 20px;
+  color: #222;
+}
+
+.step__text {
+  font-size: 20px;
+  color: #222;
+}
+
+.step__desc {
+  margin-top: 6px;
+  font-size: 20px;
+  line-height: 1.4;
+  color: #6a6a6a;
+}
+
+/* Screenshot cards */
+.help-page__media {
+  display: grid;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.help-page__media {
+  display: grid;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.help-img {
+  width: 100%;
+  height: auto;
+  display: block;
+
+  /* ✅ no rounded corners, no container */
+  border-radius: 0;
+  border: none;
+  background: transparent;
+}
+
+@media (max-width: 640px) {
+  .help-page__title {
+    font-size: 40px;
+  }
+
+  .step__label,
+  .step__text,
+  .step__desc {
+    font-size: 16px;
+  }
+}
