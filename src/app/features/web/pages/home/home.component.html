@@ -15,13 +15,14 @@
 
     <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
       <a
-        routerLink="/"
+        routerLink="/auth/signup" 
         class="bg-[#444444] text-white px-8 py-4 rounded hover:bg-[#32302f] transition-colors"
       >
         Write your Will
       </a>
       <a
         routerLink="/"
+        fragment="how-it-works"
         class="border border-[#444444] text-[#444444] px-8 py-4 rounded hover:bg-gray-50 transition-colors"
       >
         Learn How It Works
@@ -221,7 +222,7 @@
 </section>
 
 <!-- Testimonial Carousel Section -->
-<section class="testimonial-carousel-section">
+<section id="testimonies" class="testimonial-carousel-section">
   <div class="container">
     <div class="testimonial-cards">
       <div *ngFor="let testimonial of visibleTestimonials" class="testimonial-card">
@@ -266,8 +267,8 @@
 </section>
 
 <!-- How it Works Section -->
-<section class="how-it-works-section w-screen relative left-1/2 -translate-x-1/2">
-  <div id="how-it-works" class="container">
+<section id="how-it-works" class="how-it-works-section w-screen relative left-1/2 -translate-x-1/2">
+  <div class="container">
     <div class="how-it-works-header">
       <div class="how-it-works-content">
         <h2 class="how-it-works-title dm-serif">How it Works</h2>
@@ -325,7 +326,7 @@
 </section>
 
 <!-- Pricing Section -->
-<section class="pricing-section w-screen relative left-1/2 -translate-x-1/2">
+<section id="pricing" class="pricing-section w-screen relative left-1/2 -translate-x-1/2">
   <div class="container">
     <div class="pricing-grid">
       <div class="pricing-header">
@@ -462,7 +463,7 @@
 </section>
 
 <!-- FAQ Section -->
-<section class="faq-section w-screen relative left-1/2 -translate-x-1/2">
+<section id="faqs" class="faq-section w-screen relative left-1/2 -translate-x-1/2">
   <div class="container">
     <div class="faq-header">
       <h2 class="faq-title dm-serif">FAQs</h2>
@@ -505,10 +506,10 @@
 
     <!-- Still have a question -->
     <div class="contact-section">
-      <h3 class="contact-title">Still have a question?</h3>
-      <p class="contact-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <h3 class="contact-title">Still have a Question?</h3>
+      <p class="contact-description">Our client Success Team is here to help You.</p>
       <a routerLink="/" class="contact-button">
-        Contact
+        Contact Us
       </a>
     </div>
   </div>
