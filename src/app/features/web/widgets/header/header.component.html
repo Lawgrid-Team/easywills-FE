@@ -1,54 +1,111 @@
-
-<!-- <div class="container mx-auto px-4 py-2 sm:px-6 lg:px-8"> -->
-<header class="w-full">
-    <div class="">
-        <div class="flex justify-between items-center pt-4 pb-4 border-b border-b-gray-300">
-            <div class="container flex justify-between items-center mx-auto">
-                <div class="flex items-center">
-                    <img src="svg/easywill_logo.svg" routerLink='' alt="EasyWill Logo" class="cursor-pointer">
-                </div>
-
-                <div class="flex items-center justify-center gap-x-4">
-                    <button mat-stroked-button [routerLink]="['/auth/login']">Login</button>
-                    <button mat-flat-button [routerLink]="['auth/signup']">Write your will</button>
-
-                    <!-- <button [routerLink]="['/login']" class="bg-white hover:bg-white-200 ring-1 ring-gray-300 text-black font-bold py-2 px-4 rounded">
-                        Login
-                    </button>
-                    <button [routerLink]="['/signup']" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                        Write your will
-                    </button> -->
-                </div>
-            </div>
+<header class="w-full bg-white">
+  <div class="border-b border-b-gray-300">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between py-4">
+        <div class="flex items-center">
+            <a [routerLink]="['/']" class="inline-flex items-center" aria-label="Go to home">
+                <img
+                    src="svg/easywill_logo.svg"
+                    alt="EasyWill Logo"
+                    class="h-8 sm:h-9 w-auto cursor-pointer"
+                />
+            </a>
         </div>
-        <div class="pt-4 pb-4 border-y-gray-300 border-b border-b-gray-300">
-            <nav class="flex justify-between items-center container mx-auto">
-                <ul class="flex items-center justify-center gap-x-8 text-base/7 text-gray-400">
-                    <!-- <li class="hover:text-gray-500">
-                        <a routerLink='' routerLinkActive="router-link-active" class="hover:text-gray-500">Home</a>
-                    </li> -->
-                    <li class="hover:text-gray-500">
-                        <a [routerLink]="['/']" fragment="how-it-works" class="hover:text-gray-500">How it Works</a>
-                    </li>
-                    <li class="hover:text-gray-500">
-                        <a [routerLink]="['/pricing']" routerLinkActive="router-link-active" class="hover:text-gray-500">Pricing</a>
-                    </li>
-                    <li class="hover:text-gray-500">
-                        <a [routerLink]="['/help']" routerLinkActive="router-link-active" class="hover:text-gray-500">Help Centre</a>
-                    </li>
-                    <!-- <li class="hover:text-gray-500">
-                        <a href="#" class="hover:text-gray-500">Contact</a>
-                    </li> -->
-                </ul>
 
-                <ul class="flex items-center justify-center gap-x-4 text-base/7 text-gray-400">
-                    <li class="hover:text-gray-500">
-                        <a href="#" class="hover:text-gray-500">Digital Vault</a>
-                    </li>
-                </ul>
-            </nav>
+        <!-- Desktop actions -->
+        <div class="hidden md:flex items-center gap-x-4">
+          <button mat-stroked-button [routerLink]="['/auth/login']">Login</button>
+          <button mat-flat-button [routerLink]="['/auth/signup']">Write your will</button>
         </div>
+
+        <!-- Mobile hamburger -->
+        <button
+          type="button"
+          class="md:hidden inline-flex items-center justify-center p-2 rounded border border-gray-200"
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="isMenuOpen"
+          aria-label="Toggle menu"
+        >
+          <span class="text-xl leading-none">☰</span>
+        </button>
+      </div>
     </div>
+  </div>
+
+  <!-- Desktop nav row -->
+  <div class="hidden md:block border-b border-b-gray-300">
+    <nav class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
+      <ul class="flex items-center gap-x-8 text-base/7 text-gray-400">
+        <li class="hover:text-gray-500">
+          <a [routerLink]="['/']" fragment="how-it-works" class="hover:text-gray-500">
+            How it Works
+          </a>
+        </li>
+        <li class="hover:text-gray-500">
+          <a [routerLink]="['/pricing']" routerLinkActive="router-link-active" class="hover:text-gray-500">
+            Pricing
+          </a>
+        </li>
+        <li class="hover:text-gray-500">
+          <a [routerLink]="['/help']" routerLinkActive="router-link-active" class="hover:text-gray-500">
+            Help Centre
+          </a>
+        </li>
+      </ul>
+
+      <ul class="flex items-center gap-x-4 text-base/7 text-gray-400">
+        <li class="hover:text-gray-500">
+          <a href="#" class="hover:text-gray-500">Digital Vault</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div *ngIf="isMenuOpen" class="md:hidden border-b border-b-gray-300 bg-white">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <!-- Links -->
+      <nav class="flex flex-col gap-3 text-gray-700">
+        <a
+          class="py-2"
+          [routerLink]="['/']"
+          fragment="how-it-works"
+          (click)="closeMenu()"
+        >
+          How it Works
+        </a>
+
+        <a
+          class="py-2"
+          [routerLink]="['/pricing']"
+          (click)="closeMenu()"
+        >
+          Pricing
+        </a>
+
+        <a
+          class="py-2"
+          [routerLink]="['/help']"
+          (click)="closeMenu()"
+        >
+          Help Centre
+        </a>
+
+        <a class="py-2" href="#" (click)="closeMenu()">
+          Digital Vault
+        </a>
+      </nav>
+
+      <!-- Mobile actions -->
+      <div class="mt-4 flex flex-col gap-3">
+        <button mat-stroked-button [routerLink]="['/auth/login']" (click)="closeMenu()">
+          Login
+        </button>
+
+        <button mat-flat-button [routerLink]="['/auth/signup']" (click)="closeMenu()">
+          Write your will
+        </button>
+      </div>
+    </div>
+  </div>
 </header>
-
-
